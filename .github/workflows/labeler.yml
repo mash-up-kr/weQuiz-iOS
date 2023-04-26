@@ -23,5 +23,5 @@ jobs:
       with:
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
         target-approved-count: 2
-        label-to-be-added: "✅ Accepted" 
-        label-to-be-removed: "🕐 In Review" 
+        label-to-be-added: ":white_check_mark: Accepted" 
+        label-to-be-removed: ":clock1: In Review" 
