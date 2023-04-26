@@ -1,0 +1,27 @@
+# This workflow will triage pull requests and apply a label based on the
+# paths that are modified in the pull request.
+#
+# To use this workflow, you will need to set up a .github/labeler.yml
+# file with configuration.  For more information, see:
+# https://github.com/actions/labeler
+
+name: PR Review Labeler
+on:
+  pull_request_review:
+    types: [submitted, edited]
+
+jobs:
+  label:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+    - uses: jsryudev/pr-review-labeler@v0.2.2
+      with:
+        repo-token: "${{ secrets.GITHUB_TOKEN }}"
+        target-approved-count: 2
+        label-to-be-added: ":white_check_mark: Accepted" 
+        label-to-be-removed: ":clock1: In Review" 
