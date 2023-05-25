@@ -5,13 +5,19 @@
       location = "group:Projects"
       name = "Projects">
       <FileRef
+         location = "group:Authentication/Authentication.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:DesignSystem/DesignSystem.xcodeproj">
+      </FileRef>
+      <FileRef
+         location = "group:Home/Home.xcodeproj">
       </FileRef>
       <FileRef
          location = "group:Main/Main.xcodeproj">
       </FileRef>
       <FileRef
-         location = "group:SignUp/SignUp.xcodeproj">
+         location = "group:Quiz/Quiz.xcodeproj">
       </FileRef>
    </Group>
 </Workspace>
