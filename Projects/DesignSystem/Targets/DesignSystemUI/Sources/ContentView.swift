@@ -9,13 +9,15 @@ public struct ContentView: View {
     }
 
     public var body: some View {
-        VStack {
-            Text("Hello, World!")
-                .font(.pretendard(.bold, size: ._12))
-                .padding()
-            Text("Hello, World!")
-                .font(.pretendard(.regular, sementic: .h4))
-                .padding()
+        NavigationStack {
+            List {
+                NavigationLink("Typography Semantic", value: TypographyPreview.TypographyType.semantic)
+                NavigationLink("Typography Manual", value: TypographyPreview.TypographyType.manual)
+            }
+            .navigationDestination(for: TypographyPreview.TypographyType.self) {
+                TypographyPreview(typographyType: $0)
+            }
+            .navigationTitle("WeQuiz DesignSystem")
         }
     }
 }

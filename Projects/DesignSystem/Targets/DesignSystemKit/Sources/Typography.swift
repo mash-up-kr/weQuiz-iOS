@@ -13,7 +13,7 @@ public extension DesignSystemKit {
 }
 
 public extension DesignSystemKit.Typography {
-    enum Weight {
+    enum Weight: String, Hashable, CaseIterable {
         case regular
         case medium
         case semibold

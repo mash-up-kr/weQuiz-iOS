@@ -1,5 +1,5 @@
 //
-//  Font+.swift
+//  Font+Typography.swift
 //  DesignSystem
 //
 //  Created by Ahn Sang Hoon on 2023/05/25.
@@ -9,8 +9,8 @@
 import SwiftUI
 
 public extension Font {
-    static func pretendard(_ weight: DesignSystemKit.Typography.Weight = .regular, sementic: DesignSystemKit.Typography.Semantic = .base) -> Font {
-        .pretendard(weight, sementic.size.rawValue)
+    static func pretendard(_ weight: DesignSystemKit.Typography.Weight = .regular, semantic: DesignSystemKit.Typography.Semantic = .base) -> Font {
+        .pretendard(weight, semantic.size.rawValue)
     }
     
     static func pretendard(_ weight: DesignSystemKit.Typography.Weight = .regular, size: DesignSystemKit.Typography.Size = ._16) -> Font {
