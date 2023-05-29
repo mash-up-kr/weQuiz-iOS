@@ -1,7 +1,5 @@
 import Foundation
 
-public final class DesignSystemKit {
-    public static func hello() {
-        print("Hello, from your Kit framework")
-    }
+public enum DesignSystemKit {
+    static let bundleId = "wequiz.ios.DesignSystem"
 }
