@@ -5,7 +5,7 @@ import QuizUI
 struct QuizApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MakeQuizView()
         }
     }
 }
