@@ -12,6 +12,7 @@ public struct ContentView: View {
         case typography(TypographyPreview.TypographyType)
         case icon
         case color
+        case component
     }
 
     public var body: some View {
@@ -21,6 +22,7 @@ public struct ContentView: View {
                 NavigationLink("Typography Manual", value: NavigationType.typography(.manual))
                 NavigationLink("Icon", value: NavigationType.icon)
                 NavigationLink("Color", value: NavigationType.color)
+                NavigationLink("Component", value: NavigationType.component)
             }
             .navigationDestination(for: NavigationType.self) {
                 switch $0 {
@@ -30,6 +32,8 @@ public struct ContentView: View {
                     IconPreview()
                 case .color:
                     ColorPreview()
+                case .component:
+                    ComponentPreview()
                 }
             }
             .navigationTitle("WeQuiz DesignSystem")
