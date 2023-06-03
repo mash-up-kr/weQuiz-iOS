@@ -11,6 +11,7 @@ public struct ContentView: View {
     private enum NavigationType: Hashable {
         case typography(TypographyPreview.TypographyType)
         case icon
+        case color
     }
 
     public var body: some View {
@@ -19,6 +20,7 @@ public struct ContentView: View {
                 NavigationLink("Typography Semantic", value: NavigationType.typography(.semantic))
                 NavigationLink("Typography Manual", value: NavigationType.typography(.manual))
                 NavigationLink("Icon", value: NavigationType.icon)
+                NavigationLink("Color", value: NavigationType.color)
             }
             .navigationDestination(for: NavigationType.self) {
                 switch $0 {
@@ -26,6 +28,8 @@ public struct ContentView: View {
                     TypographyPreview(typographyType: type)
                 case .icon:
                     IconPreview()
+                case .color:
+                    ColorPreview()
                 }
             }
             .navigationTitle("WeQuiz DesignSystem")
