@@ -16,74 +16,74 @@ struct IconPreview: View {
     private let chevron: IconDataSet = (
         "Chevron",
         [
-           DesignSystemKit.Icon.Chevron.upBig,
-           DesignSystemKit.Icon.Chevron.upMedium,
-           DesignSystemKit.Icon.Chevron.upSmall,
-           DesignSystemKit.Icon.Chevron.downBig,
-           DesignSystemKit.Icon.Chevron.downMedium,
-           DesignSystemKit.Icon.Chevron.downSmall,
-           DesignSystemKit.Icon.Chevron.leftBig,
-           DesignSystemKit.Icon.Chevron.leftMedium,
-           DesignSystemKit.Icon.Chevron.leftSmall,
-           DesignSystemKit.Icon.Chevron.rightBig,
-           DesignSystemKit.Icon.Chevron.rightMedium,
-           DesignSystemKit.Icon.Chevron.rightSmall
+           Icon.Chevron.upBig,
+           Icon.Chevron.upMedium,
+           Icon.Chevron.upSmall,
+           Icon.Chevron.downBig,
+           Icon.Chevron.downMedium,
+           Icon.Chevron.downSmall,
+           Icon.Chevron.leftBig,
+           Icon.Chevron.leftMedium,
+           Icon.Chevron.leftSmall,
+           Icon.Chevron.rightBig,
+           Icon.Chevron.rightMedium,
+           Icon.Chevron.rightSmall
        ]
     )
     
     private let checkmark: IconDataSet = (
         "Checkmark",
         [
-            DesignSystemKit.Icon.Checkmark.trueFill24,
-            DesignSystemKit.Icon.Checkmark.trueFill20,
-            DesignSystemKit.Icon.Checkmark.falseLine24,
-            DesignSystemKit.Icon.Checkmark.falseLine20,
-            DesignSystemKit.Icon.Checkmark.falseFill24,
-            DesignSystemKit.Icon.Checkmark.falseFill20
+            Icon.Checkmark.trueFill24,
+            Icon.Checkmark.trueFill20,
+            Icon.Checkmark.falseLine24,
+            Icon.Checkmark.falseLine20,
+            Icon.Checkmark.falseFill24,
+            Icon.Checkmark.falseFill20
         ]
     )
     
     private let circleAlert: IconDataSet = (
         "CircleAlert",
         [
-            DesignSystemKit.Icon.CircleAlert.fillMono
+            Icon.CircleAlert.fillMono
         ]
     )
     
     private let close: IconDataSet = (
         "Close",
         [
-            DesignSystemKit.Icon.Close.fillBlack,
-            DesignSystemKit.Icon.Close.fillGray,
+            Icon.Close.fillBlack,
+            Icon.Close.fillGray,
         ]
     )
     
     private let edit: IconDataSet = (
         "Edit",
         [
-            DesignSystemKit.Icon.Edit.list
+            Icon.Edit.list
         ]
     )
     
     private let ranking: IconDataSet = (
         "Ranking",
         [
-            DesignSystemKit.Icon.Ranking.down,
-            DesignSystemKit.Icon.Ranking.up,
+            Icon.Ranking.down,
+            Icon.Ranking.up,
         ]
     )
     
     private let siren: IconDataSet = (
         "Siren",
         [
-            DesignSystemKit.Icon.Siren.mono
+            Icon.Siren.mono
         ]
     )
     
     private let magnifier: IconDataSet = (
         "Magnifier",
         [
-            DesignSystemKit.Icon.Magnifier.lineGray
+            Icon.Magnifier.lineGray
         ]
     )
     
@@ -107,7 +107,7 @@ struct IconPreview: View {
         
         var body: some View {
             HStack {
-                Image.icon(representable)
+                Image(representable)
                     .fixedSize()
                     .frame(width: 45, height: 45)
                     .background(

@@ -9,11 +9,7 @@
 import SwiftUI
 
 public extension Image {
-    static func icon(_ type: any IconRepresentable) -> Image {
-        image(type.name)
-    }
-    
-    private static func image(_ name: String) -> Image {
-        .init(name, bundle: Bundle(identifier: DesignSystemKit.bundleId)!)
+    init(_ representable: any IconRepresentable) {
+        self = .init(representable.name, bundle: Bundle(identifier: DesignSystemKit.bundleId)!)
     }
 }

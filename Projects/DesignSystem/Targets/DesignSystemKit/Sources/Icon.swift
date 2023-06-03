@@ -8,15 +8,13 @@
 
 import Foundation
 
-public extension DesignSystemKit {
-    enum Icon {}
-}
+public enum Icon {}
 
 public protocol IconRepresentable: CaseIterable {
     var name: String { get }
 }
 
-public extension DesignSystemKit.Icon {
+public extension Icon {
     
     // MARK: - Chevron
     
