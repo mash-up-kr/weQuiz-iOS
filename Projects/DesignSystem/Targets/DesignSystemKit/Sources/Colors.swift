@@ -13,13 +13,15 @@ public extension DesignSystemKit {
         
         // MARK: - Primary
         
-        case purple
-        case mainG
+        case p1
         
         // MARK: - Secondary
         
-        case green
-        case mint
+        case s1
+        case s2
+        case s3
+        case s4
+        case s5
         
         // MARK: - Semantic
         

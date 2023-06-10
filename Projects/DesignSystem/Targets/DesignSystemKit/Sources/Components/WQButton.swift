@@ -39,8 +39,8 @@ public struct WQButton: View {
                     model.leftAction?()
                 } label: {
                     Text(model.titles.leftTitle)
-                        .font(.pretendard(.bold, size: ._16))
-                        .foregroundColor(.white)
+                        .font(.pretendard(.semibold, size: ._16))
+                        .foregroundColor(.designSystem(.g2))
                         .padding()
                 }
                 .background {
@@ -51,13 +51,13 @@ public struct WQButton: View {
                     model.rightAction?()
                 } label: {
                     Text(model.titles.rightTitle)
-                        .font(.pretendard(.bold, size: ._16))
-                        .foregroundColor(.designSystem(.g9))
+                        .font(.pretendard(.semibold, size: ._16))
+                        .foregroundColor(.designSystem(.g2))
                         .padding()
                 }
                 .background {
                     RoundedRectangle(cornerRadius: style.cornerRadius)
-                        .foregroundColor(.designSystem(.main))
+                        .foregroundColor(.designSystem(.p1))
                 }
             }
             .padding(style.padding)
@@ -70,15 +70,15 @@ public struct WQButton: View {
                 model.action?()
             } label: {
                 Text(model.title)
-                    .font(.pretendard(.bold, size: ._16))
-                    .foregroundColor(.designSystem(.g9))
+                    .font(.pretendard(.semibold, size: ._16))
+                    .foregroundColor(.designSystem(.g2))
                     .padding()
                     .frame(maxWidth: .infinity)
             }
             .frame(maxWidth: .infinity)
             .background {
                 RoundedRectangle(cornerRadius: style.cornerRadius)
-                    .foregroundColor(.designSystem(.main))
+                    .foregroundColor(.designSystem(.p1))
             }
             .padding(style.padding)
         }
@@ -90,15 +90,15 @@ public struct WQButton: View {
                 model.action?()
             } label: {
                 Text(model.title)
-                    .font(.pretendard(.bold, size: ._16))
-                    .foregroundColor(.designSystem(.g9))
+                    .font(.pretendard(.semibold, size: ._16))
+                    .foregroundColor(.designSystem(.g2))
                     .padding()
                     .frame(maxWidth: .infinity)
             }
             .frame(maxWidth: .infinity)
             .background {
                 RoundedRectangle(cornerRadius: style.cornerRadius)
-                    .foregroundColor(.designSystem(.main))
+                    .foregroundColor(.designSystem(.p1))
                 
             }
             .padding(style.padding)
