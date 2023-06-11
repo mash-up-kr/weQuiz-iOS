@@ -19,7 +19,13 @@ struct ComponentPreview: View {
                 WQTopBarPreview()
             }
         }
+        .safeAreaInset(
+            edge: .bottom,
+            content: {
+                Spacer()
+                    .frame(height: 15)
+            }
+        )
         .navigationTitle("Component")
-        .padding()
     }
 }
