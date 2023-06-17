@@ -32,7 +32,9 @@ extension Project {
             infoPlist: "Targets/\(name)/SupportingFiles/\(name)-info.plist",
             sources: ["Targets/\(name)/Sources/**"],
             resources: [],
-            dependencies: []
+            dependencies: [
+                .project(target: "DesignSystemKit", path: .relativeToRoot("Projects/DesignSystem"))
+            ]
         )
         let tests = Target(
             name: "\(name)Tests",
@@ -116,7 +118,7 @@ extension Project {
             infoPlist: "Targets/\(name)/SupportingFiles/\(name)-info.plist",
             sources: ["Targets/\(name)/Sources/**"],
             resources: needResource ? ["Targets/\(name)/Resources/**"] : [],
-            dependencies: []
+            dependencies: needResource == false ? [.project(target: "DesignSystemKit", path: .relativeToRoot("Projects/DesignSystem"))] : []
         )
         let tests = Target(
             name: "\(name)Tests",
