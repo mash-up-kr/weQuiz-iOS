@@ -10,6 +10,19 @@ import Foundation
 
 public extension DesignSystemKit {
     enum Colors: String, CaseIterable {
+        
+        // MARK: - Primary
+        
+        case p1
+        
+        // MARK: - Secondary
+        
+        case s1
+        case s2
+        case s3
+        case s4
+        case s5
+        
         // MARK: - Semantic
         
         case main
