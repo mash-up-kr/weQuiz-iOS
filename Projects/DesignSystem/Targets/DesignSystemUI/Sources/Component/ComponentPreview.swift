@@ -13,7 +13,11 @@ import DesignSystemKit
 struct ComponentPreview: View {
     var body: some View {
         ScrollView {
-            WQButtonPreview()
+            VStack {
+                WQButtonPreview()
+                WQSearchBarPreview()
+                WQTopBarPreview()
+            }
         }
         .navigationTitle("Component")
         .padding()
