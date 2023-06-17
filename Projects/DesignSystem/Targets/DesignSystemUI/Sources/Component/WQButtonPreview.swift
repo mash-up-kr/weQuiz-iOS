@@ -17,7 +17,7 @@ struct WQButtonPreview: View {
                 .font(.title)
             VStack(alignment: .center) {
                 WQButton(
-                    style: .two(
+                    style: .double(
                         .init(
                             titles: ("왼쪽버튼", "오른쪽버튼"),
                             leftAction: {
@@ -30,7 +30,7 @@ struct WQButtonPreview: View {
                     )
                 )
                 WQButton(
-                    style: .one(
+                    style: .single(
                         .init(
                             title: "버튼",
                             action: {
@@ -40,7 +40,7 @@ struct WQButtonPreview: View {
                     )
                 )
                 WQButton(
-                    style: .full(
+                    style: .fullRadiusSingle(
                         .init(
                             title: "버튼",
                             action: {

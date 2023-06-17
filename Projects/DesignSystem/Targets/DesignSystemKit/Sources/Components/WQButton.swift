@@ -10,9 +10,9 @@ import SwiftUI
 
 public struct WQButton: View {
     public enum Style {
-        case two(TwoButtonStyleModel)
-        case one(OneButtonStyleModel)
-        case full(OneButtonStyleModel)
+        case double(DobuleButtonStyleModel)
+        case single(SingleButtonStyleModel)
+        case fullRadiusSingle(SingleButtonStyleModel)
     }
     
     public let style: Style
@@ -23,16 +23,16 @@ public struct WQButton: View {
     
     public var body: some View {
         switch style {
-        case .two(let model):
+        case .double(let model):
             twoButton(style, model: model)
-        case .one(let model):
+        case .single(let model):
             oneButton(style, model: model)
-        case .full(let model):
+        case .fullRadiusSingle(let model):
             fullButton(style, model: model)
         }
     }
     
-    private func twoButton(_ style: Style, model: Style.TwoButtonStyleModel) -> some View {
+    private func twoButton(_ style: Style, model: Style.DobuleButtonStyleModel) -> some View {
         ZStack {
             HStack {
                 Button {
@@ -64,7 +64,7 @@ public struct WQButton: View {
         }
     }
     
-    private func oneButton(_ style: Style, model: Style.OneButtonStyleModel) -> some View {
+    private func oneButton(_ style: Style, model: Style.SingleButtonStyleModel) -> some View {
         ZStack {
             Button {
                 model.action?()
@@ -84,7 +84,7 @@ public struct WQButton: View {
         }
     }
     
-    private func fullButton(_ style: Style, model: Style.OneButtonStyleModel) -> some View {
+    private func fullButton(_ style: Style, model: Style.SingleButtonStyleModel) -> some View {
         ZStack {
             Button {
                 model.action?()
@@ -109,7 +109,7 @@ public struct WQButton: View {
 public extension WQButton.Style {
     typealias Action = (() -> Void)?
     
-    struct TwoButtonStyleModel {
+    struct DobuleButtonStyleModel {
         let titles: (leftTitle: String, rightTitle: String)
         let leftAction: Action
         let rightAction: Action
@@ -121,7 +121,7 @@ public extension WQButton.Style {
         }
     }
     
-    struct OneButtonStyleModel {
+    struct SingleButtonStyleModel {
         let title: String
         let action: Action
         
@@ -133,22 +133,22 @@ public extension WQButton.Style {
     
     var cornerRadius: CGFloat {
         switch self {
-        case .two: return 12
-        case .one: return 16
-        case .full: return .zero
+        case .double: return 12
+        case .single: return 16
+        case .fullRadiusSingle: return .zero
         }
     }
     
     fileprivate var padding: EdgeInsets {
         switch self {
-        case .two, .one:
+        case .double, .single:
             return .init(
                 top: 12,
                 leading: 20,
                 bottom: 20,
                 trailing: 20
             )
-        case .full:
+        case .fullRadiusSingle:
             return .init(
                 top: 8,
                 leading: 8,
@@ -162,7 +162,7 @@ public extension WQButton.Style {
 struct WQButton_Previews: PreviewProvider {
     static var previews: some View {
         WQButton(
-            style: .two(
+            style: .double(
                 .init(
                     titles: ("왼쪽","오른쪽 테스트 버튼"),
                     leftAction: {
@@ -174,12 +174,12 @@ struct WQButton_Previews: PreviewProvider {
             )
         )
         WQButton(
-            style: .one(.init(title: "원버튼", action: {
+            style: .single(.init(title: "원버튼", action: {
                 print("버튼클릭")
             }))
         )
         WQButton(
-            style: .full(.init(title: "풀버튼", action: {
+            style: .fullRadiusSingle(.init(title: "풀버튼", action: {
                 print("버튼클릭")
             })))
     }
