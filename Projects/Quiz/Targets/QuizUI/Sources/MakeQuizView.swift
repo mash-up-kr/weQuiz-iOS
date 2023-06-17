@@ -1,5 +1,6 @@
 import SwiftUI
 import Combine
+import DesignSystemKit
 
 public struct MakeQuizView: View {
     public init() {}
@@ -14,15 +15,20 @@ public struct MakeQuizView: View {
             GeometryReader {_ in
                 VStack {
                     VStack {
-                        TextField("제목없는 시험지", text: $quizName)
+                        TextField("", text: $quizName, prompt: Text("제목없는 시험지").foregroundColor(Color.designSystem(.g4)))
                             .onReceive(Just(quizName)) { _ in
                                 limitQuizName(quizNameLimit)
                             }
+                            .font(.pretendard(.medium, size: ._24))
+                            .foregroundColor(Color.designSystem(.g4))
                         List {
                             Section(content: {
                                 ForEach(questionItem, id: \.self) { item in
-                                    Text(item)
+                                    QuizView(title: item)
+                                        .frame(height: 68)
                                         .listRowSeparator(.hidden)
+                                        .listRowInsets(EdgeInsets())
+                                        .listRowBackground(Color.designSystem(.g9))
                                 }
                                 .onMove(perform: moveListItem)
                             }, footer: {
@@ -33,7 +39,6 @@ public struct MakeQuizView: View {
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 56)
                                 .background(.red)
-                                .listRowSeparator(.hidden)
                             })
                         }
                         .listStyle(.plain)
@@ -46,7 +51,6 @@ public struct MakeQuizView: View {
                     })
                     .frame(maxWidth: .infinity)
                     .frame(height: 52)
-                    .background(.green)
                 }
             }
             .frame(maxWidth: .infinity)
@@ -57,6 +61,9 @@ public struct MakeQuizView: View {
             .toolbar {
                 EditButton()
             }
+            .background(
+                Color.designSystem(.g9)
+            )
        }
     }
     
