@@ -24,7 +24,7 @@ public struct ClearButton: ViewModifier {
                 Button {
                     textFieldInput = ""
                 } label: {
-                    Image(Icon.Close.fillBlack)
+                    image
                 }
                 .padding(.trailing, 8)
             }

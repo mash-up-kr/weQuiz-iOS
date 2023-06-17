@@ -48,7 +48,7 @@ public struct WQSearchBar: View {
             .clearButton(
                 .init(textFieldInput: $input, image: Image(Icon.Close.fillBlack))
             )
-            .tint(.designSystem(.main))
+            .tint(.designSystem(.p1))
             
         }
         .background(
