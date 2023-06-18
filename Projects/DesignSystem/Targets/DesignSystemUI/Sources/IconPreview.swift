@@ -55,6 +55,7 @@ struct IconPreview: View {
         [
             Icon.Close.fillBlack,
             Icon.Close.fillGray,
+            Icon.Close.fillWhite
         ]
     )
     
@@ -64,15 +65,7 @@ struct IconPreview: View {
             Icon.Edit.list
         ]
     )
-    
-    private let ranking: IconDataSet = (
-        "Ranking",
-        [
-            Icon.Ranking.down,
-            Icon.Ranking.up,
-        ]
-    )
-    
+
     private let siren: IconDataSet = (
         "Siren",
         [
@@ -84,6 +77,13 @@ struct IconPreview: View {
         "Magnifier",
         [
             Icon.Magnifier.lineGray
+        ]
+    )
+    
+    private let arrow: IconDataSet = (
+        "Arrow",
+        [
+            Icon.Arrow.up
         ]
     )
     
@@ -139,13 +139,13 @@ struct IconPreview: View {
                 IconSectionView(title: edit.title, data: edit.data)
             }
             VStack(alignment: .leading) {
-                IconSectionView(title: ranking.title, data: ranking.data)
-            }
-            VStack(alignment: .leading) {
                 IconSectionView(title: siren.title, data: siren.data)
             }
             VStack(alignment: .leading) {
                 IconSectionView(title: magnifier.title, data: magnifier.data)
+            }
+            VStack(alignment: .leading) {
+                IconSectionView(title: arrow.title, data: arrow.data)
             }
         }
         .navigationTitle("Icon")
