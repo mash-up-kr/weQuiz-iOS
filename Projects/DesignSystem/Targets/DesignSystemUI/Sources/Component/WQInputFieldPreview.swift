@@ -15,16 +15,42 @@ struct WQInputFieldPreview: View {
     @State private var phoneNumberInput: String = ""
     @State private var phoneNumberValidate: Bool = false
     
+    @State private var verificationCodeInput: String = ""
+    @State private var verificationCodeValidate: Bool = false
+    @State private var verificationCodeTimeLimit: Int = 179
+
     var body: some View {
         VStack {
-            Text("PhoneNumber")
-                .font(.title)
-            WQInputField(style:.phoneNumber(
-                .init(
-                    input: $phoneNumberInput,
-                    isValid: $phoneNumberValidate
-                )
-            ))
+            VStack {
+                Text("PhoneNumber")
+                    .font(.title)
+                WQInputField(style:.phoneNumber(
+                    .init(
+                        input: $phoneNumberInput,
+                        isValid: $phoneNumberValidate
+                    )
+                ))
+            }
+            VStack {
+                Text("VerificationCode")
+                    .font(.title)
+                WQInputField(style: .verificationCode(
+                    .init(
+                        input: $verificationCodeInput,
+                        isValid: $verificationCodeValidate,
+                        timeLimit: $verificationCodeTimeLimit
+                    )
+                ))
+                .onAppear {
+                    Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [self] _ in
+                        if self.verificationCodeTimeLimit > 0 {
+                            self.verificationCodeTimeLimit -= 1
+                        } else {
+                            self.verificationCodeTimeLimit = 179
+                        }
+                    }
+                }
+            }
             Spacer()
         }
     }

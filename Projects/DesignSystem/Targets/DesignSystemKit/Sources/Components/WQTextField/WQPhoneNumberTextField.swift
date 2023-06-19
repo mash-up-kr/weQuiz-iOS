@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct WQPhoneNumberTextField: UIViewRepresentable {
-    public typealias UIViewType = UITextField
+    typealias UIViewType = UITextField
     
     @Binding private var text: String
     @Binding private var isValid: Bool
@@ -24,21 +24,16 @@ struct WQPhoneNumberTextField: UIViewRepresentable {
     
     init(
         text: Binding<String>,
-        isValid: Binding<Bool>,
-        font: UIFont? = nil,
-        textColor: UIColor? = nil
+        isValid: Binding<Bool>
     ) {
         self._text = text
         self._isValid = isValid
-        self.font = font
-        self.textColor = textColor
     }
     
     func makeUIView(context: Context) -> UITextField {
         let uiView = UITextField()
         uiView.keyboardType = .numberPad
         uiView.textContentType = .telephoneNumber
-        uiView.autocapitalizationType = .none
         uiView.text = text
         uiView.font = font
         uiView.placeholder = placeholder
@@ -54,7 +49,6 @@ struct WQPhoneNumberTextField: UIViewRepresentable {
     func updateUIView(_ uiView: UIViewType, context: Context) {
         uiView.keyboardType = .numberPad
         uiView.textContentType = .telephoneNumber
-        uiView.autocapitalizationType = .none
         uiView.text = text
         uiView.font = font
         uiView.placeholder = placeholder
