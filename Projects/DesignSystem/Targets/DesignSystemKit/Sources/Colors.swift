@@ -24,8 +24,7 @@ public extension DesignSystemKit {
         case s5
         
         // MARK: - Semantic
-        
-        case main
+
         case disabled
         case alert
         
