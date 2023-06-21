@@ -8,10 +8,26 @@ public struct MakeQuizView: View {
     let quizNameLimit: Int = 38
     @State var quizName: String = ""
     @State var questionItem: [String] = ["문제 1","문제 2","문제 3","문제 4"]
+    @Environment(\.editMode) private var editMode
 
     public var body: some View {
         
-        NavigationView {
+        VStack {
+            WQTopBar(style: .navigationWithListEdit(
+                .init(
+                    title: "문제 만들기",
+                    editAction: {
+                        self.editMode?.wrappedValue == .active ? 
+                        (self.editMode?.wrappedValue = .inactive) : (self.editMode?.wrappedValue = .active)
+                    }, action: {
+                        print("back")
+                    })
+            ))
+            .padding(.horizontal, 20)
+            .background(
+                Color.designSystem(.g9)
+            )
+            
             GeometryReader {_ in
                 VStack {
                     VStack {
@@ -31,8 +47,8 @@ public struct MakeQuizView: View {
                                         .frame(height: 68)
                                         .listRowSeparator(.hidden)
                                         .listRowInsets(EdgeInsets())
-                                        .listRowBackground(Color.designSystem(.g9))
-                                        .padding(.bottom, 16)
+                                        .listRowBackground(Color.clear)
+                                        .padding([.top, .bottom], 8)
                                 }
                                 .onMove(perform: moveListItem)
                             }, footer: {
@@ -55,6 +71,7 @@ public struct MakeQuizView: View {
                                     .frame(height: 56)
                                     .background(.red)
                                     .cornerRadius(16)
+                                    .padding(.top, 8)
                                     
                                 }
                                 .background(
@@ -72,31 +89,20 @@ public struct MakeQuizView: View {
 
                     WQButton(
                       style: .single(
-                          .init(
-                              title: "시험지 완성하기",
+                          .init(title: "시험지 완성하기",
                               action: {
                                   print("make quiz")
-                              }
-                          )
-                      )
+                              }))
                     )
                     .frame(height: 52)
-                    
                 }
-                
-                
             }
             .frame(maxWidth: .infinity)
             .ignoresSafeArea(.keyboard, edges: .bottom)
-            .navigationBarTitle(Text("문제 만들기"),
-                                    displayMode: .inline)
-            .toolbar {
-                EditButton()
-            }
-            .background(
-                Color.designSystem(.g9)
-            )
-       }
+        }
+        .background(
+            Color.designSystem(.g9)
+        )
     }
     
     private func moveListItem(from source: IndexSet, to destination: Int) {
