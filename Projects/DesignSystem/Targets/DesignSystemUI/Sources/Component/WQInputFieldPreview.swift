@@ -18,10 +18,15 @@ struct WQInputFieldPreview: View {
     @State private var verificationCodeInput: String = ""
     @State private var verificationCodeValidate: Bool = false
     @State private var verificationCodeTimeLimit: Int = 179
+    
+    private let limitCharacterPlaceholder: String = "Input character"
+    @State private var limitCharacterInput: String = ""
+    @State private var limitCharacterValidate: Bool = false
+    @State private var limitCharacterLimit: Int = 10
 
     var body: some View {
-        VStack {
-            VStack {
+        VStack(spacing: 50) {
+            VStack(alignment: .leading) {
                 Text("PhoneNumber")
                     .font(.title)
                 WQInputField(style:.phoneNumber(
@@ -31,7 +36,7 @@ struct WQInputFieldPreview: View {
                     )
                 ))
             }
-            VStack {
+            VStack(alignment: .leading) {
                 Text("VerificationCode")
                     .font(.title)
                 WQInputField(style: .verificationCode(
@@ -50,6 +55,21 @@ struct WQInputFieldPreview: View {
                         }
                     }
                 }
+            }
+            VStack(alignment: .leading) {
+                Text("LimitCharacter")
+                    .font(.title)
+                WQInputField(style: .limitCharacter(
+                    .init(
+                        input: $limitCharacterInput,
+                        isValid: $limitCharacterValidate,
+                        placeholder: limitCharacterPlaceholder,
+                        limit: limitCharacterLimit,
+                        condition: { value in
+                            value < limitCharacterLimit
+                        }
+                    )
+                ))
             }
             Spacer()
         }
