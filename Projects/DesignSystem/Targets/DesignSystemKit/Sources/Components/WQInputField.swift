@@ -16,7 +16,6 @@ public struct WQInputField: View {
         case limitCharacter(LimitCharacterStyleModel)
     }
     
-    private let placeholder: String? = nil
     private let style: Style
     @FocusState private var isFocused: Bool
 
@@ -51,10 +50,10 @@ public struct WQInputField: View {
         VStack {
             WQPhoneNumberTextField(
                 text: model.$input,
-                isValid: model.$isValid
+                isValid: model.$isValid,
+                placeholder: model.placeholder
             )
             .didEndEditing(model.didEndEditing)
-            .placeholder(placeholder ?? "")
             .font(.medium, ._20)
             .foregroundColor(.designSystem(.g2))
             .padding(
@@ -155,7 +154,8 @@ struct WQInputField_Previews: PreviewProvider {
             .phoneNumber(
                 .init(
                     input: .constant(""),
-                    isValid: .constant(false)
+                    isValid: .constant(false),
+                    placeholder: "핸드폰 번호를 입력해주세요."
                 )
             )
         )
@@ -187,15 +187,18 @@ public extension WQInputField.Style {
     struct PhoneNumberStyleModel {
         @Binding public var input: String
         @Binding public var isValid: Bool
+        public let placeholder: String
         var didEndEditing: ((UITextField) -> Void)?
         
         public init(
             input: Binding<String>,
             isValid: Binding<Bool>,
+            placeholder: String,
             didEndEditing: ((UITextField) -> Void)? = nil
         ) {
             self._input = input
             self._isValid = isValid
+            self.placeholder = placeholder
             self.didEndEditing = didEndEditing
         }
     }

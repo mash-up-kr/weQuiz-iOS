@@ -14,20 +14,21 @@ struct WQPhoneNumberTextField: UIViewRepresentable {
     @Binding private var text: String
     @Binding private var isValid: Bool
     
-    var placeholder: String?
+    private let placeholder: String
     var font: UIFont?
     var textColor: UIColor?
     
     var didChange: ((String?) -> Void)? = nil
     var didEndEditing: ((UITextField) -> Void)? = nil
-    var didBeginEditing: ((UITextField) -> Void)? = nil
     
     init(
         text: Binding<String>,
-        isValid: Binding<Bool>
+        isValid: Binding<Bool>,
+        placeholder: String
     ) {
         self._text = text
         self._isValid = isValid
+        self.placeholder = placeholder
     }
     
     func makeUIView(context: Context) -> UITextField {
@@ -60,8 +61,7 @@ struct WQPhoneNumberTextField: UIViewRepresentable {
             text: $text,
             isValid: $isValid,
             didChange: didChange,
-            didEndEditing: didEndEditing,
-            didBeginEditing: didBeginEditing
+            didEndEditing: didEndEditing
         )
     }
     
@@ -70,20 +70,17 @@ struct WQPhoneNumberTextField: UIViewRepresentable {
         var isValid: Binding<Bool>
         var didChange: ((String?) -> Void)?
         var didEndEditing: ((UITextField) -> Void)?
-        var didBeginEditing: ((UITextField) -> Void)?
         
         init(
             text: Binding<String>,
             isValid: Binding<Bool>,
             didChange: ((String?) -> Void)? = nil,
-            didEndEditing: ((UITextField) -> Void)? = nil,
-            didBeginEditing: ((UITextField) -> Void)? = nil
+            didEndEditing: ((UITextField) -> Void)? = nil
         ) {
             self.text = text
             self.isValid = isValid
             self.didChange = didChange
             self.didEndEditing = didEndEditing
-            self.didBeginEditing = didBeginEditing
         }
         
         @objc
@@ -92,11 +89,7 @@ struct WQPhoneNumberTextField: UIViewRepresentable {
             isValid.wrappedValue = validation(textField.text)
             didChange?(textField.text)
         }
-        
-        public func textFieldDidBeginEditing(_ textField: UITextField) {
-            didBeginEditing?(textField)
-        }
-        
+
         public func textFieldDidEndEditing(_ textField: UITextField) {
             didEndEditing?(textField)
         }
@@ -152,12 +145,6 @@ extension WQPhoneNumberTextField {
         return view
     }
     
-    func placeholder(_ text: String) -> Self {
-        var view = self
-        view.placeholder = text
-        return view
-    }
-    
     func didChange(_ completion: ((String?) -> Void)? = nil) -> Self {
         var view = self
         view.didChange = completion
@@ -169,19 +156,14 @@ extension WQPhoneNumberTextField {
         view.didEndEditing = completion
         return view
     }
-    
-    func didBeginEditing(_ completion: ((UITextField) -> Void)? = nil) -> Self {
-        var view = self
-        view.didBeginEditing = completion
-        return view
-    }
 }
 
 struct WQPhoneNumberTextField_Previews: PreviewProvider {
     static var previews: some View {
         WQPhoneNumberTextField(
             text: .constant(""),
-            isValid: .constant(false)
+            isValid: .constant(false),
+            placeholder: "placeholder"
         )
     }
 }
