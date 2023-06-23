@@ -89,11 +89,13 @@ public extension Icon {
     enum Close: IconRepresentable {
         case fillBlack
         case fillGray
+        case fillWhite
         
         public var name: String {
             switch self {
             case .fillBlack: return "close_fill_black"
             case .fillGray: return "close_fill_gray"
+            case .fillWhite: return "close_fill_white"
             }
         }
     }
@@ -106,20 +108,6 @@ public extension Icon {
         public var name: String {
             switch self {
             case .list: return "edit_list"
-            }
-        }
-    }
-
-    // MARK: - Ranking
-    
-    enum Ranking: IconRepresentable {
-        case down
-        case up
-        
-        public var name: String {
-            switch self {
-            case .down: return "ranking_down"
-            case .up: return "ranking_up"
             }
         }
     }
@@ -144,6 +132,18 @@ public extension Icon {
         public var name: String {
             switch self {
             case .lineGray: return "maginfier_line_gray"
+            }
+        }
+    }
+
+    // MARK: - Arrow
+    
+    enum Arrow: IconRepresentable {
+        case up
+        
+        public var name: String {
+            switch self {
+            case .up: return "arrow_up"
             }
         }
     }

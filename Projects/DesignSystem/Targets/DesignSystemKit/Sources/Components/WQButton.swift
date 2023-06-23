@@ -15,7 +15,7 @@ public struct WQButton: View {
         case fullRadiusSingle(SingleButtonStyleModel)
     }
     
-    public let style: Style
+    private let style: Style
     
     public init(style: Style) {
         self.style = style
@@ -34,14 +34,19 @@ public struct WQButton: View {
     
     private func twoButton(_ style: Style, model: Style.DobuleButtonStyleModel) -> some View {
         ZStack {
-            HStack {
+            HStack(spacing: 7) {
                 Button {
                     model.leftAction?()
                 } label: {
-                    Text(model.titles.leftTitle)
-                        .font(.pretendard(.semibold, size: ._16))
-                        .foregroundColor(.designSystem(.g2))
-                        .padding()
+                    HStack(spacing: .zero) {
+                        Spacer()
+                        Text(model.titles.leftTitle)
+                            .font(.pretendard(.semibold, size: ._16))
+                            .lineLimit(1)
+                            .foregroundColor(.designSystem(.g2))
+                            .padding()
+                        Spacer()
+                    }
                 }
                 .background {
                     RoundedRectangle(cornerRadius: style.cornerRadius)
@@ -50,10 +55,15 @@ public struct WQButton: View {
                 Button {
                     model.rightAction?()
                 } label: {
-                    Text(model.titles.rightTitle)
-                        .font(.pretendard(.semibold, size: ._16))
-                        .foregroundColor(.designSystem(.g2))
-                        .padding()
+                    HStack(spacing: .zero) {
+                        Spacer()
+                        Text(model.titles.rightTitle)
+                            .font(.pretendard(.semibold, size: ._16))
+                            .lineLimit(1)
+                            .foregroundColor(.designSystem(.g2))
+                            .padding()
+                        Spacer()
+                    }
                 }
                 .background {
                     RoundedRectangle(cornerRadius: style.cornerRadius)
