@@ -1,13 +1,17 @@
 import SwiftUI
 import Combine
 import DesignSystemKit
+import QuizKit
 
 public struct MakeQuizView: View {
     public init() {}
     
     let quizNameLimit: Int = 38
+    
     @State var quizName: String = ""
-    @State var questionItem: [String] = ["문제 1","문제 2","문제 3","문제 4"]
+    @State var questionItem: [QuestionModel] = [QuestionModel(), QuestionModel()]
+    
+    
     @Environment(\.editMode) private var editMode
 
     public var body: some View {
@@ -42,9 +46,8 @@ public struct MakeQuizView: View {
                         
                         List {
                             Section(content: {
-                                ForEach(questionItem, id: \.self) { item in
-                                    QuizView(title: item)
-                                        .frame(height: 68)
+                                ForEach($questionItem, id: \.id) { item in
+                                    QuestionView(model: item)
                                         .listRowSeparator(.hidden)
                                         .listRowInsets(EdgeInsets())
                                         .listRowBackground(Color.clear)
@@ -54,10 +57,10 @@ public struct MakeQuizView: View {
                             }, footer: {
                                 
                                 Button(action: {
-                                    self.questionItem.append("질!문!")
+                                    self.questionItem.append(QuestionModel())
                                 }) {
                                     HStack(alignment: .center, spacing: 7, content: {
-                                        
+                                        // TODO: - Icon 수정
                                         Text(".")
                                             .frame(width: 16.5, height: 16.5)
                                             .background(Color.white)
@@ -69,7 +72,7 @@ public struct MakeQuizView: View {
                                     })
                                     .frame(maxWidth: .infinity)
                                     .frame(height: 56)
-                                    .background(.red)
+                                    .background(Color.designSystem(.g8))
                                     .cornerRadius(16)
                                     .padding(.top, 8)
                                     
@@ -91,7 +94,7 @@ public struct MakeQuizView: View {
                       style: .single(
                           .init(title: "시험지 완성하기",
                               action: {
-                                  print("make quiz")
+                                  // TODO: 시험지 완성하기 연결
                               }))
                     )
                     .frame(height: 52)
@@ -116,8 +119,8 @@ public struct MakeQuizView: View {
     }
 }
 
-struct MakeQuizView_Previews: PreviewProvider {
-    static var previews: some View {
-        MakeQuizView()
-    }
-}
+//struct MakeQuizView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MakeQuizView()
+//    }
+//}
