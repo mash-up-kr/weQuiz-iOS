@@ -36,41 +36,43 @@ struct QuestionGroupList: View {
     }
 }
 
-struct ListHeader: View {
-    @Binding var questions: [QuestionGroup]
-    @Binding var isEditing: Bool
-    
-    var body: some View {
-        HStack {
-            Text("전체\(questions.count)")
-                .font(.system(size: 14))
-                .font(.title)
-            Spacer()
-            CustomEditButton(isEditing: $isEditing)
+extension QuestionGroupList {
+    private struct ListHeader: View {
+        @Binding var questions: [QuestionGroup]
+        @Binding var isEditing: Bool
+        
+        var body: some View {
+            HStack {
+                Text("전체\(questions.count)")
+                    .font(.system(size: 14))
+                    .font(.title)
+                Spacer()
+                CustomEditButton(isEditing: $isEditing)
+            }
+        }
+    }
+
+    private struct CustomEditButton: View {
+        @Binding var isEditing: Bool
+        
+        private var title: String {
+            return isEditing ? "삭제" : "편집"
+        }
+        
+        var body: some View {
+            Button(action: {
+                isEditing.toggle()
+            }) {
+                Text(title)
+                    .font(.system(size: 14))
+            }
+            .animation(.default)
         }
     }
 }
 
-struct CustomEditButton: View {
-    @Binding var isEditing: Bool
-    
-    private var title: String {
-        return isEditing ? "삭제" : "편집"
-    }
-    
-    var body: some View {
-        Button(action: {
-            isEditing.toggle()
-        }) {
-            Text(title)
-                .font(.system(size: 14))
-        }
-        .animation(.default)
+struct QuestionGroupList_Previews: PreviewProvider {
+    static var previews: some View {
+        QuestionGroupList(questions: .constant(questionsSamlple))
     }
 }
-
-//struct QuestionsList_Previews: PreviewProvider {
-//    static var previews: some View {
-//        QuestionsList(question: questionsSamlple[0])
-//    }
-//}

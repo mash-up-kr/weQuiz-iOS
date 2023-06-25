@@ -43,26 +43,28 @@ struct QuestionDetail: View {
     }
 }
 
-struct questionsList: View {
-    var question: Question
-    
-    var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                Text(question.title)
-                    .font(.system(size: 24))
-                    .padding(.bottom)
-                ForEach(question.content, id: \.self) { content in
-                    QuestionDetailRow(contents: content)
+extension QuestionDetail {
+    private struct questionsList: View {
+        var question: Question
+        
+        var body: some View {
+            ScrollView {
+                VStack(alignment: .leading) {
+                    Text(question.title)
+                        .font(.system(size: 24))
+                        .padding(.bottom)
+                    ForEach(question.content, id: \.self) { content in
+                        QuestionDetailRow(contents: content)
+                    }
                 }
             }
         }
     }
 }
 
-//struct QuestionDetailView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        QuestionDetail(questionGroup: )
-//    }
-//}
+struct QuestionDetailView_Previews: PreviewProvider {
+    static var previews: some View {
+        QuestionDetail(questionGroup: questionsSamlple[0])
+    }
+}
 
