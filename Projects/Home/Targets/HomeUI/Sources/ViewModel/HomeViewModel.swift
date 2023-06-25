@@ -19,7 +19,6 @@ public class HomeViewModel: ObservableObject {
     public init() {
         self.questionGroups = questionsSamlple
         self.friendsRank = friendsRankSample
-//        self.friendsRank = []
         self.profile = profileSamlple
         self.explainContents = explainSample
     }

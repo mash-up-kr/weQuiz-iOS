@@ -22,7 +22,7 @@ struct QuestionGroupRow: View {
 }
 
 extension QuestionGroupRow {
-    var questionsDescription: some View {
+    private var questionsDescription: some View {
         HStack {
             Text(questionGroup.title)
             Spacer()

@@ -17,7 +17,7 @@ struct FriendsRow: View {
 }
 
 extension FriendsRow {
-    var friendInfoDescription: some View {
+    private var friendInfoDescription: some View {
         HStack {
             image
                 .padding(.vertical, 16)
@@ -38,7 +38,7 @@ extension FriendsRow {
         .cornerRadius(12)
     }
     
-    var image: some View {
+    private var image: some View {
         switch friend.rank {
         case 1: return Image(systemName: "circle")
         case 2: return Image(systemName: "triangle")

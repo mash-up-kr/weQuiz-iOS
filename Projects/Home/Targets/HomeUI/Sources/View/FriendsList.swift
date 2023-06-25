@@ -26,8 +26,8 @@ struct FriendsList: View {
     }
 }
 
-//struct FriendsList_Previews: PreviewProvider {
-//    static var previews: some View {
-//        FriendsList(friend: friendsRankingSample[0])
-//    }
-//}
+struct FriendsList_Previews: PreviewProvider {
+    static var previews: some View {
+        FriendsList(friends: .constant(friendsRankSample))
+    }
+}

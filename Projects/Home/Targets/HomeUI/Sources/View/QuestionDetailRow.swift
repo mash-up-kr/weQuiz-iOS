@@ -17,8 +17,8 @@ struct QuestionDetailRow: View {
     }
 }
 
-//struct QuestionDetailRow_Previews: PreviewProvider {
-//    static var previews: some View {
-//        QuestionDetailRow()
-//    }
-//}
+struct QuestionDetailRow_Previews: PreviewProvider {
+    static var previews: some View {
+        QuestionDetailRow(contents: questionsSamlple[0].questions.description)
+    }
+}

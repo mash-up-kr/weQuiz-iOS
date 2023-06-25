@@ -17,7 +17,6 @@ public struct Home: View {
                 }
                 .padding()
             }
-//            .navigationTitle("HOME")
         }
         .preferredColorScheme(.dark)
     }
@@ -25,14 +24,14 @@ public struct Home: View {
 
 extension Home {
     
-    var logoView: some View {
+    private var logoView: some View {
         HStack {
             Text("LOGO")
             Spacer()
         }
     }
     
-    var profileView: some View {
+    private var profileView: some View {
         let image = viewModel.profile.image
         let nickname = viewModel.profile.nickname
         let contents = viewModel.profile.contents
@@ -56,7 +55,7 @@ extension Home {
         }
     }
     
-    var makeQuestionButton: some View {
+    private var makeQuestionButton: some View {
         Button(action: {
             // 소현이가 만드는 문제만들기 뷰와 연동되어야 함
             print("문제만들기 버튼이 클릭되었습니다.")
@@ -76,7 +75,7 @@ extension Home {
         }
     }
     
-    var questionExpainView: some View {
+    private var questionExplainView: some View {
         let title = viewModel.explainContents.title
         let contents = viewModel.explainContents.contents
         
@@ -96,7 +95,7 @@ extension Home {
         .cornerRadius(16)
     }
     
-    var friendRankList: some View {
+    private var friendRankList: some View {
         VStack {
             CustomHeader(title: "친구 랭킹", nextView: AnyView(FriendsList(friends: $viewModel.friendsRank)))
             
@@ -106,7 +105,7 @@ extension Home {
         }
     }
     
-    var myQuestionList: some View {
+    private var myQuestionList: some View {
         ScrollView {
             CustomHeader(title: "내가 낸 문제지 리스트", nextView: AnyView(QuestionGroupList(questions: $viewModel.questionGroups)))
             
@@ -123,11 +122,11 @@ extension Home {
     }
     
     @ViewBuilder
-    var createFriendRankView: some View {
+    private var createFriendRankView: some View {
         if !viewModel.friendsRank.isEmpty {
             friendRankList
         } else {
-            questionExpainView
+            questionExplainView
         }
     }
 }
