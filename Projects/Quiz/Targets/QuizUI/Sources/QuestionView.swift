@@ -45,7 +45,7 @@ public struct QuestionView: View {
                         InputAnswerView(answerNumber: index)
                     }
                 
-                    
+                    AddAnswerView()
                 }
                 .padding(.horizontal, 20)
             }
