@@ -74,8 +74,14 @@ struct AnimatingCellHeight: AnimatableModifier {
     }
 }
 
-//struct QuizView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        QuizView(title: "문제 입력")
-//    }
-//}
+struct Question_Previews: PreviewProvider {
+    static var previews: some View {
+        QuestionView(model: .constant(.init(title: "title")))
+    }
+}
+
+public extension View {
+    func hidden(_ shouldHide: Bool) -> some View {
+        opacity(shouldHide ? 0 : 1)
+    }
+}
