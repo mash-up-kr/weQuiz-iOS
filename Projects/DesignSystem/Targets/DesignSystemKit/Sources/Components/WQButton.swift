@@ -143,15 +143,21 @@ public extension WQButton.Style {
     
     var cornerRadius: CGFloat {
         switch self {
-        case .double: return 12
-        case .single: return 16
+        case .double, .single: return 12
         case .fullRadiusSingle: return .zero
         }
     }
     
     fileprivate var padding: EdgeInsets {
         switch self {
-        case .double, .single:
+        case .double:
+            return .init(
+                top: 0,
+                leading: 20,
+                bottom: 20,
+                trailing: 20
+            )
+        case .single:
             return .init(
                 top: 12,
                 leading: 20,
