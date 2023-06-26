@@ -14,6 +14,7 @@ public struct ContentView: View {
         case color
         case component
         case modal
+        case toast
     }
 
     public var body: some View {
@@ -25,6 +26,7 @@ public struct ContentView: View {
                 NavigationLink("Color", value: NavigationType.color)
                 NavigationLink("Component", value: NavigationType.component)
                 NavigationLink("Modal", value: NavigationType.modal)
+                NavigationLink("Toast", value: NavigationType.toast)
             }
             .navigationDestination(for: NavigationType.self) {
                 switch $0 {
@@ -38,6 +40,8 @@ public struct ContentView: View {
                     ComponentPreview()
                 case .modal:
                     WQModalPreview()
+                case .toast:
+                    WQToastPreview()
                 }
             }
             .navigationTitle("WeQuiz DesignSystem")
