@@ -47,11 +47,13 @@ public struct MakeQuizView: View {
                         List {
                             Section(content: {
                                 ForEach($questionItem, id: \.id) { item in
-                                    QuestionView(model: item)
-                                        .listRowSeparator(.hidden)
-                                        .listRowInsets(EdgeInsets())
-                                        .listRowBackground(Color.clear)
-                                        .padding([.top, .bottom], 8)
+                                    QuestionView(model: item, onRemove: { index in
+                                        questionItem.removeAll { $0.id == index }
+                                    })
+                                    .listRowSeparator(.hidden)
+                                    .listRowInsets(EdgeInsets())
+                                    .listRowBackground(Color.clear)
+                                    .padding([.top, .bottom], 8)
                                 }
                                 .onMove(perform: moveListItem)
                             }, footer: {
