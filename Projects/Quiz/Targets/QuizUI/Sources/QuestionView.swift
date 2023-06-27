@@ -36,7 +36,6 @@ public struct QuestionView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .foregroundColor(.designSystem(.g4))
                     .padding([.top, .horizontal], 20)
-                    .padding(.bottom, 16)
                     .onTapGesture {
                         withAnimation(.linear(duration: 0.3)) {
                             isExpand.toggle()
@@ -44,21 +43,24 @@ public struct QuestionView: View {
                     }
                 
                     
-                if isExpand == true {
-                    VStack {
-                        ForEach(0..<2) { index in
-                            InputAnswerView(answerNumber: index)
-                        }
-                    
-                        AddAnswerView()
+                VStack {
+                    ForEach(0..<2) { index in
+                        InputAnswerView(answerNumber: index)
+                            .frame(height: 56)
+                            
                     }
-                    .padding(.horizontal, 20)
+                
+                    AddAnswerView()
+                        .frame(height: 70)
+
                 }
+                .hidden(!isExpand)
+                .modifier(AnimatingCellHeight(height: isExpand ? 230 : 0))
+                .padding(.horizontal, 20)
                 
                 Spacer()
+                
             }
-            .modifier(AnimatingCellHeight(height: isExpand ? 300 : 68))
-            
             .background(
                 Color.designSystem(.g8)
             )
