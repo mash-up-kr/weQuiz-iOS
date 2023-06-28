@@ -8,17 +8,20 @@
 
 import SwiftUI
 import DesignSystemKit
+import QuizKit
 
-struct InputAnswerView: View {
+public struct InputAnswerView: View {
     
-    @State var answer = ""
+    
     var answerNumber: Int = 0
+    @Binding var answer: String
     
-    public init(answerNumber: Int) {
+    public init(answerNumber: Int, answer: Binding<String>) {
         self.answerNumber = answerNumber
+        self._answer = answer
     }
     
-    var body: some View {
+    public var body: some View {
         HStack {
             Text(String(UnicodeScalar(answerNumber + 65)!))
                 .font(.pretendard(.medium, size: ._16))
@@ -55,6 +58,6 @@ struct InputAnswerView: View {
 
 struct InputAnswerView_Previews: PreviewProvider {
     static var previews: some View {
-        InputAnswerView(answerNumber: 0)
+        InputAnswerView(answerNumber: 0, answer: .constant(""))
     }
 }

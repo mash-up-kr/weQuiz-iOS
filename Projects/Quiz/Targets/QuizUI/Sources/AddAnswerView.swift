@@ -11,7 +11,11 @@ import DesignSystemKit
 
 struct AddAnswerView: View {
     
-    var answerNumber: Int = 0
+    var answerNumber: Int = 2
+    
+    public init(answerNumber: Int) {
+        self.answerNumber = answerNumber
+    }
     
     var body: some View {
         HStack {
@@ -51,6 +55,6 @@ struct AddAnswerView: View {
 
 struct AddAnswerView_Previews: PreviewProvider {
     static var previews: some View {
-        AddAnswerView()
+        AddAnswerView(answerNumber: 2)
     }
 }

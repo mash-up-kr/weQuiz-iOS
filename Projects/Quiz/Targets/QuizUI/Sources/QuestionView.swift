@@ -16,6 +16,10 @@ public struct QuestionView: View {
     @State var isExpand = false
     
     @Binding var model: QuestionModel
+    @State var answerModel = AnswerModel.init(allAnswers: ["", ""])
+    @State var expandedHeight: CGFloat = 230
+    
+    
     var onRemove: ((UUID) -> ())?
     
     public init(model: Binding<QuestionModel>, onRemove: ((UUID) -> ())?) {
@@ -44,18 +48,24 @@ public struct QuestionView: View {
                 
                     
                 VStack {
-                    ForEach(0..<2) { index in
-                        InputAnswerView(answerNumber: index)
+                    ForEach(0..<answerModel.allAnswers.count, id: \.self) { index in
+                        InputAnswerView(answerNumber: index, answer: $answerModel.allAnswers[index])
                             .frame(height: 56)
-                            
+                        
                     }
                 
-                    AddAnswerView()
+                    AddAnswerView(answerNumber: answerModel.allAnswers.count)
                         .frame(height: 70)
+                        .onTapGesture {
+                            if self.answerModel.allAnswers.count < 10 {
+                                self.answerModel.allAnswers.append("")
+                                self.expandedHeight += 65
+                            }
+                        }
 
                 }
                 .hidden(!isExpand)
-                .modifier(AnimatingCellHeight(height: isExpand ? 230 : 0))
+                .modifier(AnimatingCellHeight(height: isExpand ? expandedHeight : 0))
                 .padding(.horizontal, 20)
                 
                 Spacer()
