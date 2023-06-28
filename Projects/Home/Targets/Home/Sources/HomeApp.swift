@@ -5,7 +5,8 @@ import HomeUI
 struct HomeApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Home()
+                .environmentObject(HomeViewModel())
         }
     }
 }
