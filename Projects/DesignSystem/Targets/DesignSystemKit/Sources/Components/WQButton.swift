@@ -52,6 +52,7 @@ public struct WQButton: View {
                     RoundedRectangle(cornerRadius: style.cornerRadius)
                         .foregroundColor(.designSystem(.g5))
                 }
+                .frame(height: 52)
                 Button {
                     model.rightAction?()
                 } label: {
@@ -69,6 +70,7 @@ public struct WQButton: View {
                     RoundedRectangle(cornerRadius: style.cornerRadius)
                         .foregroundColor(.designSystem(.p1))
                 }
+                .frame(height: 52)
             }
             .padding(style.padding)
         }
@@ -85,6 +87,7 @@ public struct WQButton: View {
                     .padding()
                     .frame(maxWidth: .infinity)
             }
+            .frame(height: 52)
             .frame(maxWidth: .infinity)
             .background {
                 RoundedRectangle(cornerRadius: style.cornerRadius)
@@ -105,6 +108,7 @@ public struct WQButton: View {
                     .padding()
                     .frame(maxWidth: .infinity)
             }
+            .frame(height: 52)
             .frame(maxWidth: .infinity)
             .background {
                 RoundedRectangle(cornerRadius: style.cornerRadius)
