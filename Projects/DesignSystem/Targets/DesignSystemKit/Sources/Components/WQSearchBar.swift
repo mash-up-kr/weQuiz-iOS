@@ -53,7 +53,7 @@ public struct WQSearchBar: View {
         }
         .background(
             RoundedRectangle(cornerRadius: 30)
-                .foregroundColor(.designSystem(.g2))
+                .foregroundColor(.designSystem(.g7))
         )
     }
 }
