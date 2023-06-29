@@ -15,6 +15,7 @@ public struct InputAnswerView: View {
     
     var answerNumber: Int = 0
     @Binding var answer: String
+    @State var isSelected: Bool = false
     
     public init(answerNumber: Int, answer: Binding<String>) {
         self.answerNumber = answerNumber
@@ -23,17 +24,16 @@ public struct InputAnswerView: View {
     
     public var body: some View {
         HStack {
-            Text(String(UnicodeScalar(answerNumber + 65)!))
-                .font(.pretendard(.medium, size: ._16))
-                .foregroundColor(
-                    Color.designSystem(.g4)
-                )
-                .frame(width: 24, height: 24, alignment: .center)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.designSystem(.g4),
-                                lineWidth: 1.5)
-                )
+            ZStack {
+                Image(Icon.Checkmark.falseFill24)
+                    .hidden(!isSelected)
+                
+                AlphabetCircleView(answerNumber: answerNumber)
+                    .hidden(isSelected)
+            }
+            .onTapGesture {
+                isSelected.toggle()
+            }
             
             Spacer()
 
@@ -44,12 +44,12 @@ public struct InputAnswerView: View {
                 )
                 .font(.pretendard(.medium, size: ._16))
                 .foregroundColor(
-                    Color.designSystem(.g4)
+                    isSelected ? Color.designSystem(.g2) : Color.designSystem(.g4)
                 )
         }
         .padding(.all, 16)
         .background(
-            Color.designSystem(.g7)
+            isSelected ? Color.designSystem(.p1) : Color.designSystem(.g7)
         )
         .cornerRadius(16)
         
