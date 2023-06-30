@@ -53,6 +53,7 @@ public struct InputAnswerView: View {
         .background(
             $answer.isCorrect.wrappedValue ? Color.designSystem(.p1) : Color.designSystem(.g7)
         )
+        .frame(height: 56)
         .cornerRadius(16)
         
     }

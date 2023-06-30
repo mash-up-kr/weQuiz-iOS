@@ -74,7 +74,7 @@ public struct MakeQuizView: View {
                                     .frame(height: 56)
                                     .background(Color.designSystem(.g8))
                                     .cornerRadius(16)
-                                    .padding(.top, 8)
+                                    .padding(.top, 16)
                                     
                                 }
                                 .background(
