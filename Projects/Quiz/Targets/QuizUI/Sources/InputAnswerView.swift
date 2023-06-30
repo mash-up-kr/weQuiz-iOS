@@ -10,17 +10,9 @@ import SwiftUI
 import DesignSystemKit
 import QuizKit
 
-struct SelectedModifier: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            
-    }
-}
-
 public struct InputAnswerView: View {
     
-    
-    var index: Int = 0
+    let index: Int
     @Binding var answer: AnswerModel
     
     var isCorrectAnswer: ((Bool) -> ())?

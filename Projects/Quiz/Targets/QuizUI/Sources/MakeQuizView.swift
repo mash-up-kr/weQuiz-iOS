@@ -10,8 +10,6 @@ public struct MakeQuizView: View {
     
     @State var quizName: String = ""
     @State var questionItem: [QuestionModel] = [QuestionModel(), QuestionModel()]
-    
-    
     @Environment(\.editMode) private var editMode
 
     public var body: some View {
@@ -96,7 +94,7 @@ public struct MakeQuizView: View {
                       style: .single(
                           .init(title: "시험지 완성하기",
                               action: {
-                                  // TODO: 시험지 완성하기 연결
+//                                   TODO: 시험지 완성하기 연결
                               }))
                     )
                     .frame(height: 52)
@@ -121,8 +119,8 @@ public struct MakeQuizView: View {
     }
 }
 
-//struct MakeQuizView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MakeQuizView()
-//    }
-//}
+struct MakeQuizView_Previews: PreviewProvider {
+    static var previews: some View {
+        MakeQuizView()
+    }
+}

@@ -9,7 +9,7 @@
 import SwiftUI
 import DesignSystemKit
 
-struct AddAnswerView: View {
+struct AddAnswerButtonView: View {
     
     var answerNumber: Int = 2
     
@@ -53,8 +53,8 @@ struct AddAnswerView: View {
     }
 }
 
-struct AddAnswerView_Previews: PreviewProvider {
+struct AddAnswerButtonView_Previews: PreviewProvider {
     static var previews: some View {
-        AddAnswerView(answerNumber: 2)
+        AddAnswerButtonView(answerNumber: 2)
     }
 }

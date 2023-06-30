@@ -60,7 +60,7 @@ public struct QuestionView: View {
                         
                     }
                     
-                    AddAnswerView(answerNumber: $model.answers.count)
+                    AddAnswerButtonView(answerNumber: $model.answers.count)
                         .frame(height: 70)
                         .onTapGesture {
                             addAnswer()
