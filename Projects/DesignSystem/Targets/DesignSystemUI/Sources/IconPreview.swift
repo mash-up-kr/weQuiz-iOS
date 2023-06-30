@@ -87,6 +87,13 @@ struct IconPreview: View {
         ]
     )
     
+    private let add: IconDataSet = (
+        "Add",
+        [
+            Icon.Add.circle
+        ]
+    )
+    
     private struct IconSectionView: View {
         let title: String
         let data: [any IconRepresentable]
@@ -146,6 +153,9 @@ struct IconPreview: View {
             }
             VStack(alignment: .leading) {
                 IconSectionView(title: arrow.title, data: arrow.data)
+            }
+            VStack(alignment: .leading) {
+                IconSectionView(title: add.title, data: add.data)
             }
         }
         .navigationTitle("Icon")

@@ -32,7 +32,8 @@ struct WQInputFieldPreview: View {
                 WQInputField(style:.phoneNumber(
                     .init(
                         input: $phoneNumberInput,
-                        isValid: $phoneNumberValidate
+                        isValid: $phoneNumberValidate,
+                        placeholder: phoneNumberPlaceholder
                     )
                 ))
             }
