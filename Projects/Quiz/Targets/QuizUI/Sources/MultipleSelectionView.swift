@@ -19,6 +19,9 @@ public struct MultipleSelectionView: View {
     
     public var body: some View {
         HStack(spacing: 8) {
+            
+            Spacer()
+            
             Image(isSelected ? Icon.Checkmark.trueFill20 : Icon.Checkmark.falseLine20)
             Text("중복 선택여부")
                 .font(.pretendard(.semibold, size: ._16))
