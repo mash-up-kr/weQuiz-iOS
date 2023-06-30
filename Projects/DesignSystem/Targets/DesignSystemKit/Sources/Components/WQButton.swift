@@ -83,15 +83,17 @@ public struct WQButton: View {
             } label: {
                 Text(model.title)
                     .font(.pretendard(.semibold, size: ._16))
-                    .foregroundColor(.designSystem(.g2))
+                    .foregroundColor(model.isEnable ? .designSystem(.g2) : .designSystem(.g4))
                     .padding()
                     .frame(maxWidth: .infinity)
             }
+            .disabled(!model.isEnable)
             .frame(height: 52)
             .frame(maxWidth: .infinity)
             .background {
                 RoundedRectangle(cornerRadius: style.cornerRadius)
-                    .foregroundColor(.designSystem(.p1))
+                    .foregroundColor(model.isEnable ? .designSystem(.p1) : .designSystem(.disabled))
+                    .animation(.easeInOut, value: model.isEnable)
             }
             .padding(style.padding)
         }
@@ -104,15 +106,17 @@ public struct WQButton: View {
             } label: {
                 Text(model.title)
                     .font(.pretendard(.semibold, size: ._16))
-                    .foregroundColor(.designSystem(.g2))
+                    .foregroundColor(model.isEnable ? .designSystem(.g2) : .designSystem(.g4))
                     .padding()
                     .frame(maxWidth: .infinity)
             }
+            .disabled(!model.isEnable)
             .frame(height: 52)
             .frame(maxWidth: .infinity)
             .background {
                 RoundedRectangle(cornerRadius: style.cornerRadius)
-                    .foregroundColor(.designSystem(.p1))
+                    .foregroundColor(model.isEnable ? .designSystem(.p1) : .designSystem(.disabled))
+                    .animation(.easeInOut, value: model.isEnable)
                 
             }
             .padding(style.padding)
@@ -138,9 +142,15 @@ public extension WQButton.Style {
     struct SingleButtonStyleModel {
         let title: String
         let action: Action
+        @Binding var isEnable: Bool
         
-        public init(title: String, action: Action) {
+        public init(
+            title: String,
+            isEnable: Binding<Bool> = .constant(true),
+            action: Action
+        ) {
             self.title = title
+            self._isEnable = isEnable
             self.action = action
         }
     }

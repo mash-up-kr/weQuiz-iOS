@@ -53,7 +53,6 @@ public struct WQInputField: View {
                 isValid: model.$isValid,
                 placeholder: model.placeholder
             )
-            .didEndEditing(model.didEndEditing)
             .font(.medium, ._20)
             .foregroundColor(.designSystem(.g2))
             .padding(
@@ -188,18 +187,15 @@ public extension WQInputField.Style {
         @Binding public var input: String
         @Binding public var isValid: Bool
         public let placeholder: String
-        var didEndEditing: ((UITextField) -> Void)?
         
         public init(
             input: Binding<String>,
             isValid: Binding<Bool>,
-            placeholder: String,
-            didEndEditing: ((UITextField) -> Void)? = nil
+            placeholder: String
         ) {
             self._input = input
             self._isValid = isValid
             self.placeholder = placeholder
-            self.didEndEditing = didEndEditing
         }
     }
     
