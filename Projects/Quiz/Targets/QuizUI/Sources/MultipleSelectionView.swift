@@ -11,7 +11,7 @@ import DesignSystemKit
 
 public struct MultipleSelectionView: View {
     
-    @Binding var isSelected: Bool
+    @Binding private var isSelected: Bool
     
     public init(isSelected: Binding<Bool>) {
         self._isSelected = isSelected

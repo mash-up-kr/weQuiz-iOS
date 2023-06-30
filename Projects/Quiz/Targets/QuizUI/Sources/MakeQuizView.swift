@@ -8,8 +8,8 @@ public struct MakeQuizView: View {
     
     let quizNameLimit: Int = 38
     
-    @State var quizName: String = ""
-    @State var questionItem: [QuestionModel] = [QuestionModel(), QuestionModel()]
+    @State private var quizName: String = ""
+    @State private var questionItem: [QuestionModel] = [QuestionModel(), QuestionModel()]
     @Environment(\.editMode) private var editMode
 
     public var body: some View {

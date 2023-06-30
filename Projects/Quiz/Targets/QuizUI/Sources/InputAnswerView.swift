@@ -13,7 +13,7 @@ import QuizKit
 public struct InputAnswerView: View {
     
     let index: Int
-    @Binding var answer: AnswerModel
+    @Binding private var answer: AnswerModel
     
     var isCorrectAnswer: ((Bool) -> ())?
     

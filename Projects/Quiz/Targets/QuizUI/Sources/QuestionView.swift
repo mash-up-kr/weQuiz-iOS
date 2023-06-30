@@ -12,15 +12,15 @@ import QuizKit
 
 public struct QuestionView: View {
     
-    @Binding var model: QuestionModel
+    @Binding private var model: QuestionModel
     
-    @State var questionTitle: String = ""
-    @State var isExpand = false
-    @State var expandedHeight: CGFloat = 250
-    @State var isMultipleSelection = false
+    @State private var questionTitle: String = ""
+    @State private var isExpand = false
+    @State private var expandedHeight: CGFloat = 250
+    @State private var isMultipleSelection = false
     
     
-    var onRemove: ((UUID) -> ())?
+    private var onRemove: ((UUID) -> ())?
     
     public init(model: Binding<QuestionModel>, onRemove: ((UUID) -> ())?) {
         self._model = model
