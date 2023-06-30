@@ -13,6 +13,7 @@ import DesignSystemKit
 
 public struct VerificationCodeInputView: View {
     @StateObject private var router: AuthenticationRouter
+    
     @State private var verificationCodeInput: String = ""
     @State private var isVerificationCodeValid: Bool = false
     @State private var verificationCodeTimeLimit: Int = 180
@@ -64,11 +65,19 @@ public struct VerificationCodeInputView: View {
                 Spacer()
             }
         }
+        .onChange(of: isVerificationCodeValid) { isValid in
+            if isValid {
+                verificationCodeInput = ""
+                isVerificationCodeValid = false
+                verificationCodeTimeLimit = 180
+                router.push(spec: .userInformationInput)
+            }
+        }
     }
 }
 
 struct VerificationCodeInputView_Previews: PreviewProvider {
     static var previews: some View {
-        VerificationCodeInputView(router: .init(isPresented: .constant(.verificationCodeInput)))
+        VerificationCodeInputView(router: .init(isPresented: .constant(.userInformationInput)))
     }
 }

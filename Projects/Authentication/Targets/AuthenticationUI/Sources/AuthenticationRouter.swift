@@ -19,6 +19,8 @@ public final class AuthenticationRouter: Router {
             navigateTo(.phoneNumberInput)
         case .verificationCodeInput:
             navigateTo(.verificationCodeInput)
+        case .userInformationInput:
+            navigateTo(.userInformationInput)
         }
     }
     
@@ -35,6 +37,8 @@ private extension AuthenticationRouter {
             PhoneNumberInputView(router: router(route: route))
         case .verificationCodeInput:
             VerificationCodeInputView(router: router(route: route))
+        case .userInformationInput:
+            UserInformationInputView(router: router(route: route))
         default:
             EmptyView()
         }

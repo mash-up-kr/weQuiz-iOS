@@ -12,6 +12,7 @@ public enum ViewSpec: Equatable, Hashable {
     case main
     case phoneNumberInput
     case verificationCodeInput
+    case userInformationInput
 }
 
 extension ViewSpec: Identifiable {
