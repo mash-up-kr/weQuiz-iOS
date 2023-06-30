@@ -14,6 +14,7 @@ public struct ContentView: View {
         case color
         case component
         case modal
+        case input
         case toast
     }
 
@@ -26,6 +27,7 @@ public struct ContentView: View {
                 NavigationLink("Color", value: NavigationType.color)
                 NavigationLink("Component", value: NavigationType.component)
                 NavigationLink("Modal", value: NavigationType.modal)
+                NavigationLink("Input", value: NavigationType.input)
                 NavigationLink("Toast", value: NavigationType.toast)
             }
             .navigationDestination(for: NavigationType.self) {
@@ -40,6 +42,8 @@ public struct ContentView: View {
                     ComponentPreview()
                 case .modal:
                     WQModalPreview()
+                case .input:
+                    WQInputFieldPreview()
                 case .toast:
                     WQToastPreview()
                 }
