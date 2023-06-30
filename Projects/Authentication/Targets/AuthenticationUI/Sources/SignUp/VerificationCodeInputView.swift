@@ -13,6 +13,9 @@ import DesignSystemKit
 
 public struct VerificationCodeInputView: View {
     @StateObject private var router: AuthenticationRouter
+    @State private var verificationCodeInput: String = ""
+    @State private var isVerificationCodeValid: Bool = false
+    @State private var verificationCodeTimeLimit: Int = 180
     
     public init(router: AuthenticationRouter) {
         self._router = StateObject(wrappedValue: router)
@@ -38,12 +41,16 @@ public struct VerificationCodeInputView: View {
                         Text("인증번호")
                             .font(.pretendard(.medium, size: ._12))
                             .foregroundColor(.designSystem(.g2))
-                        // 임시 컴포넌트
-                        Text("임시 VerificationCode Input")
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 32)
-                            .background(Color.designSystem(.p1))
-                        //
+                        WQInputField(style: .verificationCode(
+                            .init(
+                                input: $verificationCodeInput,
+                                isValid: $isVerificationCodeValid,
+                                timeLimit: $verificationCodeTimeLimit,
+                                resendHandler: {
+                                    print("재전송")
+                                }
+                            )
+                        ))
                     }
                 }
                 .padding(
