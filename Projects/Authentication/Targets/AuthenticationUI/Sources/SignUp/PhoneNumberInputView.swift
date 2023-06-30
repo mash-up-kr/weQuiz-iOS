@@ -14,6 +14,8 @@ import DesignSystemKit
 public struct PhoneNumberInputView: View {
     
     @StateObject private var router: AuthenticationRouter
+    @State private var phoneNumberInput: String = ""
+    @State private var isPhoneNubmerValid: Bool = false
     
     public init(router: AuthenticationRouter) {
         self._router = StateObject(wrappedValue: router)
@@ -39,12 +41,14 @@ public struct PhoneNumberInputView: View {
                         Text("휴대폰번호")
                             .font(.pretendard(.medium, size: ._12))
                             .foregroundColor(.designSystem(.g2))
-                        // 임시 컴포넌트
-                        Text("임시 PhoneNumber Input")
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 32)
-                            .background(Color.designSystem(.p1))
-                        //
+                        // TODO: ClearButton 터치 시 isVaild 변경되지 않는 이슈 있음
+                        WQInputField(style: .phoneNumber(
+                            .init(
+                                input: $phoneNumberInput,
+                                isValid: $isPhoneNubmerValid,
+                                placeholder: "휴대폰 번호 입력"
+                            )
+                        ))
                     }
                 }
                 .padding(
@@ -60,6 +64,7 @@ public struct PhoneNumberInputView: View {
                     style: .fullRadiusSingle(
                         .init(
                             title: "인증번호 받기",
+                            isEnable: .constant(!$phoneNumberInput.wrappedValue.isEmpty && $isPhoneNubmerValid.wrappedValue),
                             action: {
                                 router.push(spec: .verificationCodeInput)
                             }

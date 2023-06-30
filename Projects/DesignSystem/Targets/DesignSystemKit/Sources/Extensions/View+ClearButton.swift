@@ -9,8 +9,8 @@
 import SwiftUI
 
 public struct ClearButton: ViewModifier {
-    @Binding var textFieldInput: String
-    let image: Image
+    @Binding private var textFieldInput: String
+    private let image: Image
     
     public init(textFieldInput: Binding<String>, image: Image) {
         self._textFieldInput = textFieldInput
