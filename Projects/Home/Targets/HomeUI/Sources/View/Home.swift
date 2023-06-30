@@ -12,9 +12,9 @@ public struct Home: View {
                 VStack(spacing: 10) {
                     self.topBarView
                     self.profileView
-                    self.QuestionButton
-                    self.makeFriendRankView
-                    self.makeMyQuestionView
+                    self.questionButton
+                    self.friendRankView
+                    self.myQuestionView
                 }
             }
         }
@@ -64,7 +64,7 @@ extension Home {
         }
     }
     
-    private var QuestionButton: some View {
+    private var questionButton: some View {
         WQButton(
             style: .single(
                 .init(
@@ -122,7 +122,7 @@ extension Home {
     }
     
     @ViewBuilder
-    private var makeFriendRankView: some View {
+    private var friendRankView: some View {
         if !viewModel.friendsRank.isEmpty {
             friendRankList
                 .padding()
@@ -135,7 +135,7 @@ extension Home {
     }
     
     @ViewBuilder
-    private var makeMyQuestionView: some View {
+    private var myQuestionView: some View {
         if !viewModel.questionGroups.isEmpty {
             myQuestionList
                 .padding()
