@@ -1,4 +1,5 @@
 import SwiftUI
+import DesignSystemKit
 
 public struct Home: View {
     public init() { }
@@ -9,13 +10,12 @@ public struct Home: View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 10) {
-                    self.logoView
+                    self.topBarView
                     self.profileView
                     self.makeQuestionButton
                     self.createFriendRankView
-                    self.myQuestionList
+                    self.createMyQuestionView
                 }
-                .padding()
             }
         }
         .preferredColorScheme(.dark)
@@ -23,6 +23,9 @@ public struct Home: View {
 }
 
 extension Home {
+    private var topBarView: some View {
+        WQTopBar(style: .title(.init(title: "LOGO")))
+    }
     
     private var logoView: some View {
         HStack {
@@ -47,52 +50,41 @@ extension Home {
                 Text(nickname)
                     .font(.system(size: 20))
                     .multilineTextAlignment(.leading)
+                    .foregroundColor(
+                        .designSystem(.g2)
+                    )
                 Text(contents)
                     .font(.system(size: 20))
                     .multilineTextAlignment(.leading)
+                    .foregroundColor(
+                        .designSystem(.g4)
+                    )
             }
             .padding(.leading, 24)
         }
     }
     
     private var makeQuestionButton: some View {
-        Button(action: {
-            // 소현이가 만드는 문제만들기 뷰와 연동되어야 함
-            print("문제만들기 버튼이 클릭되었습니다.")
-        }) {
-            HStack {
-                Spacer()
-                Text("문제만들기")
-                    .font(.system(size: 16))
-                Image(systemName: "circle")
-                    .imageScale(.large)
-                    .frame(width: 16.25, height: 16.25)
-                Spacer()
-            }
-            .frame(height: 56, alignment: .center)
-            .background(Color.pink)
-            .cornerRadius(16)
-        }
+        WQButton(
+            style: .single(
+                .init(
+                    title: "문제만들기 💬",
+                    action: {
+                        print("버튼이 눌렸습니다")
+                    }
+                )
+            )
+        )
     }
     
-    private var questionExplainView: some View {
-        let title = viewModel.explainContents.title
-        let contents = viewModel.explainContents.contents
+    private var friendRankBlankView: some View {
+        let contents = "아직 랭킹이 없어요 ㅠㅠ"
         
         return VStack {
-            Text(title)
-                .font(.system(size: 16))
-                .foregroundColor(.white)
-                .padding(.top, 16)
-            
             Text(contents)
-                .font(.system(size: 16))
-                .foregroundColor(.white)
-                .padding(.all, 16)
-                .multilineTextAlignment(.leading)
+                .foregroundColor(.designSystem(.g2))
+                .font(.pretendard(.regular, size: ._14))
         }
-        .background(.blue)
-        .cornerRadius(16)
     }
     
     private var friendRankList: some View {
@@ -105,6 +97,18 @@ extension Home {
         }
     }
     
+    private var myQuestionBlankView: some View {
+        let contents = "아직 생성된 문제가 없어요."
+        let image = "doc.plaintext"
+        
+        return VStack {
+            Image(systemName: image)
+            Text(contents)
+                .foregroundColor(.designSystem(.g2))
+                .font(.pretendard(.regular, size: ._14))
+        }
+    }
+    
     private var myQuestionList: some View {
         ScrollView {
             CustomHeader(title: "내가 낸 문제지 리스트", nextView: AnyView(QuestionGroupList(questions: $viewModel.questionGroups)))
@@ -114,10 +118,6 @@ extension Home {
                     QuestionGroupRow(questionGroup: questionGroup)
                 }
             }
-    
-            if viewModel.questionGroups.isEmpty {
-                Text("아직 생성된 문제가 없습니다.")
-            }
         }
     }
     
@@ -125,8 +125,25 @@ extension Home {
     private var createFriendRankView: some View {
         if !viewModel.friendsRank.isEmpty {
             friendRankList
+                .padding()
+        } else if viewModel.friendsRank.isEmpty && !viewModel.questionGroups.isEmpty {
+            EmptyView()
         } else {
-            questionExplainView
+            friendRankBlankView
+                .padding()
+        }
+    }
+    
+    @ViewBuilder
+    private var createMyQuestionView: some View {
+        if !viewModel.questionGroups.isEmpty {
+            myQuestionList
+                .padding()
+        } else if viewModel.questionGroups.isEmpty && !viewModel.friendsRank.isEmpty {
+            EmptyView()
+        } else {
+            myQuestionBlankView
+                .padding()
         }
     }
 }
@@ -138,11 +155,10 @@ struct CustomHeader: View {
     var body: some View {
         NavigationLink(destination: nextView) {
             Text(title)
+                .foregroundColor(.designSystem(.g2))
+                .font(.pretendard(.bold, size: ._20))
             Spacer()
-            Image(systemName: "circle")
-                .resizable()
-                .scaledToFill()
-                .frame(width: 15, height: 15)
+            Image(Icon.Chevron.rightBig)
         }
         .buttonStyle(.plain)
     }
