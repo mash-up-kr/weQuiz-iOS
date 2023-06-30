@@ -10,46 +10,56 @@ import SwiftUI
 import DesignSystemKit
 import QuizKit
 
+struct SelectedModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            
+    }
+}
+
 public struct InputAnswerView: View {
     
     
-    var answerNumber: Int = 0
-    @Binding var answer: String
-    @State var isSelected: Bool = false
+    var index: Int = 0
+    @Binding var answer: AnswerModel
     
-    public init(answerNumber: Int, answer: Binding<String>) {
-        self.answerNumber = answerNumber
+    var isCorrectAnswer: ((Bool) -> ())?
+    
+    public init(index: Int, answer: Binding<AnswerModel>, isCorrectAnswer: ((Bool) -> ())?) {
+        self.index = index
         self._answer = answer
+        self.isCorrectAnswer = isCorrectAnswer
     }
     
     public var body: some View {
         HStack {
             ZStack {
                 Image(Icon.Checkmark.falseFill24)
-                    .hidden(!isSelected)
+                    .hidden(!$answer.isCorrect.wrappedValue)
                 
-                AlphabetCircleView(answerNumber: answerNumber)
-                    .hidden(isSelected)
+                AlphabetCircleView(answerNumber: index)
+                    .hidden($answer.isCorrect.wrappedValue)
             }
             .onTapGesture {
-                isSelected.toggle()
+                $answer.isCorrect.wrappedValue.toggle()
+                isCorrectAnswer?($answer.isCorrect.wrappedValue)
             }
             
             Spacer()
 
-            TextField("", text: $answer, prompt: Text("답변 입력")
+            TextField("", text: $answer.answer, prompt: Text("답변 입력")
                     .foregroundColor(
                         Color.designSystem(.g4)
                     )
                 )
                 .font(.pretendard(.medium, size: ._16))
                 .foregroundColor(
-                    isSelected ? Color.designSystem(.g2) : Color.designSystem(.g4)
+                    $answer.isCorrect.wrappedValue ? Color.designSystem(.g2) : Color.designSystem(.g4)
                 )
         }
         .padding(.all, 16)
         .background(
-            isSelected ? Color.designSystem(.p1) : Color.designSystem(.g7)
+            $answer.isCorrect.wrappedValue ? Color.designSystem(.p1) : Color.designSystem(.g7)
         )
         .cornerRadius(16)
         
@@ -58,6 +68,6 @@ public struct InputAnswerView: View {
 
 struct InputAnswerView_Previews: PreviewProvider {
     static var previews: some View {
-        InputAnswerView(answerNumber: 0, answer: .constant(""))
+        InputAnswerView(index: 0, answer: .constant(AnswerModel.init(answer: "", isCorrect: false)), isCorrectAnswer: nil)
     }
 }

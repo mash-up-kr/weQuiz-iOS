@@ -12,12 +12,12 @@ import QuizKit
 
 public struct QuestionView: View {
     
+    @Binding var model: QuestionModel
+    
     @State var questionTitle: String = ""
     @State var isExpand = false
-    
-    @Binding var model: QuestionModel
-    @State var answerModel = AnswerModel.init(allAnswers: ["", ""])
-    @State var expandedHeight: CGFloat = 230
+    @State var expandedHeight: CGFloat = 250
+    @State var isMultipleSelection = false
     
     
     var onRemove: ((UUID) -> ())?
@@ -46,20 +46,30 @@ public struct QuestionView: View {
                         }
                     }
                 
-                    
                 VStack {
-                    ForEach(0..<answerModel.allAnswers.count, id: \.self) { index in
-                        InputAnswerView(answerNumber: index, answer: $answerModel.allAnswers[index])
-                            .frame(height: 56)
+                    ForEach(0..<$model.answers.count, id: \.self) { index in
+                        InputAnswerView(index: index,
+                                        answer: $model.answers[index],
+                                        isCorrectAnswer: { isCorrect in
+                            if isCorrect == true && $isMultipleSelection.wrappedValue == false {
+                                deselectAllList()
+                                model.answers[index].isCorrect = true
+                            }
+                        })
+                        .frame(height: 56)
                         
                     }
-                
-                    AddAnswerView(answerNumber: answerModel.allAnswers.count)
+                    
+                    AddAnswerView(answerNumber: $model.answers.count)
                         .frame(height: 70)
                         .onTapGesture {
-                            if self.answerModel.allAnswers.count < 10 {
-                                self.answerModel.allAnswers.append("")
-                                self.expandedHeight += 65
+                            addAnswer()
+                        }
+                    
+                    MultipleSelectionView(isSelected: $isMultipleSelection)
+                        .onChange(of: isMultipleSelection) { newValue in
+                            if newValue == false {
+                                deselectAllList()
                             }
                         }
 
@@ -83,6 +93,18 @@ public struct QuestionView: View {
                     }
             }
             
+        }
+    }
+    
+    private func addAnswer() {
+        if self.model.answers.count >= 10 { return }
+        self.model.answers.append(AnswerModel.init())
+        self.expandedHeight += 65
+    }
+    
+    private func deselectAllList() {
+        for i in 0..<$model.answers.count {
+            model.answers[i].isCorrect = false
         }
     }
 }

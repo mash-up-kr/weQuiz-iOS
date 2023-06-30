@@ -11,7 +11,11 @@ import DesignSystemKit
 
 public struct MultipleSelectionView: View {
     
-    @State var isSelected: Bool = false
+    @Binding var isSelected: Bool
+    
+    public init(isSelected: Binding<Bool>) {
+        self._isSelected = isSelected
+    }
     
     public var body: some View {
         HStack(spacing: 8) {
@@ -29,6 +33,6 @@ public struct MultipleSelectionView: View {
  
 struct MultipleSelectionView_Previews: PreviewProvider {
     static var previews: some View {
-        MultipleSelectionView()
+        MultipleSelectionView(isSelected: .constant(true))
     }
 }
