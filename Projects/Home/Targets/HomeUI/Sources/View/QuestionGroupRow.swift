@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import DesignSystemKit
 
 struct QuestionGroupRow: View {
     let questionGroup: QuestionGroup
@@ -14,19 +15,34 @@ struct QuestionGroupRow: View {
     var body: some View {
         HStack {
             self.questionsDescription
+            Spacer()
+            self.writingStateView
         }
+        .padding(.all, 16)
         .frame(height: 56)
-        .background(.gray)
-        .cornerRadius(12)
+        .background(Color.designSystem(.g8))
+        .cornerRadius(16)
     }
 }
 
 extension QuestionGroupRow {
     private var questionsDescription: some View {
-        HStack {
-            Text(questionGroup.title)
-            Spacer()
+        Text(questionGroup.title)
+            .foregroundColor(.designSystem(.g2))
+    }
+    
+    @ViewBuilder
+    private var writingStateView: some View {
+        let writingState = questionGroup.writingState
+        
+        if writingState {
+            Text("작성 중")
+                .padding(.all, 4)
+                .foregroundColor(.designSystem(.s1))
+                .background(.black)
+                .cornerRadius(4)
+        } else {
+            EmptyView()
         }
-        .padding(.all, 16)
     }
 }

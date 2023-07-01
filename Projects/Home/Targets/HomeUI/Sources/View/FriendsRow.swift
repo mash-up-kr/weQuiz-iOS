@@ -7,6 +7,7 @@
 //
 
 import SwiftUI
+import DesignSystemKit
 
 struct FriendsRow: View {
     let friend: Friend
@@ -26,16 +27,18 @@ extension FriendsRow {
                 .padding(.vertical, 16)
             Text("#" + self.friend.originalNum)
                 .padding(.all, 4)
+                .foregroundColor(.designSystem(.g1))
                 .background(.black)
-                .padding(.vertical, 16)
+                .cornerRadius(4)
             Spacer()
             Text("\(self.friend.Score)점")
                 .padding(.trailing, 16)
                 .padding(.vertical, 16)
+                .foregroundColor(.designSystem(.g1))
         }
         .frame(height: 56)
-        .background(.gray)
-        .cornerRadius(12)
+        .background(Color.designSystem(.g8))
+        .cornerRadius(16)
     }
     
     private var image: some View {

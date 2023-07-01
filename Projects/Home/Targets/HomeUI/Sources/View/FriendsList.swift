@@ -8,6 +8,7 @@
 
 import SwiftUI
 
+
 struct FriendsList: View {
     @Binding var friends: [Friend]
     
