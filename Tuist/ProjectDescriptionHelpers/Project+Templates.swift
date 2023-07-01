@@ -33,7 +33,9 @@ extension Project {
                     infoPlist: "Targets/CoreKit/SupportingFiles/Core-info.plist",
                     sources: ["Targets/CoreKit/Sources/**"],
                     resources: [],
-                    dependencies: []
+                    dependencies: [
+                        .external(name: "Alamofire")
+                    ]
                 )
             ]
         )
