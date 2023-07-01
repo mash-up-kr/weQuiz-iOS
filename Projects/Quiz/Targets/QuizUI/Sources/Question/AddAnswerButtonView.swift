@@ -1,5 +1,5 @@
 //
-//  InputAnswerView.swift
+//  AddAnswerButtonView.swift
 //  QuizUI
 //
 //  Created by 박소현 on 2023/06/23.
@@ -9,10 +9,9 @@
 import SwiftUI
 import DesignSystemKit
 
-struct InputAnswerView: View {
+struct AddAnswerButtonView: View {
     
-    @State var answer = ""
-    var answerNumber: Int = 0
+    var answerNumber: Int = 2
     
     public init(answerNumber: Int) {
         self.answerNumber = answerNumber
@@ -23,38 +22,39 @@ struct InputAnswerView: View {
             Text(String(UnicodeScalar(answerNumber + 65)!))
                 .font(.pretendard(.medium, size: ._16))
                 .foregroundColor(
-                    Color.designSystem(.g4)
+                    Color.designSystem(.g6)
                 )
                 .frame(width: 24, height: 24, alignment: .center)
                 .overlay(
                     RoundedRectangle(cornerRadius: 12)
-                        .stroke(Color.designSystem(.g4),
-                                lineWidth: 1.5)
+                        .stroke(style: StrokeStyle(lineWidth: 1.5, lineCap: .round, dash: [5]))
+                        .foregroundColor(Color.designSystem(.g6))
+                )
+            
+
+            Text("답변 추가")
+                .frame(alignment: .leading)
+                .font(.pretendard(.medium, size: ._16))
+                .foregroundColor(
+                    Color.designSystem(.g6)
                 )
             
             Spacer()
-
-            TextField("", text: $answer, prompt: Text("답변 입력")
-                    .foregroundColor(
-                        Color.designSystem(.g4)
-                    )
-                )
-                .font(.pretendard(.medium, size: ._16))
-                .foregroundColor(
-                    Color.designSystem(.g4)
-                )
         }
         .padding(.all, 16)
         .background(
-            Color.designSystem(.g7)
+            .clear
         )
-        .cornerRadius(16)
-        
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(style: StrokeStyle(lineWidth: 1.5, lineCap: .round, dash: [7]))
+                .foregroundColor(Color.designSystem(.g6))
+        )
     }
 }
 
-struct InputAnswerView_Previews: PreviewProvider {
+struct AddAnswerButtonView_Previews: PreviewProvider {
     static var previews: some View {
-        InputAnswerView(answerNumber: 0)
+        AddAnswerButtonView(answerNumber: 2)
     }
 }
