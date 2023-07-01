@@ -57,10 +57,8 @@ public struct MakeQuizView: View {
                                     self.questionItem.append(QuestionModel())
                                 }) {
                                     HStack(alignment: .center, spacing: 7, content: {
-                                        // TODO: - Icon 수정
-                                        Text(".")
+                                        Image(Icon.Add.circle)
                                             .frame(width: 16.5, height: 16.5)
-                                            .background(Color.white)
                                         
                                         Text("질문 추가")
                                             .font(.pretendard(.bold, size: ._16))
