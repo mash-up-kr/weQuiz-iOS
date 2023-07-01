@@ -1,5 +1,5 @@
 //
-//  AddAnswerView.swift
+//  AddAnswerButtonView.swift
 //  QuizUI
 //
 //  Created by 박소현 on 2023/06/23.

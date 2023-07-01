@@ -1,5 +1,5 @@
 //
-//  InputAnswerView.swift
+//  AnswerView.swift
 //  QuizUI
 //
 //  Created by 박소현 on 2023/06/23.
@@ -10,7 +10,7 @@ import SwiftUI
 import DesignSystemKit
 import QuizKit
 
-public struct InputAnswerView: View {
+public struct AnswerView: View {
     
     let index: Int
     @Binding private var answer: AnswerModel
@@ -59,8 +59,8 @@ public struct InputAnswerView: View {
     }
 }
 
-struct InputAnswerView_Previews: PreviewProvider {
+struct AnswerView_Previews: PreviewProvider {
     static var previews: some View {
-        InputAnswerView(index: 0, answer: .constant(AnswerModel.init(answer: "", isCorrect: false)), isCorrectAnswer: nil)
+        AnswerView(index: 0, answer: .constant(AnswerModel.init(answer: "", isCorrect: false)), isCorrectAnswer: nil)
     }
 }

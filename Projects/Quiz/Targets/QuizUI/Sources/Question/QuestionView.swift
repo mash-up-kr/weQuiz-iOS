@@ -19,7 +19,6 @@ public struct QuestionView: View {
     @State private var expandedHeight: CGFloat = 250
     @State private var isMultipleSelection = false
     
-    
     private var onRemove: ((UUID) -> ())?
     
     public init(model: Binding<QuestionModel>, onRemove: ((UUID) -> ())?) {
@@ -91,7 +90,7 @@ public struct QuestionView: View {
     
     private func answerInputs() -> some View {
         ForEach(0..<$model.answers.count, id: \.self) { index in
-            InputAnswerView(index: index,
+            AnswerView(index: index,
                             answer: $model.answers[index],
                             isCorrectAnswer: { isCorrect in
                 if isCorrect == true && $isMultipleSelection.wrappedValue == false {
@@ -115,29 +114,10 @@ public struct QuestionView: View {
     }
 }
 
-struct AnimatingCellHeight: AnimatableModifier {
-    var height: CGFloat = 0
-
-    var animatableData: CGFloat {
-        get { height }
-        set { height = newValue }
-    }
-
-    func body(content: Content) -> some View {
-        content.frame(height: height)
-    }
-}
-
 struct Question_Previews: PreviewProvider {
     static var previews: some View {
         QuestionView(model: .constant(.init(title: "title"))) { idx in
             //
         }
-    }
-}
-
-public extension View {
-    func hidden(_ shouldHide: Bool) -> some View {
-        opacity(shouldHide ? 0 : 1)
     }
 }
