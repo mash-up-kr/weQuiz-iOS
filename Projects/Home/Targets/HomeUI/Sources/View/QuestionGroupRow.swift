@@ -29,6 +29,7 @@ extension QuestionGroupRow {
     private var questionsDescription: some View {
         Text(questionGroup.title)
             .foregroundColor(.designSystem(.g2))
+            .font(.pretendard(.medium, size: ._16))
     }
     
     @ViewBuilder
@@ -39,6 +40,7 @@ extension QuestionGroupRow {
             Text("작성 중")
                 .padding(.all, 4)
                 .foregroundColor(.designSystem(.s1))
+                .font(.pretendard(.medium, size: ._12))
                 .background(.black)
                 .cornerRadius(4)
         } else {

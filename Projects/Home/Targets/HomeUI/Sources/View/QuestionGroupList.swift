@@ -7,67 +7,72 @@
 //
 
 import SwiftUI
+import DesignSystemKit
 
 struct QuestionGroupList: View {
+    @Environment(\.dismiss) private var dismiss
     @Binding var questions: [QuestionGroup]
-    @State private var isEditing = false
+    @State private var isEdited = false
     
     var body: some View {
-        NavigationView {
-            List {
-                Section(header: ListHeader(questions: $questions, isEditing: $isEditing)) {
-                    ForEach(questions) { question in
-                        QuestionGroupRow(questionGroup: question)
-                    }
-                    .onDelete(perform: deleteItems)
-                    .headerProminence(.increased)
-                    .listStyle(.plain)
-                }
-            }
-            .animation(.default)
-            .environment(\.editMode, .constant(isEditing ? EditMode.active : EditMode.inactive))
-        }
-        .navigationBarTitle("문제 리스트")
-        .preferredColorScheme(.dark)
-    }
-    
-    func deleteItems(at offsets: IndexSet) {
-        questions.remove(atOffsets: offsets)
+        self.topBarView
+        self.listBarView
+        self.listView
+            .navigationBarHidden(true)
     }
 }
 
 extension QuestionGroupList {
-    private struct ListHeader: View {
-        @Binding var questions: [QuestionGroup]
-        @Binding var isEditing: Bool
-        
-        var body: some View {
-            HStack {
-                Text("전체\(questions.count)")
-                    .font(.system(size: 14))
-                    .font(.title)
-                Spacer()
-                CustomEditButton(isEditing: $isEditing)
+    private var topBarView: some View {
+        WQTopBar(style: .navigation(
+            .init(
+                title: "문제 리스트",
+                action: {
+                    dismiss()
+                })))
+    }
+    
+    private var listBarView: some View {
+        HStack {
+            Text("전체\(questions.count)")
+                .foregroundColor(.designSystem(.g2))
+                .font(.pretendard(.medium, size: ._14))
+                .padding([.horizontal, .top], 20)
+                .padding(.bottom, 16)
+            Spacer()
+            Button(action: {
+                withAnimation {
+                    self.isEdited.toggle()
+                }
+            }) {
+                Text(isEdited ? "완료" : "편집")
+                    .foregroundColor(.designSystem(.g2))
+                    .font(.pretendard(.regular, size: ._14))
+                    .padding([.horizontal, .top], 20)
+                    .padding(.bottom, 16)
             }
         }
     }
-
-    private struct CustomEditButton: View {
-        @Binding var isEditing: Bool
-        
-        private var title: String {
-            return isEditing ? "삭제" : "편집"
-        }
-        
-        var body: some View {
-            Button(action: {
-                isEditing.toggle()
-            }) {
-                Text(title)
-                    .font(.system(size: 14))
+    
+    private var listView: some View {
+        List {
+            ForEach(questions) { question in
+                QuestionGroupRow(
+                    questionGroup: question
+                )
+                .padding(.horizontal, 20)
+                .listRowInsets(EdgeInsets(top: 6, leading: 0, bottom: 6, trailing: 0))
+                .listRowSeparator(.hidden)
             }
-            .animation(.default)
+            .onDelete(perform: removeItem)
         }
+        .environment(\.editMode, .constant(isEdited ? EditMode.active : EditMode.inactive))
+        .listStyle(.plain)
+        
+    }
+    
+    private func removeItem(at offsets: IndexSet) {
+        questions.remove(atOffsets: offsets)
     }
 }
 
