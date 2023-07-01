@@ -28,36 +28,11 @@ public struct QuestionView: View {
     }
     
     public var body: some View {
-        
         ZStack(alignment: .topTrailing) {
             VStack {
-                TextField("", text: $questionTitle, prompt: Text("문제 입력")
-                        .font(.pretendard(.medium, size: ._18))
-                        .foregroundColor(.designSystem(.g4))
-                        )
-                    .font(.pretendard(.medium, size: ._18))
-                    .frame(minHeight: 26)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .foregroundColor(.designSystem(.g4))
-                    .padding([.top, .horizontal], 20)
-                    .onTapGesture {
-                        withAnimation(.linear(duration: 0.3)) {
-                            isExpand.toggle()
-                        }
-                    }
-                
+                questionTextField()
                 VStack {
-                    ForEach(0..<$model.answers.count, id: \.self) { index in
-                        InputAnswerView(index: index,
-                                        answer: $model.answers[index],
-                                        isCorrectAnswer: { isCorrect in
-                            if isCorrect == true && $isMultipleSelection.wrappedValue == false {
-                                deselectAllList()
-                                model.answers[index].isCorrect = true
-                            }
-                        })
-                    }
-                    
+                    answerInputs()
                     AddAnswerButtonView(answerNumber: $model.answers.count)
                         .frame(height: 72)
                         .onTapGesture {
@@ -70,7 +45,7 @@ public struct QuestionView: View {
                                 deselectAllList()
                             }
                         }
-
+                    
                 }
                 .hidden(!isExpand)
                 .modifier(AnimatingCellHeight(height: isExpand ? expandedHeight : 0))
@@ -90,7 +65,40 @@ public struct QuestionView: View {
                         onRemove?(model.id)
                     }
             }
-            
+        }
+        .listRowSeparator(.hidden)
+        .listRowInsets(EdgeInsets())
+        .listRowBackground(Color.clear)
+        .padding([.top, .bottom], 8)
+    }
+    
+    private func questionTextField() -> some View {
+            TextField("", text: $questionTitle, prompt: Text("문제 입력")
+                .font(.pretendard(.medium, size: ._18))
+                .foregroundColor(.designSystem(.g4))
+            )
+            .font(.pretendard(.medium, size: ._18))
+            .frame(minHeight: 26)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .foregroundColor(.designSystem(.g4))
+            .padding([.top, .horizontal], 20)
+            .onTapGesture {
+                withAnimation(.linear(duration: 0.3)) {
+                    isExpand.toggle()
+                }
+            }
+    }
+    
+    private func answerInputs() -> some View {
+        ForEach(0..<$model.answers.count, id: \.self) { index in
+            InputAnswerView(index: index,
+                            answer: $model.answers[index],
+                            isCorrectAnswer: { isCorrect in
+                if isCorrect == true && $isMultipleSelection.wrappedValue == false {
+                    deselectAllList()
+                    model.answers[index].isCorrect = true
+                }
+            })
         }
     }
     
