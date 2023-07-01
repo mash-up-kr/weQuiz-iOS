@@ -12,6 +12,8 @@ import DesignSystemKit
 
 public struct QuizCompletionView: View {
     
+    @State var isSharePresented = false
+    
     public init() {}
     
     public var body: some View {
@@ -25,10 +27,16 @@ public struct QuizCompletionView: View {
                   style: .single(
                       .init(title: "친구들에게 시험지 공유하기",
                           action: {
-                              // TODO: - 문제 만들기로 돌아가기
+                              self.isSharePresented = true
                           }))
                 )
                 .frame(height: 52)
+                .background(
+                    ActivityView(
+                        isPresented: $isSharePresented,
+                        activityItems: ["친구가 만든 찐친고사에 도전해보세요!", URL(string: "https://www.youtube.com/")!])
+                    // TODO: - url 문제 id로 수정
+                )
             }
             
             VStack {
