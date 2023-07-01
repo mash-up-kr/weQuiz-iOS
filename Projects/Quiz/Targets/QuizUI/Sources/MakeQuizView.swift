@@ -48,12 +48,9 @@ public struct MakeQuizView: View {
                                     QuestionView(model: item, onRemove: { index in
                                         questionItem.removeAll { $0.id == index }
                                     })
-                                    .listRowSeparator(.hidden)
-                                    .listRowInsets(EdgeInsets())
-                                    .listRowBackground(Color.clear)
-                                    .padding([.top, .bottom], 8)
                                 }
                                 .onMove(perform: moveListItem)
+                                
                             }, footer: {
                                 
                                 Button(action: {
