@@ -8,6 +8,9 @@
          location = "group:Authentication/Authentication.xcodeproj">
       </FileRef>
       <FileRef
+         location = "group:Core/Core.xcodeproj">
+      </FileRef>
+      <FileRef
          location = "group:DesignSystem/DesignSystem.xcodeproj">
       </FileRef>
       <FileRef

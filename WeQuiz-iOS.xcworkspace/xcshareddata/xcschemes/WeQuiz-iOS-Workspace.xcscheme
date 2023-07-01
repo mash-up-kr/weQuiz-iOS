@@ -98,6 +98,20 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
+               BlueprintIdentifier = "1B17A59E6A78A677FFC8DAE2"
+               BuildableName = "CoreKit.framework"
+               BlueprintName = "CoreKit"
+               ReferencedContainer = "container:Projects/Core/Core.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
                BlueprintIdentifier = "83C9B5D1938C22907FF6E247"
                BuildableName = "DesignSystem.app"
                BlueprintName = "DesignSystem"

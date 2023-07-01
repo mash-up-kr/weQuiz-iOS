@@ -19,6 +19,26 @@ extension Project {
                        targets: targets)
     }
     
+    public static func core() -> Project {
+        return Project(
+            name: "Core",
+            organizationName: "ommaya.io",
+            targets: [
+                Target(
+                    name: "CoreKit",
+                    platform: .iOS,
+                    product: .framework,
+                    bundleId: "wequiz.ios.Core",
+                    deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
+                    infoPlist: "Targets/CoreKit/SupportingFiles/Core-info.plist",
+                    sources: ["Targets/CoreKit/Sources/**"],
+                    resources: [],
+                    dependencies: []
+                )
+            ]
+        )
+    }
+    
     // MARK: - Private
     
     /// Helper function to create a framework target and an associated unit test target
