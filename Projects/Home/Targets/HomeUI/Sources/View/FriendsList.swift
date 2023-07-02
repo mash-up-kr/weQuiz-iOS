@@ -7,22 +7,41 @@
 //
 
 import SwiftUI
+import DesignSystemKit
 
 
 struct FriendsList: View {
+    @Environment(\.dismiss) private var dismiss
     @Binding var friends: [Friend]
     
     var body: some View {
-        List {
-            Section(header: Text("전체\(friends.count)")) {
+        self.topBarView
+        self.listView
+            .navigationBarHidden(true)
+    }
+}
+
+extension FriendsList {
+    private var topBarView: some View {
+        let title = "친구 랭킹"
+        
+        return WQTopBar(style: .navigation(
+            .init(
+            title: title,
+            action: {
+                dismiss()
+            })))
+    }
+    
+    private var listView: some View {
+        ScrollView {
+            LazyVStack {
                 ForEach(friends) { friend in
                     FriendsRow(friend: friend)
                 }
             }
-            .headerProminence(.increased)
-            .listStyle(.plain)
+            .padding()
         }
-        .navigationBarTitle("친구 랭킹")
         .preferredColorScheme(.dark)
     }
 }

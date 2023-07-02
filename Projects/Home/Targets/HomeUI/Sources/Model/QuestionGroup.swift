@@ -28,6 +28,7 @@ extension QuestionGroup: Identifiable { }
 extension QuestionGroup: Equatable { }
 
 extension Question: Decodable { }
+extension Question: Identifiable { }
 extension Question: Equatable { }
 
 

@@ -5,6 +5,7 @@ public struct Home: View {
     public init() { }
     
     @EnvironmentObject var viewModel: HomeViewModel
+    @State var isEdited: Bool = false
     
     public var body: some View {
         NavigationView {
@@ -115,7 +116,8 @@ extension Home {
             
             ForEach(viewModel.questionGroups.prefix(4), id: \.id) { questionGroup in
                 NavigationLink(destination: QuestionDetail(questionGroup: questionGroup)) {
-                    QuestionGroupRow(questionGroup: questionGroup)
+                    QuestionGroupRow(
+                        questionGroup: questionGroup)
                 }
             }
         }

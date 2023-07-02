@@ -24,6 +24,7 @@ extension FriendsRow {
                 .padding(.vertical, 16)
                 .padding(.leading, 16)
             Text(self.friend.name)
+                .padding(.horizontal, 8)
                 .padding(.vertical, 16)
             Text("#" + self.friend.originalNum)
                 .padding(.all, 4)
