@@ -28,10 +28,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8ACE440811157266EAECE4E1"
+               BlueprintIdentifier = "42C6565B538F6B2A72459FF0"
                BuildableName = "Authentication.app"
                BlueprintName = "Authentication"
-               ReferencedContainer = "container:Projects/Authentication/Authentication.xcodeproj">
+               ReferencedContainer = "container:Projects/Authentication/Authetication.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -42,10 +42,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0A127983D1C15F417B93B141"
+               BlueprintIdentifier = "BD30BE0A897A6153BCF6C868"
                BuildableName = "AuthenticationKit.framework"
                BlueprintName = "AuthenticationKit"
-               ReferencedContainer = "container:Projects/Authentication/Authentication.xcodeproj">
+               ReferencedContainer = "container:Projects/Authentication/Authetication.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -56,10 +56,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A4F53C898CD67DA4BD13FC3D"
+               BlueprintIdentifier = "8A16CF35C2FD515D4B4CBC3A"
                BuildableName = "AuthenticationKitTests.xctest"
                BlueprintName = "AuthenticationKitTests"
-               ReferencedContainer = "container:Projects/Authentication/Authentication.xcodeproj">
+               ReferencedContainer = "container:Projects/Authentication/Authetication.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -70,10 +70,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9DDC634AE1E38C7FBA93CCA8"
+               BlueprintIdentifier = "6C47C42E388DC907BC4C56D2"
                BuildableName = "AuthenticationTests.xctest"
                BlueprintName = "AuthenticationTests"
-               ReferencedContainer = "container:Projects/Authentication/Authentication.xcodeproj">
+               ReferencedContainer = "container:Projects/Authentication/Authetication.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -84,10 +84,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "4F343AE12BFFDD7389B026D6"
+               BlueprintIdentifier = "FF7E60F7AA842127A37AC4EE"
                BuildableName = "AuthenticationUI.framework"
                BlueprintName = "AuthenticationUI"
-               ReferencedContainer = "container:Projects/Authentication/Authentication.xcodeproj">
+               ReferencedContainer = "container:Projects/Authentication/Authetication.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -98,10 +98,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BF8A9B30A5488A03E9E07446"
+               BlueprintIdentifier = "3FF50C4EFB8E3265932C901A"
                BuildableName = "AuthenticationUITests.xctest"
                BlueprintName = "AuthenticationUITests"
-               ReferencedContainer = "container:Projects/Authentication/Authentication.xcodeproj">
+               ReferencedContainer = "container:Projects/Authentication/Authetication.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -200,6 +200,174 @@
                BuildableName = "DesignSystemUITests.xctest"
                BlueprintName = "DesignSystemUITests"
                ReferencedContainer = "container:Projects/DesignSystem/DesignSystem.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "787785524E0E998535524C4F"
+               BuildableName = "FBLPromises.framework"
+               BlueprintName = "FBLPromises"
+               ReferencedContainer = "container:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/promises/Promises.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "769B28412864CE639D5C8BFF"
+               BuildableName = "Firebase.framework"
+               BlueprintName = "Firebase"
+               ReferencedContainer = "container:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Firebase.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "E0B0DA275AE486EF3029517C"
+               BuildableName = "FirebaseAuth.framework"
+               BlueprintName = "FirebaseAuth"
+               ReferencedContainer = "container:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Firebase.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "76913A6628DE3CA06F1E69AD"
+               BuildableName = "FirebaseCore.framework"
+               BlueprintName = "FirebaseCore"
+               ReferencedContainer = "container:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Firebase.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "BF2506109F9DAB9BDE836612"
+               BuildableName = "FirebaseCoreInternal.framework"
+               BlueprintName = "FirebaseCoreInternal"
+               ReferencedContainer = "container:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/firebase-ios-sdk/Firebase.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "C1FE7FF39814998C3D90D94E"
+               BuildableName = "GTMSessionFetcherCore.framework"
+               BlueprintName = "GTMSessionFetcherCore"
+               ReferencedContainer = "container:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/gtm-session-fetcher/GTMSessionFetcher.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3ED94F9FE92CD30586A12982"
+               BuildableName = "GoogleUtilities_AppDelegateSwizzler.framework"
+               BlueprintName = "GoogleUtilities-AppDelegateSwizzler"
+               ReferencedContainer = "container:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/GoogleUtilities/GoogleUtilities.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "F20F5A508D0D18A6998274ED"
+               BuildableName = "GoogleUtilities_Environment.framework"
+               BlueprintName = "GoogleUtilities-Environment"
+               ReferencedContainer = "container:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/GoogleUtilities/GoogleUtilities.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "B8F4309DA609689A1E4C324E"
+               BuildableName = "GoogleUtilities_Logger.framework"
+               BlueprintName = "GoogleUtilities-Logger"
+               ReferencedContainer = "container:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/GoogleUtilities/GoogleUtilities.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "82D64D19A26B0837A33FDFA0"
+               BuildableName = "GoogleUtilities_NSData.framework"
+               BlueprintName = "GoogleUtilities-NSData"
+               ReferencedContainer = "container:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/GoogleUtilities/GoogleUtilities.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "028985CE3AF9A6EEBA19BF6E"
+               BuildableName = "GoogleUtilities_Network.framework"
+               BlueprintName = "GoogleUtilities-Network"
+               ReferencedContainer = "container:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/GoogleUtilities/GoogleUtilities.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "40FFBEDB2AEFA0C9C7228480"
+               BuildableName = "GoogleUtilities_Reachability.framework"
+               BlueprintName = "GoogleUtilities-Reachability"
+               ReferencedContainer = "container:Tuist/Dependencies/SwiftPackageManager/.build/checkouts/GoogleUtilities/GoogleUtilities.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -438,30 +606,30 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A4F53C898CD67DA4BD13FC3D"
+               BlueprintIdentifier = "8A16CF35C2FD515D4B4CBC3A"
                BuildableName = "AuthenticationKitTests.xctest"
                BlueprintName = "AuthenticationKitTests"
-               ReferencedContainer = "container:Projects/Authentication/Authentication.xcodeproj">
+               ReferencedContainer = "container:Projects/Authentication/Authetication.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9DDC634AE1E38C7FBA93CCA8"
+               BlueprintIdentifier = "6C47C42E388DC907BC4C56D2"
                BuildableName = "AuthenticationTests.xctest"
                BlueprintName = "AuthenticationTests"
-               ReferencedContainer = "container:Projects/Authentication/Authentication.xcodeproj">
+               ReferencedContainer = "container:Projects/Authentication/Authetication.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "BF8A9B30A5488A03E9E07446"
+               BlueprintIdentifier = "3FF50C4EFB8E3265932C901A"
                BuildableName = "AuthenticationUITests.xctest"
                BlueprintName = "AuthenticationUITests"
-               ReferencedContainer = "container:Projects/Authentication/Authentication.xcodeproj">
+               ReferencedContainer = "container:Projects/Authentication/Authetication.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference

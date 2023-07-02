@@ -22,7 +22,7 @@ extension Project {
     // MARK: - Private
     
     /// Helper function to create a framework target and an associated unit test target
-    private static func makeFrameworkTargets(name: String, platform: Platform) -> [Target] {
+    private static func makeFrameworkTargets(name: String, platform: Platform = .iOS) -> [Target] {
         let sources = Target(
             name: name,
             platform: platform,
@@ -50,8 +50,39 @@ extension Project {
         return [sources, tests]
     }
     
+    private static func makeFrameworkTargets(
+        name: String,
+        platform: Platform = .iOS,
+        additionalDependencies: [TargetDependency]
+    ) -> [Target] {
+        let sources = Target(
+            name: name,
+            platform: platform,
+            product: .framework,
+            bundleId: "wequiz.ios.\(name)",
+            deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
+            infoPlist: "Targets/\(name)/SupportingFiles/\(name)-info.plist",
+            sources: ["Targets/\(name)/Sources/**"],
+            resources: [],
+            dependencies: additionalDependencies
+        )
+        let tests = Target(
+            name: "\(name)Tests",
+            platform: platform,
+            product: .unitTests,
+            bundleId: "wequiz.ios.\(name)Tests",
+            deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
+            infoPlist: "Targets/\(name)/SupportingFiles/\(name)Tests-info.plist",
+            sources: ["Targets/\(name)/Tests/**"],
+            resources: [],
+            dependencies: [.target(name: name)]
+        )
+        return [sources, tests]
+    }
+    
+    
     /// Helper function to create the application target and the unit test target.
-    private static func makeAppTargets(name: String, platform: Platform, dependencies: [TargetDependency]) -> [Target] {
+    private static func makeAppTargets(name: String, platform: Platform = .iOS, dependencies: [TargetDependency]) -> [Target] {
         let platform: Platform = platform
         
         let mainTarget = Target(
@@ -272,3 +303,66 @@ extension Project {
     }
 }
 
+// MARK: - Authentication
+
+extension Project {
+    public static func authetication(name: String) -> Project {
+        var targets: [Target] = makeAuthenticationAppTarget(name: name)
+        let authenticationKitTarget = makeFrameworkTargets(
+            name: "AuthenticationKit",
+            additionalDependencies: [
+                .project(target: "DesignSystemKit", path: .relativeToRoot("Projects/DesignSystem")),
+                .project(target: "CoreKit", path: .relativeToRoot("Projects/Core")),
+                .external(name: "FirebaseAuth")
+            ]
+        )
+        let authenticationUITarget = makeFrameworkTargets(
+            name: "AuthenticationUI",
+            additionalDependencies: []
+        )
+        targets.append(contentsOf: authenticationKitTarget)
+        targets.append(contentsOf: authenticationUITarget)
+        return Project(
+            name: "Authetication",
+            organizationName: "ommaya.io",
+            targets: targets
+        )
+    }
+    
+    private static func makeAuthenticationAppTarget(name: String) -> [Target] {
+        let main = Target(
+            name: name,
+            platform: .iOS,
+            product: .app,
+            bundleId: "wequiz.ios.\(name)",
+            deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
+            infoPlist: "Targets/\(name)/SupportingFiles/\(name)-info.plist",
+            sources: [
+                "Targets/\(name)/Sources/**"
+            ],
+            resources: [
+                "Targets/\(name)/Resources/**",
+                "Targets/\(name)/SupportingFiles/GoogleService-Info.plist"
+            ],
+            dependencies: [
+                TargetDependency.target(name: "AuthenticationKit"),
+                TargetDependency.target(name: "AuthenticationUI")
+            ]
+        )
+        let tests =  Target(
+            name: "\(name)Tests",
+            platform: .iOS,
+            product: .unitTests,
+            bundleId: "wequiz.ios.\(name)Tests",
+            deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
+            infoPlist: "Targets/\(name)/SupportingFiles/\(name)Tests-info.plist",
+            sources: ["Targets/\(name)/Tests/**"],
+            dependencies: [
+                .target(name: "\(name)")
+            ])
+        
+        return [
+            main, tests
+        ]
+    }
+}
