@@ -125,8 +125,9 @@ public struct MakeQuizView: View {
     }
     
     private func removeListItem() {
-        questionItem.removeAll { $0.id == self.removedIndex.1 }
+        questionItem.removeAll { $0.id == self.removedIndex.index }
         removedIndex = (false, nil)
+        
     }
     
     private func limitQuizName(_ upper: Int) {
