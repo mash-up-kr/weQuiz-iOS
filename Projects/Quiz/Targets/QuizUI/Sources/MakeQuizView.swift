@@ -11,8 +11,8 @@ public struct MakeQuizView: View {
     @State private var quizName: String = ""
     @State private var questionItem: [QuestionModel] = [QuestionModel(), QuestionModel()]
     @Environment(\.editMode) private var editMode
-    @State var removeItemPopupPresented = false
-    @State var removedIndex: (popupPresented: Bool, index: UUID?) = (false, nil)
+    @State private var removeItemPopupPresented = false
+    @State private var removedIndex: (popupPresented: Bool, index: UUID?) = (false, nil)
     
 
     public var body: some View {
