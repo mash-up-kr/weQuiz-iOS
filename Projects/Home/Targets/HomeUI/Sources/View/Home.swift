@@ -113,9 +113,9 @@ extension Home {
     private var myQuestionList: some View {
         ScrollView {
             CustomHeader(title: "내가 낸 문제지 리스트", nextView: AnyView(QuestionGroupList(questions: $viewModel.questionGroups)))
-            
-            ForEach(viewModel.questionGroups.prefix(4), id: \.id) { questionGroup in
-                NavigationLink(destination: QuestionDetail(questionGroup: questionGroup)) {
+                
+            ForEach(viewModel.questionGroups.prefix(4)) { questionGroup in
+                NavigationLink(destination: QuestionDetail(questions: .constant(questionGroup.questions))) {
                     QuestionGroupRow(
                         questionGroup: questionGroup)
                 }

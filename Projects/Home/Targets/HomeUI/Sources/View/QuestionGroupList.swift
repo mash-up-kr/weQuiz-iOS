@@ -68,7 +68,6 @@ extension QuestionGroupList {
         }
         .environment(\.editMode, .constant(isEdited ? EditMode.active : EditMode.inactive))
         .listStyle(.plain)
-        
     }
     
     private func removeItem(at offsets: IndexSet) {

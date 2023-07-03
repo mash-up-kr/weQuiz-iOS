@@ -12,7 +12,7 @@ struct QuestionGroup {
     var title: String
     var description: String
     var questions: [Question]
-    let id: UUID = UUID()
+    var id: UUID = UUID()
     var writingState: Bool
 }
 
