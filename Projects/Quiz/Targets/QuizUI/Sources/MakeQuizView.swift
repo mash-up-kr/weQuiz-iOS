@@ -11,6 +11,9 @@ public struct MakeQuizView: View {
     @State private var quizName: String = ""
     @State private var questionItem: [QuestionModel] = [QuestionModel(), QuestionModel()]
     @Environment(\.editMode) private var editMode
+    @State var removeItemPopupPresented = false
+    @State var removedIndex: (popupPresented: Bool, index: UUID?) = (false, nil)
+    
 
     public var body: some View {
         
@@ -46,7 +49,7 @@ public struct MakeQuizView: View {
                             Section(content: {
                                 ForEach($questionItem, id: \.id) { item in
                                     QuestionView(model: item, onRemove: { index in
-                                        questionItem.removeAll { $0.id == index }
+                                        removedIndex = (popupPresented: true, index: index)
                                     })
                                 }
                                 .onMove(perform: moveListItem)
@@ -98,6 +101,20 @@ public struct MakeQuizView: View {
             .frame(maxWidth: .infinity)
             .ignoresSafeArea(.keyboard, edges: .bottom)
         }
+        .modal(.init(
+                    message: "문제를 삭제할까요?",
+                    doubleButtonStyleModel: .init(
+                        titles: ("아니요", "삭제"),
+                        leftAction: {
+                            removedIndex.popupPresented = false
+                        },
+                        rightAction: {
+                            removeListItem()
+                        }
+                    )
+                ),
+               isPresented: $removedIndex.popupPresented
+            )
         .background(
             Color.designSystem(.g9)
         )
@@ -105,6 +122,11 @@ public struct MakeQuizView: View {
     
     private func moveListItem(from source: IndexSet, to destination: Int) {
         questionItem.move(fromOffsets: source, toOffset: destination)
+    }
+    
+    private func removeListItem() {
+        questionItem.removeAll { $0.id == self.removedIndex.1 }
+        removedIndex = (false, nil)
     }
     
     private func limitQuizName(_ upper: Int) {
