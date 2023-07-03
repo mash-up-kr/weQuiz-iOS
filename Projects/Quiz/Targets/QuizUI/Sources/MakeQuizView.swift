@@ -8,10 +8,8 @@ public struct MakeQuizView: View {
     
     let quizNameLimit: Int = 38
     
-    @State var quizName: String = ""
-    @State var questionItem: [QuestionModel] = [QuestionModel(), QuestionModel()]
-    
-    
+    @State private var quizName: String = ""
+    @State private var questionItem: [QuestionModel] = [QuestionModel(), QuestionModel()]
     @Environment(\.editMode) private var editMode
 
     public var body: some View {
@@ -47,13 +45,12 @@ public struct MakeQuizView: View {
                         List {
                             Section(content: {
                                 ForEach($questionItem, id: \.id) { item in
-                                    QuestionView(model: item)
-                                        .listRowSeparator(.hidden)
-                                        .listRowInsets(EdgeInsets())
-                                        .listRowBackground(Color.clear)
-                                        .padding([.top, .bottom], 8)
+                                    QuestionView(model: item, onRemove: { index in
+                                        questionItem.removeAll { $0.id == index }
+                                    })
                                 }
                                 .onMove(perform: moveListItem)
+                                
                             }, footer: {
                                 
                                 Button(action: {
@@ -74,7 +71,7 @@ public struct MakeQuizView: View {
                                     .frame(height: 56)
                                     .background(Color.designSystem(.g8))
                                     .cornerRadius(16)
-                                    .padding(.top, 8)
+                                    .padding(.top, 16)
                                     
                                 }
                                 .background(
@@ -94,7 +91,7 @@ public struct MakeQuizView: View {
                       style: .single(
                           .init(title: "시험지 완성하기",
                               action: {
-                                  // TODO: 시험지 완성하기 연결
+//                                   TODO: 시험지 완성하기 연결
                               }))
                     )
                     .frame(height: 52)
@@ -119,8 +116,8 @@ public struct MakeQuizView: View {
     }
 }
 
-//struct MakeQuizView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        MakeQuizView()
-//    }
-//}
+struct MakeQuizView_Previews: PreviewProvider {
+    static var previews: some View {
+        MakeQuizView()
+    }
+}

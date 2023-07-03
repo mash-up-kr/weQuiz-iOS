@@ -147,4 +147,16 @@ public extension Icon {
             }
         }
     }
+    
+    // MARK: - Add Circle
+    
+    enum Add: IconRepresentable {
+        case circle
+        
+        public var name: String {
+            switch self {
+            case .circle: return "add_circle"
+            }
+        }
+    }
 }

@@ -52,6 +52,7 @@ public struct WQButton: View {
                     RoundedRectangle(cornerRadius: style.cornerRadius)
                         .foregroundColor(.designSystem(.g5))
                 }
+                .frame(height: 52)
                 Button {
                     model.rightAction?()
                 } label: {
@@ -69,6 +70,7 @@ public struct WQButton: View {
                     RoundedRectangle(cornerRadius: style.cornerRadius)
                         .foregroundColor(.designSystem(.p1))
                 }
+                .frame(height: 52)
             }
             .padding(style.padding)
         }
@@ -81,14 +83,17 @@ public struct WQButton: View {
             } label: {
                 Text(model.title)
                     .font(.pretendard(.semibold, size: ._16))
-                    .foregroundColor(.designSystem(.g2))
+                    .foregroundColor(model.isEnable ? .designSystem(.g2) : .designSystem(.g4))
                     .padding()
                     .frame(maxWidth: .infinity)
             }
+            .disabled(!model.isEnable)
+            .frame(height: 52)
             .frame(maxWidth: .infinity)
             .background {
                 RoundedRectangle(cornerRadius: style.cornerRadius)
-                    .foregroundColor(.designSystem(.p1))
+                    .foregroundColor(model.isEnable ? .designSystem(.p1) : .designSystem(.disabled))
+                    .animation(.easeInOut, value: model.isEnable)
             }
             .padding(style.padding)
         }
@@ -101,14 +106,17 @@ public struct WQButton: View {
             } label: {
                 Text(model.title)
                     .font(.pretendard(.semibold, size: ._16))
-                    .foregroundColor(.designSystem(.g2))
+                    .foregroundColor(model.isEnable ? .designSystem(.g2) : .designSystem(.g4))
                     .padding()
                     .frame(maxWidth: .infinity)
             }
+            .disabled(!model.isEnable)
+            .frame(height: 52)
             .frame(maxWidth: .infinity)
             .background {
                 RoundedRectangle(cornerRadius: style.cornerRadius)
-                    .foregroundColor(.designSystem(.p1))
+                    .foregroundColor(model.isEnable ? .designSystem(.p1) : .designSystem(.disabled))
+                    .animation(.easeInOut, value: model.isEnable)
                 
             }
             .padding(style.padding)
@@ -134,24 +142,36 @@ public extension WQButton.Style {
     struct SingleButtonStyleModel {
         let title: String
         let action: Action
+        @Binding var isEnable: Bool
         
-        public init(title: String, action: Action) {
+        public init(
+            title: String,
+            isEnable: Binding<Bool> = .constant(true),
+            action: Action
+        ) {
             self.title = title
+            self._isEnable = isEnable
             self.action = action
         }
     }
     
     var cornerRadius: CGFloat {
         switch self {
-        case .double: return 12
-        case .single: return 16
+        case .double, .single: return 12
         case .fullRadiusSingle: return .zero
         }
     }
     
     fileprivate var padding: EdgeInsets {
         switch self {
-        case .double, .single:
+        case .double:
+            return .init(
+                top: 0,
+                leading: 20,
+                bottom: 20,
+                trailing: 20
+            )
+        case .single:
             return .init(
                 top: 12,
                 leading: 20,
