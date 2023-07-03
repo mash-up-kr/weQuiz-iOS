@@ -14,6 +14,8 @@ public struct MakeQuizView: View {
     @State private var removeItemPopupPresented = false
     @State private var removedIndex: (popupPresented: Bool, index: UUID?) = (false, nil)
     
+    @State private var removeSuccessToastModal: WQToast.Model?
+    
 
     public var body: some View {
         
@@ -115,6 +117,7 @@ public struct MakeQuizView: View {
                 ),
                isPresented: $removedIndex.popupPresented
             )
+        .toast(model: $removeSuccessToastModal)
         .background(
             Color.designSystem(.g9)
         )
@@ -127,7 +130,7 @@ public struct MakeQuizView: View {
     private func removeListItem() {
         questionItem.removeAll { $0.id == self.removedIndex.index }
         removedIndex = (false, nil)
-        
+        removeSuccessToastModal = .init(status: .success, text: "문제를 삭제했어요")
     }
     
     private func limitQuizName(_ upper: Int) {
