@@ -14,6 +14,7 @@ struct QuestionDetail: View {
     
     @Environment(\.dismiss) private var dismiss
     @Binding var questions: [Question]
+    @State var isTapedList: Bool = false
     
     var body: some View {
         self.topBarView
@@ -54,7 +55,7 @@ extension QuestionDetail {
         List {
             ForEach(questions) { question in
                 VStack {
-                    answerList(question: question)
+                    answerList(question: question, isTapedList: $isTapedList)
                     HStack {
                         Text("\(question.num)/\(questions.count)")
                         Spacer()
@@ -71,7 +72,7 @@ extension QuestionDetail {
                     }
                 }
                 .onTapGesture {
-                    print("aslkdnaslkdsanlkan")
+                    self.isTapedList.toggle()
                 }
                 .padding()
                 .background(Color.designSystem(.g8))
@@ -89,6 +90,7 @@ extension QuestionDetail {
     private struct answerList: View {
         
         var question: Question
+        @Binding var isTapedList: Bool
         
         var body: some View {
             ScrollView {
@@ -99,7 +101,17 @@ extension QuestionDetail {
                             .foregroundColor(.designSystem(.g2))
                     }
                     ForEach(question.content.indices) { index in
-                        AnswerListRow(index: index, contents: question.content[index])
+                        GeometryReader { geometry in
+                            ZStack(alignment: .leading) {
+                                AnswerPercentView(index: index, isHidden: $isTapedList)
+                                    .frame(width: geometry.size.width / 2, height: geometry.size.height)
+                                AnswerListRow(index: index, contents: question.content[index], percent: 10)
+                                    .frame(width: geometry.size.width, height: geometry.size.height)
+                            }
+                            .background(Color.designSystem(.g9))
+                            .cornerRadius(16)
+                        }
+                        .frame(height: 56)
                     }
                 }
             }

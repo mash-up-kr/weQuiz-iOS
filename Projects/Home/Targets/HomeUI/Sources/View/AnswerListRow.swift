@@ -14,25 +14,28 @@ struct AnswerListRow: View {
     
     var index: Int
     var contents: String
+    var percent: CGFloat
     
     var body: some View {
-        HStack {
-            ZStack {
-                QuizUI.AlphabetCircleView(answerNumber: index)
+        ZStack {
+            HStack {
+                ZStack {
+                    AlphabetCircleView(answerNumber: index)
+                }
+                Text(contents)
+                    .font(.pretendard(.medium, size: ._16))
+                Spacer()
             }
-            Text(contents)
-                .font(.pretendard(.medium, size: ._16))
-            Spacer()
         }
         .padding()
         .foregroundColor(.designSystem(.g2))
-        .background(Color.designSystem(.g9))
+        .background(Color.clear)
         .cornerRadius(16)
     }
 }
 
 struct QuestionDetailRow_Previews: PreviewProvider {
     static var previews: some View {
-        AnswerListRow(index: 1, contents: questionsSamlple[0].questions.description)
+        AnswerListRow(index: 1, contents: questionsSamlple[0].questions.description, percent: 30)
     }
 }
