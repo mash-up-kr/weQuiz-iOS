@@ -14,7 +14,6 @@ struct QuestionDetail: View {
     
     @Environment(\.dismiss) private var dismiss
     @Binding var questions: [Question]
-    @State var isTapedList: Bool = false
     
     var body: some View {
         self.topBarView
@@ -55,11 +54,7 @@ extension QuestionDetail {
         List {
             ForEach(questions) { question in
                 VStack {
-                    answerList(question: question, isTapedList: $isTapedList)
-                    QuestionBottonBar(question: question, questionsCount: questions.count)
-                }
-                .onTapGesture {
-                    self.isTapedList.toggle()
+                    answerList(question: question, questionsCount: questions.count)
                 }
                 .padding()
                 .background(Color.designSystem(.g8))
@@ -70,6 +65,7 @@ extension QuestionDetail {
         .listStyle(.plain)
     }
     
+    
     private func removeItem(at offsets: IndexSet) {
         questions.remove(atOffsets: offsets)
     }
@@ -77,7 +73,8 @@ extension QuestionDetail {
     private struct answerList: View {
         
         var question: Question
-        @Binding var isTapedList: Bool
+        var questionsCount: Int
+        @State var isTapped: Bool = false
         
         var body: some View {
             ScrollView {
@@ -90,7 +87,7 @@ extension QuestionDetail {
                     ForEach(question.content.indices) { index in
                         GeometryReader { geometry in
                             ZStack(alignment: .leading) {
-                                AnswerPercentView(index: index, isHidden: $isTapedList)
+                                AnswerPercentView(index: index, isHidden: $isTapped)
                                     .frame(width: geometry.size.width / 2, height: geometry.size.height)
                                 AnswerListRow(index: index, contents: question.content[index], percent: 10)
                                     .frame(width: geometry.size.width, height: geometry.size.height)
@@ -100,29 +97,23 @@ extension QuestionDetail {
                         }
                         .frame(height: 56)
                     }
-                }
-            }
-        }
-    }
-    
-    private struct QuestionBottonBar: View {
-        
-        var question: Question
-        var questionsCount: Int
-        
-        var body: some View {
-            HStack {
-                Text("\(question.num)/\(questionsCount)")
-                Spacer()
-                Button(action: {
-                    
-                }) {
                     HStack {
-                        Text("눌러서 결과보기")
-                            .font(.pretendard(.medium, size: ._14))
-                            .foregroundColor(.designSystem(.g2))
-                        Image(Icon.Chevron.rightMedium)
+                        Text("\(question.num)/\(questionsCount)")
+                        Spacer()
+                        Button(action: {
+                            
+                        }) {
+                            HStack {
+                                Text("눌러서 결과보기")
+                                    .font(.pretendard(.medium, size: ._14))
+                                    .foregroundColor(.designSystem(.g2))
+                                Image(Icon.Chevron.rightMedium)
+                            }
+                        }
                     }
+                }
+                .onTapGesture {
+                    self.isTapped.toggle()
                 }
             }
         }

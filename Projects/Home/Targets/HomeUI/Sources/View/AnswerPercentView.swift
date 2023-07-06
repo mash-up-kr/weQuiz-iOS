@@ -23,7 +23,7 @@ struct AnswerPercentView: View {
 
 struct AnswerPercentView_Previews: PreviewProvider {
     static var previews: some View {
-        AnswerPercentView(index: 1, isHidden: .constant(true))
+        AnswerPercentView(index: 1, isHidden: .constant(false))
     }
 }
 
