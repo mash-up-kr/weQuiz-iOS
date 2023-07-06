@@ -56,20 +56,7 @@ extension QuestionDetail {
             ForEach(questions) { question in
                 VStack {
                     answerList(question: question, isTapedList: $isTapedList)
-                    HStack {
-                        Text("\(question.num)/\(questions.count)")
-                        Spacer()
-                        Button(action: {
-                            
-                        }) {
-                            HStack {
-                                Text("눌러서 결과보기")
-                                    .font(.pretendard(.medium, size: ._14))
-                                    .foregroundColor(.designSystem(.g2))
-                                Image(Icon.Chevron.rightMedium)
-                            }
-                        }
-                    }
+                    QuestionBottonBar(question: question, questionsCount: questions.count)
                 }
                 .onTapGesture {
                     self.isTapedList.toggle()
@@ -112,6 +99,29 @@ extension QuestionDetail {
                             .cornerRadius(16)
                         }
                         .frame(height: 56)
+                    }
+                }
+            }
+        }
+    }
+    
+    private struct QuestionBottonBar: View {
+        
+        var question: Question
+        var questionsCount: Int
+        
+        var body: some View {
+            HStack {
+                Text("\(question.num)/\(questionsCount)")
+                Spacer()
+                Button(action: {
+                    
+                }) {
+                    HStack {
+                        Text("눌러서 결과보기")
+                            .font(.pretendard(.medium, size: ._14))
+                            .foregroundColor(.designSystem(.g2))
+                        Image(Icon.Chevron.rightMedium)
                     }
                 }
             }
