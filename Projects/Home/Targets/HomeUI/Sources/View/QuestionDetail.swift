@@ -8,6 +8,7 @@
 
 import SwiftUI
 import DesignSystemKit
+import QuizUI
 
 struct QuestionDetail: View {
     
@@ -28,16 +29,25 @@ extension QuestionDetail {
                 title: "",
                 bttons: [
                     .init(icon: Icon.Edit.list, action: {
-                        print("네비게이션 버튼 클릭1")
-                    }),
+                        actionSheet()
+                    })
+                    ,
                     .init(icon: Icon.CircleAlert.fillMono, action: {
-                        print("네비게이션 버튼 클릭2")
+                        // 휴지통 로직을 구현해줘야 한다.
+                        // 휴지통 버튼을 클릭하면 Question 전체가 없어져야 하므로 이는 이전 VC에서 질문을 삭제해줘야한다.
+                        // 이것은 즉 Rounter가 필요할 것 같다.
                     })
                 ], action: {
                     dismiss()
                 }
             )
         ))
+    }
+    
+    private func actionSheet() {
+        guard let data = URL(string: "https://www.youtube.com/") else { return }
+        let activityView = UIActivityViewController(activityItems: [data], applicationActivities: nil)
+        UIApplication.shared.windows.first?.rootViewController?.present(activityView, animated: true, completion: nil)
     }
     
     private var questionList: some View {
@@ -91,15 +101,12 @@ extension QuestionDetail {
                     ForEach(question.content.indices) { index in
                         AnswerListRow(index: index, contents: question.content[index])
                     }
-                    
-//                    ForEach(question.content, id: \.self) { content in
-//                        AnswerListRow(index: 1, contents: content)
-//                    }
                 }
             }
         }
     }
 }
+
 
 struct QuestionDetailView_Previews: PreviewProvider {
     static var previews: some View {

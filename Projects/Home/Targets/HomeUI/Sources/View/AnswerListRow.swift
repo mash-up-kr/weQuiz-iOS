@@ -8,6 +8,7 @@
 
 import SwiftUI
 import DesignSystemKit
+import QuizUI
 
 struct AnswerListRow: View {
     
@@ -17,10 +18,7 @@ struct AnswerListRow: View {
     var body: some View {
         HStack {
             ZStack {
-                Image(Icon.Checkmark.falseFill24)
-                
-//                AlphabetCircleView(answerNumber: index)
-//                    .hidden(contents.isCorrect.wrappedValue)
+                QuizUI.AlphabetCircleView(answerNumber: index)
             }
             Text(contents)
                 .font(.pretendard(.medium, size: ._16))
@@ -33,8 +31,8 @@ struct AnswerListRow: View {
     }
 }
 
-//struct QuestionDetailRow_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AnswerListRow(contents: questionsSamlple[0].questions.description)
-//    }
-//}
+struct QuestionDetailRow_Previews: PreviewProvider {
+    static var previews: some View {
+        AnswerListRow(index: 1, contents: questionsSamlple[0].questions.description)
+    }
+}
