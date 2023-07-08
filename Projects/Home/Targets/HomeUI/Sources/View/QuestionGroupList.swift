@@ -57,9 +57,16 @@ extension QuestionGroupList {
     private var listView: some View {
         List {
             ForEach($questions) { question in
-                QuestionGroupRow(
-                    questionGroup: question
-                )
+                ZStack {
+                    QuestionGroupRow(questionGroup: question)
+                    NavigationLink(destination: QuestionDetail(questionGroup: question, onRemove: { index in
+                        questions.removeAll { $0.id == index }
+                    })) {
+                        EmptyView()
+                    }
+                    .opacity(0)
+                }
+                .listRowBackground(Color.clear)
                 .padding(.horizontal, 20)
                 .listRowInsets(EdgeInsets(top: 6, leading: 0, bottom: 6, trailing: 0))
                 .listRowSeparator(.hidden)
@@ -68,6 +75,15 @@ extension QuestionGroupList {
         }
         .environment(\.editMode, .constant(isEdited ? EditMode.active : EditMode.inactive))
         .listStyle(.plain)
+        
+        
+//        ForEach($questions.prefix(4)) { questionGroup in
+//            NavigationLink(destination: QuestionDetail(questionGroup: questionGroup, onRemove: { index in
+//                questions.removeAll { $0.id == index }
+//            })) {
+//                QuestionGroupRow(questionGroup: questionGroup)
+//            }
+//        }
     }
     
     private func removeItem(at offsets: IndexSet) {
