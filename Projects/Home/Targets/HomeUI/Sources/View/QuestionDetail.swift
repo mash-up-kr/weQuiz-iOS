@@ -8,17 +8,41 @@
 
 import SwiftUI
 import DesignSystemKit
-import QuizUI
 
 struct QuestionDetail: View {
     
     @Environment(\.dismiss) private var dismiss
-    @Binding var questions: [Question]
+    @Binding var questionGroup: QuestionGroup
+    @State private var isPresentRemoveModal: Bool = false
+    @State private var removeSuccessToastModal: WQToast.Model?
+    var onRemove: ((UUID) -> ())?
     
     var body: some View {
-        self.topBarView
-        self.questionList
-            .navigationBarHidden(true)
+        VStack {
+            self.topBarView
+            self.questionList
+        }
+        .navigationBarHidden(true)
+        .modal(
+            .init(
+                message: "선택한 문제를 삭제할까요?",
+                doubleButtonStyleModel: .init(
+                    titles: ("아니오", "삭제"),
+                    leftAction: {
+                        isPresentRemoveModal = false
+                    },
+                    rightAction: {
+                        isPresentRemoveModal = false
+                        removeSuccessToastModal = .init(status: .success, text: "문제를 삭제했어요")
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+                            onRemove?(questionGroup.id)
+                        }
+                    }
+                )
+            ),
+            isPresented: $isPresentRemoveModal
+        )
+        .toast(model: $removeSuccessToastModal)
     }
 }
 
@@ -33,9 +57,7 @@ extension QuestionDetail {
                     })
                     ,
                     .init(icon: Icon.CircleAlert.fillMono, action: {
-                        // 휴지통 로직을 구현해줘야 한다.
-                        // 휴지통 버튼을 클릭하면 Question 전체가 없어져야 하므로 이는 이전 VC에서 질문을 삭제해줘야한다.
-                        // 이것은 즉 Rounter가 필요할 것 같다.
+                        isPresentRemoveModal = true
                     })
                 ], action: {
                     dismiss()
@@ -52,22 +74,16 @@ extension QuestionDetail {
     
     private var questionList: some View {
         List {
-            ForEach(questions) { question in
+            ForEach(questionGroup.questions) { question in
                 VStack {
-                    answerList(question: question, questionsCount: questions.count)
+                    answerList(question: question, questionsCount: questionGroup.questions.count)
                 }
                 .padding()
                 .background(Color.designSystem(.g8))
                 .cornerRadius(16)
             }
-            .onDelete(perform: removeItem)
         }
         .listStyle(.plain)
-    }
-    
-    
-    private func removeItem(at offsets: IndexSet) {
-        questions.remove(atOffsets: offsets)
     }
     
     private struct answerList: View {
@@ -123,7 +139,7 @@ extension QuestionDetail {
 
 struct QuestionDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        QuestionDetail(questions: .constant(questionsSamlple[0].questions))
+        QuestionDetail(questionGroup: .constant(questionsSamlple[0]))
     }
 }
 

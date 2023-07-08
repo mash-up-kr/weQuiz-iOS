@@ -56,7 +56,7 @@ extension QuestionGroupList {
     
     private var listView: some View {
         List {
-            ForEach(questions) { question in
+            ForEach($questions) { question in
                 QuestionGroupRow(
                     questionGroup: question
                 )
