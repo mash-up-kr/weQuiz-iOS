@@ -11,6 +11,11 @@ public struct MakeQuizView: View {
     @State private var quizName: String = ""
     @State private var questionItem: [QuestionModel] = [QuestionModel(), QuestionModel()]
     @Environment(\.editMode) private var editMode
+    @State private var removeItemPopupPresented = false
+    @State private var removedIndex: (popupPresented: Bool, index: UUID?) = (false, nil)
+    
+    @State private var removeSuccessToastModal: WQToast.Model?
+    
 
     public var body: some View {
         
@@ -46,7 +51,7 @@ public struct MakeQuizView: View {
                             Section(content: {
                                 ForEach($questionItem, id: \.id) { item in
                                     QuestionView(model: item, onRemove: { index in
-                                        questionItem.removeAll { $0.id == index }
+                                        removedIndex = (popupPresented: true, index: index)
                                     })
                                 }
                                 .onMove(perform: moveListItem)
@@ -57,10 +62,8 @@ public struct MakeQuizView: View {
                                     self.questionItem.append(QuestionModel())
                                 }) {
                                     HStack(alignment: .center, spacing: 7, content: {
-                                        // TODO: - Icon 수정
-                                        Text(".")
+                                        Image(Icon.Add.circle)
                                             .frame(width: 16.5, height: 16.5)
-                                            .background(Color.white)
                                         
                                         Text("질문 추가")
                                             .font(.pretendard(.bold, size: ._16))
@@ -100,6 +103,21 @@ public struct MakeQuizView: View {
             .frame(maxWidth: .infinity)
             .ignoresSafeArea(.keyboard, edges: .bottom)
         }
+        .modal(.init(
+                    message: "문제를 삭제할까요?",
+                    doubleButtonStyleModel: .init(
+                        titles: ("아니요", "삭제"),
+                        leftAction: {
+                            removedIndex.popupPresented = false
+                        },
+                        rightAction: {
+                            removeListItem()
+                        }
+                    )
+                ),
+               isPresented: $removedIndex.popupPresented
+            )
+        .toast(model: $removeSuccessToastModal)
         .background(
             Color.designSystem(.g9)
         )
@@ -107,6 +125,12 @@ public struct MakeQuizView: View {
     
     private func moveListItem(from source: IndexSet, to destination: Int) {
         questionItem.move(fromOffsets: source, toOffset: destination)
+    }
+    
+    private func removeListItem() {
+        questionItem.removeAll { $0.id == self.removedIndex.index }
+        removedIndex = (false, nil)
+        removeSuccessToastModal = .init(status: .success, text: "문제를 삭제했어요")
     }
     
     private func limitQuizName(_ upper: Int) {
