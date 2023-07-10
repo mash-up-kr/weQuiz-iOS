@@ -75,15 +75,6 @@ extension QuestionGroupList {
         }
         .environment(\.editMode, .constant(isEdited ? EditMode.active : EditMode.inactive))
         .listStyle(.plain)
-        
-        
-//        ForEach($questions.prefix(4)) { questionGroup in
-//            NavigationLink(destination: QuestionDetail(questionGroup: questionGroup, onRemove: { index in
-//                questions.removeAll { $0.id == index }
-//            })) {
-//                QuestionGroupRow(questionGroup: questionGroup)
-//            }
-//        }
     }
     
     private func removeItem(at offsets: IndexSet) {
