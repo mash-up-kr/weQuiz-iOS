@@ -92,7 +92,7 @@ extension Home {
         VStack {
             CustomHeader(title: "친구 랭킹", nextView: AnyView(FriendsList(friends: $viewModel.friendsRank)))
             
-            ForEach(viewModel.friendsRank.prefix(3), id: \.id) { friend in
+            ForEach($viewModel.friendsRank.prefix(3), id: \.id) { friend in
                 FriendsRow(friend: friend)
             }
         }
@@ -113,11 +113,12 @@ extension Home {
     private var myQuestionList: some View {
         ScrollView {
             CustomHeader(title: "내가 낸 문제지 리스트", nextView: AnyView(QuestionGroupList(questions: $viewModel.questionGroups)))
-            
-            ForEach(viewModel.questionGroups.prefix(4), id: \.id) { questionGroup in
-                NavigationLink(destination: QuestionDetail(questionGroup: questionGroup)) {
-                    QuestionGroupRow(
-                        questionGroup: questionGroup)
+                
+            ForEach($viewModel.questionGroups.prefix(4)) { questionGroup in
+                NavigationLink(destination: QuestionDetail(questionGroup: questionGroup, onRemove: { index in
+                    viewModel.questionGroups.removeAll { $0.id == index }
+                })) {
+                    QuestionGroupRow(questionGroup: questionGroup)
                 }
             }
         }

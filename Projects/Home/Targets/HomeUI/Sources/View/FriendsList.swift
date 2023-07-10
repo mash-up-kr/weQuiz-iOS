@@ -36,7 +36,7 @@ extension FriendsList {
     private var listView: some View {
         ScrollView {
             LazyVStack {
-                ForEach(friends) { friend in
+                ForEach($friends) { friend in
                     FriendsRow(friend: friend)
                 }
             }
