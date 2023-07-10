@@ -17,15 +17,12 @@ struct AnswerListRow: View {
     var percent: CGFloat
     
     var body: some View {
-        ZStack {
-            HStack {
-                ZStack {
-                    AlphabetCircleView(answerNumber: index)
-                }
-                Text(contents)
-                    .font(.pretendard(.medium, size: ._16))
-                Spacer()
-            }
+        
+        HStack {
+            AlphabetCircleView(answerNumber: index)
+            Text(contents)
+                .font(.pretendard(.medium, size: ._16))
+            Spacer()
         }
         .padding()
         .foregroundColor(.designSystem(.g2))
