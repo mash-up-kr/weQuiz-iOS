@@ -102,7 +102,7 @@ public struct QuestionView: View {
     }
     
     private func addAnswer() {
-        if self.model.answers.count >= 10 { return }
+        if self.model.answers.count >= 5 { return }
         self.model.answers.append(AnswerModel.init())
         self.expandedHeight += 65
     }

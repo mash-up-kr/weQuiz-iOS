@@ -59,6 +59,7 @@ public struct MakeQuizView: View {
                                 }, footer: {
                                     
                                     Button(action: {
+                                        if self.questionItem.count >= 10 { return }
                                         self.questionItem.append(QuestionModel())
                                     }) {
                                         HStack(alignment: .center, spacing: 7, content: {
