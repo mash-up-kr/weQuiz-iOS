@@ -8,8 +8,10 @@ public struct MakeQuizView: View {
     
     let quizNameLimit: Int = 38
     
+    @ObservedObject var viewModel = QuestionViewModel()
+    
     @State private var quizName: String = ""
-    @State private var questionItem: [QuestionModel] = [QuestionModel(), QuestionModel()]
+    
     @Environment(\.editMode) private var editMode
     @State private var removeItemPopupPresented = false
     @State private var removedIndex: (popupPresented: Bool, index: UUID?) = (false, nil)
@@ -49,18 +51,18 @@ public struct MakeQuizView: View {
                             
                             List {
                                 Section(content: {
-                                    ForEach($questionItem, id: \.id) { item in
+                                    ForEach($viewModel.model, id: \.id) { item in
                                         QuestionView(model: item, onRemove: { index in
                                             removedIndex = (popupPresented: true, index: index)
                                         })
                                     }
                                     .onMove(perform: moveListItem)
-                                    
+
                                 }, footer: {
                                     
                                     Button(action: {
-                                        if self.questionItem.count >= 10 { return }
-                                        self.questionItem.append(QuestionModel())
+                                        if self.viewModel.model.count >= 10 { return }
+                                        self.viewModel.model.append(QuestionModel())
                                     }) {
                                         HStack(alignment: .center, spacing: 7, content: {
                                             Image(Icon.Add.circle)
@@ -134,11 +136,11 @@ public struct MakeQuizView: View {
     }
     
     private func moveListItem(from source: IndexSet, to destination: Int) {
-        questionItem.move(fromOffsets: source, toOffset: destination)
+        viewModel.model.move(fromOffsets: source, toOffset: destination)
     }
     
     private func removeListItem() {
-        questionItem.removeAll { $0.id == self.removedIndex.index }
+        viewModel.model.removeAll { $0.id == self.removedIndex.index }
         removedIndex = (false, nil)
         removeSuccessToastModal = .init(status: .success, text: "문제를 삭제했어요")
     }
