@@ -10,7 +10,7 @@ import SwiftUI
 import DesignSystemKit
 
 struct FriendsRow: View {
-    let friend: Friend
+    @Binding var friend: Friend
     
     var body: some View {
         self.friendInfoDescription

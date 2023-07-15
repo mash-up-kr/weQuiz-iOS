@@ -10,7 +10,7 @@ import SwiftUI
 import DesignSystemKit
 
 struct QuestionGroupRow: View {
-    let questionGroup: QuestionGroup
+    @Binding var questionGroup: QuestionGroup
     
     var body: some View {
         HStack {
