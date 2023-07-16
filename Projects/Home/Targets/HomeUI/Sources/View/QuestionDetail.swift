@@ -17,8 +17,6 @@ struct QuestionDetail: View {
     @State private var removeSuccessToastModal: WQToast.Model?
     var onRemove: ((UUID) -> ())?
     
-    
-    
     var body: some View {
         VStack {
             self.topBarView
@@ -83,6 +81,7 @@ extension QuestionDetail {
         .listStyle(.plain)
     }
 }
+
 
 struct QuestionDetailView_Previews: PreviewProvider {
     static var previews: some View {
