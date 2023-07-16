@@ -12,12 +12,10 @@ import DesignSystemKit
 struct AnswerPercentView: View {
     
     var index: Int
-//    @Binding var isHidden: Bool
     
     var body: some View {
         Rectangle()
             .fill(answerNum(rawValue: index)?.color ?? Color.designSystem(.s1))
-//            .opacity(isHidden ? 1 : 0)
     }
 }
 
