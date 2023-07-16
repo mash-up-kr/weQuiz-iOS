@@ -77,7 +77,7 @@ extension QuestionDetail {
     private var questionList: some View {
         List {
             ForEach(questionGroup.questions) { question in
-                AnswerList(question: question, questionsCount: questionGroup.questions.count)
+                AnswerListContainer(question: question, questionsCount: questionGroup.questions.count)
             }
         }
         .listStyle(.plain)

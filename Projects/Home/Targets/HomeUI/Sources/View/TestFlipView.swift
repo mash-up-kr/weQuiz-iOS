@@ -70,7 +70,7 @@ struct CardView: View {
             }
             .padding()
         }
-        .cardFilp(isFaceUp: isFaceUp, axis: axis)
+//        .cardFilp(isFaceUp: isFaceUp, axis: axis)
     }
 }
 
