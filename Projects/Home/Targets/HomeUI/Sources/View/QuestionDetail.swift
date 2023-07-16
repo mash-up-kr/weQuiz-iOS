@@ -17,6 +17,8 @@ struct QuestionDetail: View {
     @State private var removeSuccessToastModal: WQToast.Model?
     var onRemove: ((UUID) -> ())?
     
+    
+    
     var body: some View {
         VStack {
             self.topBarView
@@ -75,67 +77,12 @@ extension QuestionDetail {
     private var questionList: some View {
         List {
             ForEach(questionGroup.questions) { question in
-                VStack {
-                    answerList(question: question, questionsCount: questionGroup.questions.count)
-                }
-                .padding()
-                .background(Color.designSystem(.g8))
-                .cornerRadius(16)
+                AnswerList(question: question, questionsCount: questionGroup.questions.count)
             }
         }
         .listStyle(.plain)
     }
-    
-    private struct answerList: View {
-        
-        var question: Question
-        var questionsCount: Int
-        @State var isTapped: Bool = false
-        
-        var body: some View {
-            ScrollView {
-                LazyVStack(alignment: .leading) {
-                    HStack {
-                        Text("\(question.num). \(question.title)")
-                            .font(.pretendard(.medium, size: ._18))
-                            .foregroundColor(.designSystem(.g2))
-                    }
-                    ForEach(question.content.indices) { index in
-                        GeometryReader { geometry in
-                            ZStack(alignment: .leading) {
-                                AnswerPercentView(index: index, isHidden: $isTapped)
-                                    .frame(width: geometry.size.width / 2, height: geometry.size.height)
-                                AnswerListRow(index: index, contents: question.content[index], percent: 10)
-                                    .frame(width: geometry.size.width, height: geometry.size.height)
-                            }
-                            .background(Color.designSystem(.g9))
-                            .cornerRadius(16)
-                        }
-                        .frame(height: 56)
-                    }
-                    HStack {
-                        Text("\(question.num)/\(questionsCount)")
-                        Spacer()
-                        Button(action: {
-                            
-                        }) {
-                            HStack {
-                                Text("눌러서 결과보기")
-                                    .font(.pretendard(.medium, size: ._14))
-                                    .foregroundColor(.designSystem(.g2))
-                                Image(Icon.Chevron.rightMedium)
-                            }
-                        }
-                    }
-                }
-                .onTapGesture {
-                    self.isTapped.toggle()
-                }
-            }
-        }
-    }
 }
-
 
 struct QuestionDetailView_Previews: PreviewProvider {
     static var previews: some View {
