@@ -83,13 +83,13 @@ public struct WQModal: View {
                             )
                         )
                         WQButton(style: .single(model.singleButtonStyleModel))
-                            .frame(maxWidth: proxy.size.width * 0.8)
                     }
                     .background {
                         RoundedRectangle(cornerRadius: 16)
                             .foregroundColor(.designSystem(.g7))
                     }
                 }
+                .padding(.horizontal, 20)
                 .position(x: proxy.size.width / 2.0, y: proxy.size.height / 2.0)
             }
         }
@@ -115,13 +115,13 @@ public struct WQModal: View {
                             )
                         )
                         WQButton(style: .double(model.doubleButtonStyleModel))
-                            .frame(maxWidth: proxy.size.width * 0.8)
                     }
                     .background {
                         RoundedRectangle(cornerRadius: 16)
                             .foregroundColor(.designSystem(.g7))
                     }
                 }
+                .padding(.horizontal, 20)
                 .position(x: proxy.size.width / 2.0, y: proxy.size.height / 2.0)
             }
         }
