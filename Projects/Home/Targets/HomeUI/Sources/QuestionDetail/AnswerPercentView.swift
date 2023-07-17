@@ -12,18 +12,16 @@ import DesignSystemKit
 struct AnswerPercentView: View {
     
     var index: Int
-    @Binding var isHidden: Bool
     
     var body: some View {
         Rectangle()
             .fill(answerNum(rawValue: index)?.color ?? Color.designSystem(.s1))
-            .hidden(isHidden)
     }
 }
 
 struct AnswerPercentView_Previews: PreviewProvider {
     static var previews: some View {
-        AnswerPercentView(index: 1, isHidden: .constant(false))
+        AnswerPercentView(index: 1)
     }
 }
 
