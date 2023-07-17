@@ -12,6 +12,7 @@ import DesignSystemKit
 
 public struct QuizCompletionView: View {
     
+    @Environment(\.presentationMode) var presentation
     @State var isSharePresented = false
     
     public init() {}
@@ -19,7 +20,9 @@ public struct QuizCompletionView: View {
     public var body: some View {
         ZStack {
             VStack {
-                WQTopBar(style: .navigationWithButtons(.init(title: "문제 만들기", bttons: [])))
+                WQTopBar(style: .navigationWithButtons(.init(title: "문제 만들기", bttons: [], action: {
+                    self.presentation.wrappedValue.dismiss()
+                })))
                 
                 Spacer()
                 
@@ -59,6 +62,7 @@ public struct QuizCompletionView: View {
         .background(
             Color.designSystem(.g9)
         )
+        .navigationBarHidden(true)
     }
 }
 
