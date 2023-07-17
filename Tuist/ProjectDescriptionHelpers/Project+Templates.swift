@@ -19,28 +19,6 @@ extension Project {
                        targets: targets)
     }
     
-    public static func core() -> Project {
-        return Project(
-            name: "Core",
-            organizationName: "ommaya.io",
-            targets: [
-                Target(
-                    name: "CoreKit",
-                    platform: .iOS,
-                    product: .framework,
-                    bundleId: "wequiz.ios.Core",
-                    deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
-                    infoPlist: "Targets/CoreKit/SupportingFiles/Core-info.plist",
-                    sources: ["Targets/CoreKit/Sources/**"],
-                    resources: [],
-                    dependencies: [
-                        .external(name: "Alamofire")
-                    ]
-                )
-            ]
-        )
-    }
-    
     // MARK: - Private
     
     /// Helper function to create a framework target and an associated unit test target
@@ -103,18 +81,17 @@ extension Project {
     }
 }
 
+// MARK: - DesignSystem
+
 extension Project {
-    /// Helper function to create the Project for this ExampleApp
-    public static func designSystem(name: String, platform: Platform, additionalTargets: [String]) -> Project {
+    public static func designSystem(name: String, additionalTargets: [String]) -> Project {
         var targets = makeDesignSystemAppTargets(
             name: name,
-            platform: platform,
             dependencies: additionalTargets.map { TargetDependency.target(name: $0) }
         )
         targets += additionalTargets.flatMap({
             makeDesignSystemFrameworkTargets(
                 name: $0,
-                platform: platform,
                 needResource: $0.contains("Kit")
             )
         })
@@ -125,15 +102,13 @@ extension Project {
     
     // MARK: - Private
     
-    /// Helper function to create a framework target and an associated unit test target
     private static func makeDesignSystemFrameworkTargets(
         name: String,
-        platform: Platform,
         needResource: Bool = false
     ) -> [Target] {
         let sources = Target(
             name: name,
-            platform: platform,
+            platform: .iOS,
             product: .framework,
             bundleId: "wequiz.ios.\(name)",
             deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
@@ -144,7 +119,7 @@ extension Project {
         )
         let tests = Target(
             name: "\(name)Tests",
-            platform: platform,
+            platform: .iOS,
             product: .unitTests,
             bundleId: "wequiz.ios.\(name)Tests",
             deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
@@ -156,13 +131,10 @@ extension Project {
         return [sources, tests]
     }
     
-    /// Helper function to create the application target and the unit test target.
-    private static func makeDesignSystemAppTargets(name: String, platform: Platform, dependencies: [TargetDependency]) -> [Target] {
-        let platform: Platform = platform
-        
+    private static func makeDesignSystemAppTargets(name: String, dependencies: [TargetDependency]) -> [Target] {
         let mainTarget = Target(
             name: name,
-            platform: platform,
+            platform: .iOS,
             product: .app,
             bundleId: "wequiz.ios.\(name)",
             deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
@@ -171,10 +143,9 @@ extension Project {
             resources: ["Targets/\(name)/Resources/**"],
             dependencies: dependencies
         )
-        
         let testTarget = Target(
             name: "\(name)Tests",
-            platform: platform,
+            platform: .iOS,
             product: .unitTests,
             bundleId: "wequiz.ios.\(name)Tests",
             deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
@@ -182,7 +153,121 @@ extension Project {
             sources: ["Targets/\(name)/Tests/**"],
             dependencies: [
                 .target(name: "\(name)")
-            ])
+            ]
+        )
+        return [mainTarget, testTarget]
+    }
+}
+
+
+// MARK: - Core
+
+extension Project {
+    public static func core() -> Project {
+        return Project(
+            name: "Core",
+            organizationName: "ommaya.io",
+            targets: [
+                Target(
+                    name: "CoreKit",
+                    platform: .iOS,
+                    product: .framework,
+                    bundleId: "wequiz.ios.Core",
+                    deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
+                    infoPlist: "Targets/CoreKit/SupportingFiles/Core-info.plist",
+                    sources: ["Targets/CoreKit/Sources/**"],
+                    resources: [],
+                    dependencies: [
+                        .external(name: "Alamofire")
+                    ]
+                )
+            ]
+        )
+    }
+}
+
+// MARK: - Main
+
+extension Project {
+    public static func main(name: String) -> Project {
+        var targets = makeMainAppTargets(
+            name: name,
+            dependencies: [
+                TargetDependency.target(name: "MainKit"),
+                TargetDependency.target(name: "MainUI")
+            ]
+        )
+        targets.append(makeMainKitFrameworkTarget())
+        targets.append(makeMainUIFrameworkTarget())
+        return Project(
+            name: name,
+            organizationName: "ommaya.io",
+            targets: targets
+        )
+    }
+    
+    private static func makeMainKitFrameworkTarget() -> Target {
+        Target(
+            name: "MainKit",
+            platform: .iOS,
+            product: .framework,
+            bundleId: "wequiz.ios.MainKit",
+            deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
+            sources: ["Targets/MainKit/Sources/**"],
+            resources: [],
+            dependencies: [
+                .project(target: "HomeKit", path: .relativeToRoot("Projects/Home")),
+                .project(target: "QuizKit", path: .relativeToRoot("Projects/Quiz")),
+                .project(target: "CoreKit", path: .relativeToRoot("Projects/Core")),
+                .project(target: "AuthenticationKit", path: .relativeToRoot("Projects/Authentication")),
+            ]
+        )
+    }
+    
+    private static func makeMainUIFrameworkTarget() -> Target {
+        Target(
+            name: "MainUI",
+            platform: .iOS,
+            product: .framework,
+            bundleId: "wequiz.ios.MainUI",
+            deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
+            sources: ["Targets/MainUI/Sources/**"],
+            resources: [],
+            dependencies: [
+                .project(target: "DesignSystemKit", path: .relativeToRoot("Projects/DesignSystem")),
+                .project(target: "MainKit", path: .relativeToRoot("Projects/Main")),
+                .project(target: "HomeUI", path: .relativeToRoot("Projects/Home")),
+                .project(target: "QuizUI", path: .relativeToRoot("Projects/Quiz")),
+                .project(target: "AuthenticationUI", path: .relativeToRoot("Projects/Authentication")),
+                
+            ]
+        )
+    }
+    
+    private static func makeMainAppTargets(name: String, dependencies: [TargetDependency]) -> [Target] {
+        let mainTarget = Target(
+            name: name,
+            platform: .iOS,
+            product: .app,
+            bundleId: "wequiz.ios.\(name)",
+            deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
+            infoPlist: "Targets/\(name)/SupportingFiles/\(name)-info.plist",
+            sources: ["Targets/\(name)/Sources/**"],
+            resources: ["Targets/\(name)/Resources/**"],
+            dependencies: dependencies
+        )
+        let testTarget = Target(
+            name: "\(name)Tests",
+            platform: .iOS,
+            product: .unitTests,
+            bundleId: "wequiz.ios.\(name)Tests",
+            deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
+            infoPlist: "Targets/\(name)/SupportingFiles/\(name)Tests-info.plist",
+            sources: ["Targets/\(name)/Tests/**"],
+            dependencies: [
+                .target(name: "\(name)")
+            ]
+        )
         return [mainTarget, testTarget]
     }
 }

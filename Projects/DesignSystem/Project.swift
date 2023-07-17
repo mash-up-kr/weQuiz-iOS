@@ -4,6 +4,7 @@ import ProjectDescriptionHelpers
 // MARK: - Project
 
 // Creates our project using a helper function defined in ProjectDescriptionHelpers
-let project = Project.designSystem(name: "DesignSystem",
-                          platform: .iOS,
-                          additionalTargets: ["DesignSystemKit", "DesignSystemUI"])
+let project = Project.designSystem(
+    name: "DesignSystem",
+    additionalTargets: ["DesignSystemKit", "DesignSystemUI"]
+)
