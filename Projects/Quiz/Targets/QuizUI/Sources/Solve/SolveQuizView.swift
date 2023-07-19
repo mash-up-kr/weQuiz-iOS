@@ -8,11 +8,17 @@
 
 import SwiftUI
 import DesignSystemKit
+import QuizKit
 
 public struct SolveQuizView: View {
     
-    public init() {}
+    @Binding private var model: SolveQuestionModel
     
+    public init(model: Binding<SolveQuestionModel>) {
+        self._model = model
+    }
+    
+    //TODO: - nowCount, allCount 주입 받아서 수정해야함
     @State var nowCount: Int = 1
     var allCount: Int = 10
     
@@ -30,8 +36,8 @@ public struct SolveQuizView: View {
                 ))
                 
                 WQGradientProgressBar(
-                    standard: allCount, // progress의 총 길이
-                    current: $nowCount // progress의 현재 값
+                    standard: allCount,
+                    current: $nowCount
                 )
                 
                 tooltip(nowCount, allCount)
@@ -48,12 +54,12 @@ public struct SolveQuizView: View {
                     .foregroundColor(Color.designSystem(.g1))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .frame(height: 26)
-                Text("문제 타이틀")
+                Text(model.title)
                     .font(.pretendard(.medium, size: ._24))
                     .foregroundColor(Color.designSystem(.g1))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .frame(height: 34)
-                Text("답 N개")
+                Text("답 \(model.answerCount)개")
                     .font(.pretendard(.bold, size: ._16))
                     .foregroundStyle(
                         DesignSystemKit.Gradient.gradientS1.linearGradient
@@ -61,15 +67,12 @@ public struct SolveQuizView: View {
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .frame(height: 24)
                 
-                
-                ForEach(0..<5) { item in
-                    answerView()
+                ForEach(0..<$model.answers.count, id: \.self) { index in
+                    answerView(model.answers[index])
                 }
             }
             .padding(.horizontal, 20)
         }
-        
-        
     }
     
     private func tooltip(_ nowCount: Int, _ allCount: Int) -> some View {
@@ -83,8 +86,8 @@ public struct SolveQuizView: View {
             .frame(height: 32)
     }
     
-    private func answerView() -> some View {
-        Text("{질문답변}")
+    private func answerView(_ model: SolveAnswerModel) -> some View {
+        Text(model.answer)
             .font(.pretendard(.bold, size: ._18))
             .foregroundColor(Color.designSystem(.g2))
             .frame(maxWidth: .infinity, alignment: .center)
@@ -96,6 +99,6 @@ public struct SolveQuizView: View {
 
 struct SolveQuizView_Previews: PreviewProvider {
     static var previews: some View {
-        SolveQuizView()
+        SolveQuizView(model: .constant(SolveQuestionModel(title: "내가 좋아하는 색은?", answerCount: 1, answers: [SolveAnswerModel(answer: "빨간색", order: 0, isCorrect: false), SolveAnswerModel(answer: "노란색", order: 1, isCorrect: false), SolveAnswerModel(answer: "초록색", order: 2, isCorrect: false)])))
     }
 }
