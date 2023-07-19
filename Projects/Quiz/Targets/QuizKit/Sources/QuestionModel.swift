@@ -8,10 +8,21 @@
 
 import Foundation
 
+public struct QuizModel {
+    public var title: String
+    public var questions: [QuestionModel]
+    
+    public init() {
+        self.title = ""
+        self.questions = [QuestionModel(), QuestionModel()]
+    }
+}
+
 public struct QuestionModel: Identifiable {
     public var id: UUID = UUID()
     public var title: String?
     public var answers: [AnswerModel]
+    public var isExpand: Bool = false
     
     public init(title: String? = nil) {
         self.title = title

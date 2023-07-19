@@ -9,9 +9,16 @@
 import Foundation
 
 public class QuestionViewModel: ObservableObject {
-    @Published public var model: [QuestionModel] = []
+    @Published public var quiz: QuizModel
     
     public init() {
-        self.model = [QuestionModel(), QuestionModel()]
+        self.quiz = .init()
+    }
+    
+    public func toggleExpand(_ index: UUID) {
+        for i in 0..<quiz.questions.count {
+            if quiz.questions[i].id == index { continue }
+            quiz.questions[i].isExpand = false
+        }
     }
 }
