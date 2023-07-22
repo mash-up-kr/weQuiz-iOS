@@ -8,8 +8,8 @@
 
 import Foundation
 
-public class QuestionViewModel: ObservableObject {
-    @Published public var quiz: QuizModel
+public class MakeQuizViewModel: ObservableObject {
+    @Published public var quiz: MakeQuizModel
     
     public init() {
         self.quiz = .init()
