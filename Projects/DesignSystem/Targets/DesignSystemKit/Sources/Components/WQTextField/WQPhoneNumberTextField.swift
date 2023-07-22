@@ -114,6 +114,11 @@ struct WQPhoneNumberTextField: UIViewRepresentable {
                 }
             }
             
+            if string.isEmpty, (trimmed.count == 4 || trimmed.count == 8) {
+                // - 삭제
+                textField.text = "\(textField.text?.dropLast() ?? "")"
+            }
+            
             return true
         }
         
@@ -124,6 +129,10 @@ struct WQPhoneNumberTextField: UIViewRepresentable {
             
             if number.count < 11 {
                 // 13자리가 아닌경우
+                validate = false
+            }
+            
+            if number.hasPrefix("010") == false {
                 validate = false
             }
             
