@@ -15,15 +15,16 @@ public struct QuestionView: View {
     @Binding private var model: QuestionModel
     
     @State private var questionTitle: String = ""
-    @State private var isExpand = false
     @State private var expandedHeight: CGFloat = 250
     @State private var isMultipleSelection = false
     
     private var onRemove: ((UUID) -> ())?
+    private var onExpand: ((UUID) -> ())?
     
-    public init(model: Binding<QuestionModel>, onRemove: ((UUID) -> ())?) {
+    public init(model: Binding<QuestionModel>, onRemove: ((UUID) -> ())?, onExpand: ((UUID) -> ())?) {
         self._model = model
         self.onRemove = onRemove
+        self.onExpand = onExpand
     }
     
     public var body: some View {
@@ -46,8 +47,8 @@ public struct QuestionView: View {
                         }
                     
                 }
-                .hidden(!isExpand)
-                .modifier(AnimatingCellHeight(height: isExpand ? expandedHeight : 0))
+                .hidden(!model.isExpand)
+                .modifier(AnimatingCellHeight(height: model.isExpand ? expandedHeight : 0))
                 .padding(.horizontal, 20)
                 
                 Spacer()
@@ -58,7 +59,7 @@ public struct QuestionView: View {
             )
             .cornerRadius(16)
             
-            if isExpand == true {
+            if model.isExpand == true {
                 Image(Icon.Close.fillWhite)
                     .onTapGesture {
                         onRemove?(model.id)
@@ -83,7 +84,10 @@ public struct QuestionView: View {
             .padding([.top, .horizontal], 20)
             .onTapGesture {
                 withAnimation(.linear(duration: 0.3)) {
-                    isExpand.toggle()
+                    model.isExpand.toggle()
+                    if model.isExpand == true {
+                        onExpand?(model.id)
+                    }
                 }
             }
     }
@@ -114,10 +118,10 @@ public struct QuestionView: View {
     }
 }
 
-struct Question_Previews: PreviewProvider {
-    static var previews: some View {
-        QuestionView(model: .constant(.init(title: "title"))) { idx in
-            //
-        }
-    }
-}
+//struct Question_Previews: PreviewProvider {
+//    static var previews: some View {
+//        QuestionView(model: .constant(.init(title: "title"))) { idx in
+//            //
+//        }
+//    }
+//}

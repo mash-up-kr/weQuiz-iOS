@@ -40,7 +40,7 @@ public struct MakeQuizView: View {
                 GeometryReader {_ in
                     VStack {
                         VStack {
-                            TextField("", text: $quizName, prompt: Text("제목없는 시험지").foregroundColor(Color.designSystem(.g4)))
+                            TextField("", text: $viewModel.quiz.title, prompt: Text("제목없는 시험지").foregroundColor(Color.designSystem(.g4)))
                                 .frame(height: 34)
                                 .onReceive(Just(quizName)) { _ in
                                     limitQuizName(quizNameLimit)
@@ -51,9 +51,11 @@ public struct MakeQuizView: View {
                             
                             List {
                                 Section(content: {
-                                    ForEach($viewModel.model, id: \.id) { item in
+                                    ForEach($viewModel.quiz.questions, id: \.id) { item in
                                         QuestionView(model: item, onRemove: { index in
                                             removedIndex = (popupPresented: true, index: index)
+                                        }, onExpand: { index in
+                                            viewModel.toggleExpand(index)
                                         })
                                     }
                                     .onMove(perform: moveListItem)
@@ -61,8 +63,8 @@ public struct MakeQuizView: View {
                                 }, footer: {
                                     
                                     Button(action: {
-                                        if self.viewModel.model.count >= 10 { return }
-                                        self.viewModel.model.append(QuestionModel())
+                                        if self.viewModel.quiz.questions.count >= 10 { return }
+                                        self.viewModel.quiz.questions.append(QuestionModel())
                                     }) {
                                         HStack(alignment: .center, spacing: 7, content: {
                                             Image(Icon.Add.circle)
@@ -136,11 +138,11 @@ public struct MakeQuizView: View {
     }
     
     private func moveListItem(from source: IndexSet, to destination: Int) {
-        viewModel.model.move(fromOffsets: source, toOffset: destination)
+        viewModel.quiz.questions.move(fromOffsets: source, toOffset: destination)
     }
     
     private func removeListItem() {
-        viewModel.model.removeAll { $0.id == self.removedIndex.index }
+        viewModel.quiz.questions.removeAll { $0.id == self.removedIndex.index }
         removedIndex = (false, nil)
         removeSuccessToastModal = .init(status: .success, text: "문제를 삭제했어요")
     }
