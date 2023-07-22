@@ -15,7 +15,7 @@ public struct SolveQuizView: View {
     public init() {}
     
     @ObservedObject var viewModel = SolveQuizViewModel()
-    @State var nowIndex: Int = 0
+    @State var currentIndex: Int = 0
     @State var selectedCount: Int = 0
     
     public var body: some View {
@@ -33,7 +33,7 @@ public struct SolveQuizView: View {
                 
                 WQGradientProgressBar(
                     standard: viewModel.quiz.questions.count,
-                    current: $nowIndex
+                    current: $currentIndex
                 )
                 
                 tooltip()
@@ -44,17 +44,17 @@ public struct SolveQuizView: View {
             
             VStack(alignment: .center) {
                 
-                Text("\(nowIndex + 1)")
+                Text("\(currentIndex + 1)")
                     .font(.pretendard(.bold, size: ._20))
                     .foregroundColor(Color.designSystem(.g1))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .frame(height: 26)
-                Text(viewModel.quiz.questions[nowIndex].title)
+                Text(viewModel.quiz.questions[currentIndex].title)
                     .font(.pretendard(.medium, size: ._24))
                     .foregroundColor(Color.designSystem(.g1))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .frame(height: 34)
-                Text("답 \(viewModel.quiz.questions[nowIndex].answerCount)개")
+                Text("답 \(viewModel.quiz.questions[currentIndex].answerCount)개")
                     .font(.pretendard(.bold, size: ._16))
                     .foregroundStyle(
                         DesignSystemKit.Gradient.gradientS1.linearGradient
@@ -62,11 +62,11 @@ public struct SolveQuizView: View {
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .frame(height: 24)
                 
-                ForEach($viewModel.quiz.questions[nowIndex].answers, id: \.id) { answer in
+                ForEach($viewModel.quiz.questions[currentIndex].answers, id: \.id) { answer in
                     SolveQuizAnswerView(answer)
                         .onChange(of: answer.isSelected.wrappedValue, perform: { isSelected in
                             selectedCount = (isSelected == true) ? selectedCount + 1 : selectedCount - 1
-                            if selectedCount == viewModel.quiz.questions[nowIndex].answerCount {
+                            if selectedCount == viewModel.quiz.questions[currentIndex].answerCount {
                                 onNextQuestion()
                             }
                         })
@@ -79,8 +79,8 @@ public struct SolveQuizView: View {
     
     private func onNextQuestion() {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
-            if nowIndex + 1 < viewModel.quiz.questions.count {
-                nowIndex += 1
+            if currentIndex + 1 < viewModel.quiz.questions.count {
+                currentIndex += 1
                 selectedCount = 0
             } else {
                 // TODO: - 문제 다 풀었을 때
@@ -89,7 +89,7 @@ public struct SolveQuizView: View {
     }
     
     private func tooltip() -> some View {
-        Text("\(viewModel.quiz.questions.count)문제 중 \(nowIndex + 1)번째 문제")
+        Text("\(viewModel.quiz.questions.count)문제 중 \(currentIndex + 1)번째 문제")
             .font(.pretendard(.bold, size: ._14))
             .foregroundColor(.designSystem(.g4))
             .padding(.horizontal, 16)
