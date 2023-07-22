@@ -17,8 +17,8 @@ public final class AuthenticationRouter: Router {
             break
         case .phoneNumberInput:
             navigateTo(.phoneNumberInput)
-        case .verificationCodeInput:
-            navigateTo(.verificationCodeInput)
+        case .verificationCodeInput(let phoneNumber):
+            navigateTo(.verificationCodeInput(phoneNumber))
         case .userInformationInput:
             navigateTo(.userInformationInput)
         }
@@ -35,8 +35,8 @@ private extension AuthenticationRouter {
         switch spec {
         case .phoneNumberInput:
             PhoneNumberInputView(router: router(route: route))
-        case .verificationCodeInput:
-            VerificationCodeInputView(router: router(route: route))
+        case .verificationCodeInput(let phoneNumber):
+            VerificationCodeInputView(router: router(route: route), phoneNumber: phoneNumber)
         case .userInformationInput:
             UserInformationInputView(router: router(route: route))
         default:

@@ -11,7 +11,7 @@ import Foundation
 public enum ViewSpec: Equatable, Hashable {
     case main
     case phoneNumberInput
-    case verificationCodeInput
+    case verificationCodeInput(String)
     case userInformationInput
 }
 

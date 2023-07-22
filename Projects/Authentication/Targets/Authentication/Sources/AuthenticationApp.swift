@@ -1,3 +1,4 @@
+import UserNotifications
 import SwiftUI
 
 import AuthenticationUI
@@ -7,11 +8,20 @@ import DesignSystemKit
 @main
 struct AuthenticationApp: App {
     class AppDelegate: NSObject, UIApplicationDelegate {
-      func application(_ application: UIApplication,
-                       didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-          AuthenticationKit.initializeFirebase()
-        return true
-      }
+        func application(
+            _ application: UIApplication,
+            didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
+        ) -> Bool {
+            AuthenticationKit.initializeFirebase()
+            return true
+        }
+        
+        func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+            
+        }
+        
+        func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        }
     }
     
     init() {
@@ -21,9 +31,12 @@ struct AuthenticationApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     @StateObject private var router = AuthenticationRouter(isPresented: .constant(.main))
     
+    private let authManager = AuthManager.shared
+    
     var body: some Scene {
         WindowGroup {
             OnboardingView(router: router)
+                .environmentObject(authManager)
         }
     }
 }

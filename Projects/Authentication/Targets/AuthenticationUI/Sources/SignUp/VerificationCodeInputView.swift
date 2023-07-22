@@ -13,13 +13,18 @@ import DesignSystemKit
 
 public struct VerificationCodeInputView: View {
     @StateObject private var router: AuthenticationRouter
+    @EnvironmentObject var authManager: AuthManager
     
     @State private var verificationCodeInput: String = ""
     @State private var isVerificationCodeValid: Bool = false
     @State private var verificationCodeTimeLimit: Int = 180
+    @State private var verificationCodeInvalidToastModel: WQToast.Model?
     
-    public init(router: AuthenticationRouter) {
+    private let phoneNumber: String
+    
+    public init(router: AuthenticationRouter, phoneNumber: String) {
         self._router = StateObject(wrappedValue: router)
+        self.phoneNumber = phoneNumber
     }
     
     public var body: some View {
@@ -48,7 +53,9 @@ public struct VerificationCodeInputView: View {
                                 isValid: $isVerificationCodeValid,
                                 timeLimit: $verificationCodeTimeLimit,
                                 resendHandler: {
-                                    print("재전송")
+                                    authManager.verifyPhoneNumber(
+                                        phoneNumber
+                                    )
                                 }
                             )
                         ))
@@ -66,18 +73,41 @@ public struct VerificationCodeInputView: View {
             }
         }
         .onChange(of: isVerificationCodeValid) { isValid in
+            guard verificationCodeTimeLimit > 0 else {
+                verificationCodeInvalidToastModel = .init(status: .warning, text: "인증번호 시간이 만료됐어요\n재전송을 눌러 다시 시도해 주세요")
+                return
+            }
             if isValid {
-                verificationCodeInput = ""
-                isVerificationCodeValid = false
-                verificationCodeTimeLimit = 180
-                router.push(spec: .userInformationInput)
+                authManager.signIn(with: verificationCodeInput) { result in
+                    
+                    verificationCodeInput = ""
+                    isVerificationCodeValid = false
+                    
+                    switch result {
+                    case .success(let isSucceed):
+                        if isSucceed {
+                            verificationCodeTimeLimit = 180
+                            router.push(spec: .userInformationInput)
+                        }
+                    case .failure(let reason):
+                        switch reason {
+                        case .invalidCode:
+                            verificationCodeInvalidToastModel = .init(status: .warning, text: "인증번호가 올바르지 않아요")
+                        case .timeout:
+                            verificationCodeInvalidToastModel = .init(status: .warning, text: "인증번호가 만료됐어요. 다시 시도해 주세요")
+                        case .unknown:
+                            verificationCodeInvalidToastModel = .init(status: .warning, text: "잠시 후 다시 시도해 주세요")
+                        }
+                    }
+                }
             }
         }
+        .toast(model: $verificationCodeInvalidToastModel)
     }
 }
 
 struct VerificationCodeInputView_Previews: PreviewProvider {
     static var previews: some View {
-        VerificationCodeInputView(router: .init(isPresented: .constant(.userInformationInput)))
+        VerificationCodeInputView(router: .init(isPresented: .constant(.userInformationInput)), phoneNumber: "12341234")
     }
 }

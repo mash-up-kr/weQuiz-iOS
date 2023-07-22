@@ -12,10 +12,12 @@ import AuthenticationKit
 import DesignSystemKit
 
 public struct PhoneNumberInputView: View {
-    
     @StateObject private var router: AuthenticationRouter
+    @EnvironmentObject var authManager: AuthManager
+    
     @State private var phoneNumberInput: String = ""
     @State private var isPhoneNubmerValid: Bool = false
+    @State private var phoneNumberInvalidToastModel: WQToast.Model?
     
     public init(router: AuthenticationRouter) {
         self._router = StateObject(wrappedValue: router)
@@ -66,11 +68,21 @@ public struct PhoneNumberInputView: View {
                             title: "인증번호 받기",
                             isEnable: .constant(!$phoneNumberInput.wrappedValue.isEmpty && $isPhoneNubmerValid.wrappedValue),
                             action: {
-                                router.push(spec: .verificationCodeInput)
+                                authManager.verifyPhoneNumber(phoneNumberInput, completion: { isSucceed in
+                                    guard isSucceed else { return }
+                                    router.push(spec: .verificationCodeInput(phoneNumberInput))
+                                })
                             }
                         )
                     )
                 )
+            }
+            .toast(model: $phoneNumberInvalidToastModel)
+        }
+        .onChange(of: phoneNumberInput) { input in
+            // ClearButton 터치 시 isVaild 변경되지 않아 임시 처리
+            if input.isEmpty {
+                isPhoneNubmerValid = false
             }
         }
     }
