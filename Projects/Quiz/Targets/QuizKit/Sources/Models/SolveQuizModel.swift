@@ -31,14 +31,17 @@ public struct SolveQuestionModel: Identifiable {
     }
 }
 
-public struct SolveAnswerModel {
+public class SolveAnswerModel: Identifiable, ObservableObject {
+    public var id = UUID()
     public var answer: String
     public var order: Int
+    @Published public var isSelected: Bool
     public var isCorrect: Bool
     
     public init(answer: String, order: Int, isCorrect: Bool) {
         self.answer = answer
         self.order = order
+        self.isSelected = false
         self.isCorrect = isCorrect
     }
 }
