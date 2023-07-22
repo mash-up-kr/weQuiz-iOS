@@ -31,11 +31,11 @@ public struct SolveQuestionModel: Identifiable {
     }
 }
 
-public class SolveAnswerModel: Identifiable, ObservableObject {
+public struct SolveAnswerModel: Identifiable {
     public var id = UUID()
     public var answer: String
     public var order: Int
-    @Published public var isSelected: Bool
+    public var isSelected: Bool
     public var isCorrect: Bool
     
     public init(answer: String, order: Int, isCorrect: Bool) {
