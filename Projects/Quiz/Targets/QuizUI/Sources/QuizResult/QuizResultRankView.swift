@@ -10,7 +10,7 @@ import SwiftUI
 import QuizKit
 import DesignSystemKit
 
-struct QuizResultRankCell: View {
+struct QuizResultRankView: View {
     
     private let model: RankUserModel
     
@@ -56,6 +56,6 @@ struct QuizResultRankCell: View {
 
 struct QuizResultRankCell_Previews: PreviewProvider {
     static var previews: some View {
-        QuizResultRankCell(.init(id: 1234, name: "감자", rank: 1, score: 100))
+        QuizResultRankView(.init(id: 1234, name: "감자", rank: 1, score: 100))
     }
 }
