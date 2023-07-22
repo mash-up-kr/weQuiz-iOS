@@ -7,26 +7,44 @@
 //
 
 import SwiftUI
+import QuizKit
 import DesignSystemKit
 
 struct QuizResultRankCell: View {
+    
+    private let model: RankUserModel
+    
+    public init(_ model: RankUserModel) {
+        self.model = model
+    }
+    
     var body: some View {
         HStack(alignment: .center) {
-            Image(Icon.Checkmark.falseFill20)
-                .resizable()
-                .frame(width: 24, height: 24)
             
-            Text("{닉네임}")
+            ZStack {
+                // TODO: 메달 아이콘으로 수정
+                Image(Icon.Checkmark.falseFill20)
+                    .resizable()
+                .frame(width: 24, height: 24)
+                .hidden(model.rank > 3)
+                
+                Text("\(model.rank)")
+                    .font(.pretendard(.bold, size: ._18))
+                    .foregroundColor(Color.designSystem(.g4))
+                    .hidden(model.rank <= 3)
+            }
+            
+            Text("\(model.name)")
                 .font(.pretendard(.regular, size: ._16))
                 .foregroundColor(Color.designSystem(.g2))
             
-            Text("#{고유번호}")
+            Text("#\(model.id)")
                 .font(.pretendard(.regular, size: ._10))
                 .foregroundColor(Color.white)
             
             Spacer()
             
-            Text("{100}점")
+            Text("\(model.score)점")
                 .font(.pretendard(.medium, size: ._18))
                 .foregroundColor(Color.designSystem(.g1))
         }
@@ -38,6 +56,6 @@ struct QuizResultRankCell: View {
 
 struct QuizResultRankCell_Previews: PreviewProvider {
     static var previews: some View {
-        QuizResultRankCell()
+        QuizResultRankCell(.init(id: 1234, name: "감자", rank: 1, score: 100))
     }
 }
