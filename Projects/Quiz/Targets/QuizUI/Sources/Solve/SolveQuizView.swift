@@ -67,8 +67,8 @@ public struct SolveQuizView: View {
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .frame(height: 24)
                 
-                ForEach(0..<$model.answers.count, id: \.self) { index in
-                    answerView(model.answers[index])
+                ForEach(model.answers) { answer in
+                    SolveQuizAnswerView(answer)
                 }
             }
             .padding(.horizontal, 20)
@@ -84,16 +84,6 @@ public struct SolveQuizView: View {
             .background(Color.designSystem(.g8))
             .cornerRadius(16)
             .frame(height: 32)
-    }
-    
-    private func answerView(_ model: SolveAnswerModel) -> some View {
-        Text(model.answer)
-            .font(.pretendard(.bold, size: ._18))
-            .foregroundColor(Color.designSystem(.g2))
-            .frame(maxWidth: .infinity, alignment: .center)
-            .frame(height: 58)
-            .background(Color.designSystem(.g8))
-            .cornerRadius(16)
     }
 }
 
