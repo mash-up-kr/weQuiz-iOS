@@ -27,4 +27,9 @@ public struct RankUserModel {
     public let name: String
     public let score: Int
     
+    public init(id: Int, name: String, score: Int) {
+        self.id = id
+        self.name = name
+        self.score = score
+    }
 }
