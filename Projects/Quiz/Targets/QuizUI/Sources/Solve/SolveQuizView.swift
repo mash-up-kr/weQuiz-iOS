@@ -12,15 +12,11 @@ import QuizKit
 
 public struct SolveQuizView: View {
     
-    @Binding private var model: SolveQuestionModel
+    public init() {}
     
-    public init(model: Binding<SolveQuestionModel>) {
-        self._model = model
-    }
-    
-    //TODO: - nowCount, allCount 주입 받아서 수정해야함
-    @State var nowCount: Int = 1
-    var allCount: Int = 10
+    @ObservedObject var viewModel = SolveQuizViewModel()
+    @State var nowCount: Int = 0
+    @State var selectedCount: Int = 0
     
     public var body: some View {
         
@@ -36,12 +32,11 @@ public struct SolveQuizView: View {
                 ))
                 
                 WQGradientProgressBar(
-                    standard: allCount,
+                    standard: viewModel.quiz.questions.count,
                     current: $nowCount
                 )
                 
-                tooltip(nowCount, allCount)
-                
+                tooltip()
                 
                 Spacer()
             }
@@ -49,17 +44,17 @@ public struct SolveQuizView: View {
             
             VStack(alignment: .center) {
                 
-                Text("\(nowCount)")
+                Text("\(nowCount + 1)")
                     .font(.pretendard(.bold, size: ._20))
                     .foregroundColor(Color.designSystem(.g1))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .frame(height: 26)
-                Text(model.title)
+                Text(viewModel.quiz.questions[nowCount].title)
                     .font(.pretendard(.medium, size: ._24))
                     .foregroundColor(Color.designSystem(.g1))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .frame(height: 34)
-                Text("답 \(model.answerCount)개")
+                Text("답 \(viewModel.quiz.questions[nowCount].answerCount)개")
                     .font(.pretendard(.bold, size: ._16))
                     .foregroundStyle(
                         DesignSystemKit.Gradient.gradientS1.linearGradient
@@ -67,16 +62,34 @@ public struct SolveQuizView: View {
                     .frame(maxWidth: .infinity, alignment: .trailing)
                     .frame(height: 24)
                 
-                ForEach(model.answers) { answer in
+                ForEach($viewModel.quiz.questions[nowCount].answers, id: \.id) { answer in
                     SolveQuizAnswerView(answer)
+                        .onChange(of: answer.isSelected.wrappedValue, perform: { isSelected in
+                            selectedCount = (isSelected == true) ? selectedCount + 1 : selectedCount - 1
+                            if selectedCount == viewModel.quiz.questions[nowCount].answerCount {
+                                onNextQuestion()
+                            }
+                        })
                 }
+                
             }
             .padding(.horizontal, 20)
         }
     }
     
-    private func tooltip(_ nowCount: Int, _ allCount: Int) -> some View {
-        Text("\(nowCount)문제 중 \(allCount)번째 문제")
+    private func onNextQuestion() {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
+            if nowCount + 1 < viewModel.quiz.questions.count {
+                nowCount += 1
+                selectedCount = 0
+            } else {
+                // TODO: - 문제 다 풀었을 때
+            }
+        }
+    }
+    
+    private func tooltip() -> some View {
+        Text("\(viewModel.quiz.questions.count)문제 중 \(nowCount + 1)번째 문제")
             .font(.pretendard(.bold, size: ._14))
             .foregroundColor(.designSystem(.g4))
             .padding(.horizontal, 16)
@@ -84,11 +97,5 @@ public struct SolveQuizView: View {
             .background(Color.designSystem(.g8))
             .cornerRadius(16)
             .frame(height: 32)
-    }
-}
-
-struct SolveQuizView_Previews: PreviewProvider {
-    static var previews: some View {
-        SolveQuizView(model: .constant(SolveQuestionModel(title: "내가 좋아하는 색은?", answerCount: 1, answers: [SolveAnswerModel(answer: "빨간색", order: 0, isCorrect: false), SolveAnswerModel(answer: "노란색", order: 1, isCorrect: false), SolveAnswerModel(answer: "초록색", order: 2, isCorrect: false)])))
     }
 }

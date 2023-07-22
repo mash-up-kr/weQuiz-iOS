@@ -12,10 +12,10 @@ import QuizKit
 
 public struct SolveQuizAnswerView: View {
     
-    @ObservedObject private var model: SolveAnswerModel
+    @Binding private var model: SolveAnswerModel
     
-    public init(_ model: SolveAnswerModel) {
-        self.model = model
+    public init(_ model: Binding<SolveAnswerModel>) {
+        self._model = model
     }
     
     public var body: some View {
@@ -24,10 +24,10 @@ public struct SolveQuizAnswerView: View {
             .foregroundColor(model.isSelected ? Color.designSystem(.g9) : .designSystem(.g2))
             .frame(maxWidth: .infinity, alignment: .center)
             .frame(height: 58)
-            .background(model.isSelected ? Color.designSystem(.s1) : Color.designSystem(.g8))
+            .background($model.isSelected.wrappedValue ? Color.designSystem(.s1) : Color.designSystem(.g8))
             .cornerRadius(16)
             .onTapGesture {
-                model.isSelected.toggle()
+                $model.isSelected.wrappedValue.toggle()
             }
     }
 }
