@@ -64,7 +64,7 @@ extension QuizResultView {
         HStack(alignment: .center, spacing: 6) {
             // TODO: - size 68로 수정
             Text("20")
-                .foregroundStyle(Color.designSystem(.s1))
+                .foregroundStyle(DesignSystemKit.Gradient.gradientS1.linearGradient)
                 .font(.pretendard(.bold, size: ._48))
                 .frame(height: 54)
             Text("점")
