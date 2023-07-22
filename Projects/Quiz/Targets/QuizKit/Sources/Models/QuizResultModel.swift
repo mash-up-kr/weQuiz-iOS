@@ -25,11 +25,13 @@ public struct QuizResultModel {
 public struct RankUserModel {
     public let id: Int
     public let name: String
+    public let rank: Int
     public let score: Int
     
-    public init(id: Int, name: String, score: Int) {
+    public init(id: Int, name: String, rank: Int, score: Int) {
         self.id = id
         self.name = name
+        self.rank = rank
         self.score = score
     }
 }
