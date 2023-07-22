@@ -8,7 +8,7 @@ public struct MakeQuizView: View {
     
     let quizNameLimit: Int = 38
     
-    @ObservedObject var viewModel = QuestionViewModel()
+    @ObservedObject var viewModel = MakeQuizViewModel()
     
     @State private var quizName: String = ""
     
@@ -64,7 +64,7 @@ public struct MakeQuizView: View {
                                     
                                     Button(action: {
                                         if self.viewModel.quiz.questions.count >= 10 { return }
-                                        self.viewModel.quiz.questions.append(QuestionModel())
+                                        self.viewModel.quiz.questions.append(MakeQuestionModel())
                                     }) {
                                         HStack(alignment: .center, spacing: 7, content: {
                                             Image(Icon.Add.circle)

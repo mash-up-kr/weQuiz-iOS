@@ -12,7 +12,7 @@ import QuizKit
 
 public struct QuestionView: View {
     
-    @Binding private var model: QuestionModel
+    @Binding private var model: MakeQuestionModel
     
     @State private var questionTitle: String = ""
     @State private var expandedHeight: CGFloat = 250
@@ -21,7 +21,7 @@ public struct QuestionView: View {
     private var onRemove: ((UUID) -> ())?
     private var onExpand: ((UUID) -> ())?
     
-    public init(model: Binding<QuestionModel>, onRemove: ((UUID) -> ())?, onExpand: ((UUID) -> ())?) {
+    public init(model: Binding<MakeQuestionModel>, onRemove: ((UUID) -> ())?, onExpand: ((UUID) -> ())?) {
         self._model = model
         self.onRemove = onRemove
         self.onExpand = onExpand
@@ -107,7 +107,7 @@ public struct QuestionView: View {
     
     private func addAnswer() {
         if self.model.answers.count >= 5 { return }
-        self.model.answers.append(AnswerModel.init())
+        self.model.answers.append(MakeAnswerModel.init())
         self.expandedHeight += 65
     }
     

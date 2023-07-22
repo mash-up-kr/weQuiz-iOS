@@ -8,30 +8,30 @@
 
 import Foundation
 
-public struct QuizModel {
+public struct MakeQuizModel {
     public var title: String
-    public var questions: [QuestionModel]
+    public var questions: [MakeQuestionModel]
     
     public init() {
         self.title = ""
-        self.questions = [QuestionModel(), QuestionModel()]
+        self.questions = [MakeQuestionModel(), MakeQuestionModel()]
     }
 }
 
-public struct QuestionModel: Identifiable {
+public struct MakeQuestionModel: Identifiable {
     public var id: UUID = UUID()
     public var title: String?
-    public var answers: [AnswerModel]
+    public var answers: [MakeAnswerModel]
     public var isExpand: Bool = false
     
     public init(title: String? = nil) {
         self.title = title
-        self.answers = [AnswerModel(answer: "", isCorrect: false),
-                        AnswerModel(answer: "", isCorrect: false)]
+        self.answers = [MakeAnswerModel(answer: "", isCorrect: false),
+                        MakeAnswerModel(answer: "", isCorrect: false)]
     }
 }
 
-public struct AnswerModel {
+public struct MakeAnswerModel {
     public var answer: String
     public var isCorrect: Bool
     

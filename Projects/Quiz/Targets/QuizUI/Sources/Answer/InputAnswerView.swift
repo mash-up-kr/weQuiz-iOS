@@ -13,11 +13,11 @@ import QuizKit
 public struct AnswerView: View {
     
     let index: Int
-    @Binding private var answer: AnswerModel
+    @Binding private var answer: MakeAnswerModel
     
     var isCorrectAnswer: ((Bool) -> ())?
     
-    public init(index: Int, answer: Binding<AnswerModel>, isCorrectAnswer: ((Bool) -> ())?) {
+    public init(index: Int, answer: Binding<MakeAnswerModel>, isCorrectAnswer: ((Bool) -> ())?) {
         self.index = index
         self._answer = answer
         self.isCorrectAnswer = isCorrectAnswer
@@ -61,6 +61,6 @@ public struct AnswerView: View {
 
 struct AnswerView_Previews: PreviewProvider {
     static var previews: some View {
-        AnswerView(index: 0, answer: .constant(AnswerModel.init(answer: "", isCorrect: false)), isCorrectAnswer: nil)
+        AnswerView(index: 0, answer: .constant(MakeAnswerModel.init(answer: "", isCorrect: false)), isCorrectAnswer: nil)
     }
 }
