@@ -15,10 +15,13 @@ struct QuestionGroupList: View {
     @State private var isEdited = false
     
     var body: some View {
-        self.topBarView
-        self.listBarView
-        self.listView
-            .navigationBarHidden(true)
+        VStack {
+            self.topBarView
+            self.listBarView
+            self.listView
+                
+        }
+        .navigationBarHidden(true)
     }
 }
 
@@ -38,7 +41,6 @@ extension QuestionGroupList {
                 .foregroundColor(.designSystem(.g2))
                 .font(.pretendard(.medium, size: ._14))
                 .padding([.horizontal, .top], 20)
-                .padding(.bottom, 16)
             Spacer()
             Button(action: {
                 withAnimation {
@@ -49,7 +51,6 @@ extension QuestionGroupList {
                     .foregroundColor(.designSystem(.g2))
                     .font(.pretendard(.regular, size: ._14))
                     .padding([.horizontal, .top], 20)
-                    .padding(.bottom, 16)
             }
         }
     }

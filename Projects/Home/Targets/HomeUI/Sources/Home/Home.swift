@@ -10,7 +10,7 @@ public struct Home: View {
     public var body: some View {
         NavigationView {
             ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 10) {
+                VStack(spacing: 0) {
                     self.topBarView
                     self.profileView
                     self.questionButton
@@ -26,13 +26,7 @@ public struct Home: View {
 extension Home {
     private var topBarView: some View {
         WQTopBar(style: .title(.init(title: "LOGO")))
-    }
-    
-    private var logoView: some View {
-        HStack {
-            Text("LOGO")
-            Spacer()
-        }
+            .padding(.leading, 8)
     }
     
     private var profileView: some View {
@@ -45,24 +39,29 @@ extension Home {
                 .resizable()
                 .scaledToFill()
                 .frame(width: 85, height: 85)
-                .padding(.leading, -20)
             
             VStack(alignment: .leading) {
                 Text(nickname)
-                    .font(.system(size: 20))
+                    .font(.pretendard(.bold, size: ._18))
                     .multilineTextAlignment(.leading)
                     .foregroundColor(
                         .designSystem(.g2)
                     )
+                    .padding(.bottom, 8)
+                
                 Text(contents)
-                    .font(.system(size: 20))
+                    .font(.pretendard(.medium, size: ._14))
                     .multilineTextAlignment(.leading)
                     .foregroundColor(
                         .designSystem(.g4)
                     )
             }
-            .padding(.leading, 24)
+            .padding(.leading, 20)
+            
+            Spacer()
         }
+        .padding([.leading, .trailing], 20)
+        .padding([.top, .bottom], 11)
     }
     
     private var questionButton: some View {
@@ -79,7 +78,7 @@ extension Home {
     }
     
     private var friendRankBlankView: some View {
-        let contents = "아직 랭킹이 없어요 ㅠㅠ"
+        let contents = "아직 랭킹이 없어요"
         
         return VStack {
             Text(contents)
@@ -89,7 +88,7 @@ extension Home {
     }
     
     private var friendRankList: some View {
-        VStack {
+        VStack(spacing: 12) {
             CustomHeader(title: "친구 랭킹", nextView: AnyView(FriendsList(friends: $viewModel.friendsRank)))
             
             ForEach($viewModel.friendsRank.prefix(3), id: \.id) { friend in
@@ -99,8 +98,8 @@ extension Home {
     }
     
     private var myQuestionBlankView: some View {
-        let contents = "아직 생성된 문제가 없어요."
         let image = "doc.plaintext"
+        let contents = "아직 생성된 문제가 없어요"
         
         return VStack {
             Image(systemName: image)
@@ -112,13 +111,15 @@ extension Home {
     
     private var myQuestionList: some View {
         ScrollView {
-            CustomHeader(title: "내가 낸 문제지 리스트", nextView: AnyView(QuestionGroupList(questions: $viewModel.questionGroups)))
-                
-            ForEach($viewModel.questionGroups.prefix(4)) { questionGroup in
-                NavigationLink(destination: QuestionDetail(questionGroup: questionGroup, onRemove: { index in
-                    viewModel.questionGroups.removeAll { $0.id == index }
-                })) {
-                    QuestionGroupRow(questionGroup: questionGroup)
+            LazyVStack(spacing: 12) {
+                CustomHeader(title: "내가 낸 문제지 리스트", nextView: AnyView(QuestionGroupList(questions: $viewModel.questionGroups)))
+                    
+                ForEach($viewModel.questionGroups.prefix(4)) { questionGroup in
+                    NavigationLink(destination: QuestionDetail(questionGroup: questionGroup, onRemove: { index in
+                        viewModel.questionGroups.removeAll { $0.id == index }
+                    })) {
+                        QuestionGroupRow(questionGroup: questionGroup)
+                    }
                 }
             }
         }
@@ -128,12 +129,10 @@ extension Home {
     private var friendRankView: some View {
         if !viewModel.friendsRank.isEmpty {
             friendRankList
-                .padding()
-        } else if viewModel.friendsRank.isEmpty && !viewModel.questionGroups.isEmpty {
-            EmptyView()
+                .padding([.leading, .trailing], 20)
+                .padding(.top, 9)
         } else {
-            friendRankBlankView
-                .padding()
+            EmptyView()
         }
     }
     
@@ -141,12 +140,12 @@ extension Home {
     private var myQuestionView: some View {
         if !viewModel.questionGroups.isEmpty {
             myQuestionList
-                .padding()
-        } else if viewModel.questionGroups.isEmpty && !viewModel.friendsRank.isEmpty {
-            EmptyView()
+                .padding([.leading, .trailing], 20)
+                .padding(.top, 26)
         } else {
             myQuestionBlankView
-                .padding()
+                .padding([.leading, .trailing], 20)
+                .padding(.top, 26)
         }
     }
 }

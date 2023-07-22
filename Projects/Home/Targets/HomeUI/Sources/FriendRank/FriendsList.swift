@@ -35,12 +35,12 @@ extension FriendsList {
     
     private var listView: some View {
         ScrollView {
-            LazyVStack {
+            LazyVStack(spacing: 12) {
                 ForEach($friends) { friend in
                     FriendsRow(friend: friend)
                 }
             }
-            .padding()
+            .padding(20)
         }
         .preferredColorScheme(.dark)
     }
