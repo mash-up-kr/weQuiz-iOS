@@ -13,6 +13,8 @@ public struct QuizResultView: View {
     
     public init() {}
     
+    @State private var isSharePresented = false
+    
     public var body: some View {
         VStack {
             // TODO: - 홈 아이콘으로 수정
@@ -49,9 +51,19 @@ public struct QuizResultView: View {
                 leftAction: {
                 print("다시 풀기 클릭")},
                 rightAction: {
-                print("결과 공유하기 클릭")}
+                    isSharePresented = true
+                }
             )))
             .padding(.top, 22)
+            .background(
+                // TODO: - url 문제 id로 수정
+                ActivityView(
+                    isPresented: $isSharePresented,
+                    activityItems: ["찐친고사 결과를 확인해보세요!",
+                                    URL(string: "https://youtu.be/jOTfBlKSQYY")!]
+                )
+
+            )
             
         }
         .background(Color.designSystem(.g9))
