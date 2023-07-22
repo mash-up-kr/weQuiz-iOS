@@ -33,7 +33,7 @@ public struct SolveQuizView: View {
                 
                 WQGradientProgressBar(
                     standard: viewModel.quiz.questions.count,
-                    current: $currentIndex
+                    current: .constant(currentIndex + 1)
                 )
                 
                 tooltip()
