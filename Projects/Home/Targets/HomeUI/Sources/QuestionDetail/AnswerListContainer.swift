@@ -80,6 +80,7 @@ struct AnswerList: View {
                         }
                         .background(Color.designSystem(.g9))
                         .cornerRadius(16)
+                        .padding(.bottom, 12)
                     }
                     .frame(height: 56)
                 }

@@ -18,8 +18,7 @@ struct QuestionGroupRow: View {
             Spacer()
             self.writingStateView
         }
-        .padding(.all, 16)
-        .frame(height: 56)
+        .frame(height: 58)
         .background(Color.designSystem(.g8))
         .cornerRadius(16)
     }
@@ -28,8 +27,9 @@ struct QuestionGroupRow: View {
 extension QuestionGroupRow {
     private var questionsDescription: some View {
         Text(questionGroup.title)
-            .foregroundColor(.designSystem(.g2))
+            .foregroundColor(.designSystem(.g1))
             .font(.pretendard(.medium, size: ._16))
+            .padding(.leading, 16)
     }
     
     @ViewBuilder
@@ -37,12 +37,16 @@ extension QuestionGroupRow {
         let writingState = questionGroup.writingState
         
         if writingState {
-            Text("작성 중")
-                .padding(.all, 4)
-                .foregroundColor(.designSystem(.s1))
-                .font(.pretendard(.medium, size: ._12))
-                .background(.black)
-                .cornerRadius(4)
+            ZStack {
+                Text("작성 중")
+                    .padding(.all, 4)
+                    .font(.pretendard(.medium, size: ._12))
+                    .foregroundColor(.designSystem(.s1))
+            }
+            .background(.black)
+            .cornerRadius(4)
+            .padding(.trailing, 16)
+            .padding(.leading, 8)
         } else {
             EmptyView()
         }
