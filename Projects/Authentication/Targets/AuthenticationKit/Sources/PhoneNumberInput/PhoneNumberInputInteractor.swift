@@ -9,7 +9,7 @@
 import Foundation
 
 public final class PhoneNumberInputInteractor {
-    private var presenter: PhoneNumberInputPresentingLogic?
+    private let presenter: PhoneNumberInputPresentingLogic
     private let authManager: AuthManager
     
     public init(
@@ -23,7 +23,7 @@ public final class PhoneNumberInputInteractor {
 
 extension PhoneNumberInputInteractor: PhoneNumberInputRequestingLogic {
     public func request(_ request: PhoneNumberInputModel.Request.OnTouchNavigationBack) {
-        presenter?.present(
+        presenter.present(
             PhoneNumberInputModel.Response.Naivgate(
                 destination: .back
             )
@@ -33,10 +33,10 @@ extension PhoneNumberInputInteractor: PhoneNumberInputRequestingLogic {
     public func request(_ request: PhoneNumberInputModel.Request.OnTouchGetVerificationCode) {
         authManager.verifyPhoneNumber(request.input, completion: { isSucceed in
             guard isSucceed else {
-                self.presenter?.present(PhoneNumberInputModel.Response.Toast(type: .unknown))
+                self.presenter.present(PhoneNumberInputModel.Response.Toast(type: .unknown))
                 return
             }
-            self.presenter?.present(
+            self.presenter.present(
                 PhoneNumberInputModel.Response.Naivgate(
                     destination: .verificationCodeInput(request.input)
                 )

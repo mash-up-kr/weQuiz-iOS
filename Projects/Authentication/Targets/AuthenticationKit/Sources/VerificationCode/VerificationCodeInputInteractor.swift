@@ -60,7 +60,7 @@ extension VerificationCodeInputInteractor: VerificationCodeInputRequestingLogic 
             case .success(let isSucceed):
                 if isSucceed {
                     self?.presenter?.present(
-                        VerificationCodeInputModel.Response.Naivgate(destination: .userInformationInput)
+                        VerificationCodeInputModel.Response.Naivgate(destination: .userInformationInput(request.phoneNumber))
                     )
                 }
             case .failure(let reason):

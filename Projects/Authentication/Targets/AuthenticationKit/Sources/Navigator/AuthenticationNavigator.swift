@@ -11,7 +11,8 @@ import Foundation
 public enum Screen: Hashable {
     case phoneNumber
     case verificationCodeInput(String)
-    case userInformationInput
+    case userInformationInput(String)
+    case signUpFinsh
 }
 
 public final class AuthenticationNavigator: ObservableObject {

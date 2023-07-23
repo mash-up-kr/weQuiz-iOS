@@ -46,8 +46,11 @@ public struct OnboardingView: View {
                 case .verificationCodeInput(let phoneNumber):
                     verificationCodeInputBuilder(phoneNumber)
                         .navigationBarBackButtonHidden()
-                case .userInformationInput:
-                    UserInformationInputView()
+                case .userInformationInput(let phoneNumber):
+                    userInformationInputBuilder(phoneNumber)
+                        .navigationBarBackButtonHidden()
+                case .signUpFinsh:
+                    SignUpFinishView()
                         .navigationBarBackButtonHidden()
                 }
             }
@@ -73,6 +76,19 @@ public struct OnboardingView: View {
             authManager: authManager
         )
         return VerificationCodeInputView(
+            interactor: interactor,
+            presenter: presenter,
+            phoneNumber: phoneNumber
+        )
+    }
+    
+    private func userInformationInputBuilder(_ phoneNumber: String) -> UserInformationInputView {
+        let presenter = UserInformationInputPresenter(navigator: navigator)
+        let interactor = UserInformationInputInteractor(
+            presenter: presenter,
+            authManager: authManager
+        )
+        return UserInformationInputView(
             interactor: interactor,
             presenter: presenter,
             phoneNumber: phoneNumber

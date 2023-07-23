@@ -31,11 +31,13 @@ public enum VerificationCodeInputModel {
         }
         
         public struct OnRequestVerifyCode {
-            public let remainTime: Int
-            public let isValid: Bool
-            public let code: String
+            let phoneNumber: String
+            let remainTime: Int
+            let isValid: Bool
+            let code: String
             
-            public init(remainTime: Int, isValid: Bool, code: String) {
+            public init(phoneNumber: String, remainTime: Int, isValid: Bool, code: String) {
+                self.phoneNumber = phoneNumber
                 self.remainTime = remainTime
                 self.isValid = isValid
                 self.code = code
@@ -47,9 +49,8 @@ public enum VerificationCodeInputModel {
         public struct Naivgate {
             public enum Destination {
                 case back
-                case userInformationInput
+                case userInformationInput(String)
             }
-            
             public let destination: Destination
         }
 

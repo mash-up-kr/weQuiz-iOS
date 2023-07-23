@@ -80,6 +80,7 @@ public struct VerificationCodeInputView: View {
         }
         .onChange(of: isValid) { isValid in
             interactor?.reqeust(VerificationCodeInputModel.Request.OnRequestVerifyCode(
+                phoneNumber: phoneNumber,
                 remainTime: presenter.viewModel.remainTime,
                 isValid: isValid,
                 code: input

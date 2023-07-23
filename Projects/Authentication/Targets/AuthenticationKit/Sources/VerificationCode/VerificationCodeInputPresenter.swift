@@ -30,8 +30,8 @@ extension VerificationCodeInputPresenter: VerificationCodeInputPresentingLogic {
         switch response.destination {
         case .back:
             navigator.back()
-        case .userInformationInput:
-            navigator.path.append(.userInformationInput)
+        case .userInformationInput(let phoneNumber):
+            navigator.path.append(.userInformationInput(phoneNumber))
         }
     }
     

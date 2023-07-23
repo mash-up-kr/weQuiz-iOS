@@ -12,14 +12,26 @@ import AuthenticationKit
 import DesignSystemKit
 
 public struct UserInformationInputView: View {
-    @EnvironmentObject var navigator: AuthenticationNavigator
+    @ObservedObject private var presenter: UserInformationInputPresenter
     
     @State private var nickname: String = ""
     @State private var isNicknameValid: Bool = false
     @State private var introduction: String = ""
     @State private var isIntroductionValid: Bool = false
+    @State private var userInformationInputToastModel: WQToast.Model?
     
-    init() {}
+    private let interactor: UserInformationInputRequestingLogic?
+    private let phoneNumber: String
+    
+    public init(
+        interactor: UserInformationInputRequestingLogic,
+        presenter: UserInformationInputPresenter,
+        phoneNumber: String
+    ) {
+        self.presenter = presenter
+        self.interactor = interactor
+        self.phoneNumber = phoneNumber
+    }
     
     public var body: some View {
         VStack(alignment: .leading, spacing: .zero) {
@@ -27,7 +39,7 @@ public struct UserInformationInputView: View {
                 .init(
                     title: "",
                     action: {
-                        navigator.back()
+                        interactor?.request(UserInformationInputModel.Request.OnTouchNavigationBack())
                     }
                 )
             ))
@@ -43,17 +55,6 @@ public struct UserInformationInputView: View {
                     introduction: $introduction,
                     isIntroductionValid: $isIntroductionValid
                 )
-                Spacer()
-                WQButton(
-                    style: .fullRadiusSingle(
-                        .init(
-                            title: "다음",
-                            action: {
-                                // TODO: 인증번호 입력 화면 진입
-                            }
-                        )
-                    )
-                )
             }
             .padding(
                 .init(
@@ -64,7 +65,31 @@ public struct UserInformationInputView: View {
                 )
             )
             Spacer()
+            WQButton(
+                style: .fullRadiusSingle(
+                    .init(
+                        title: "다음",
+                        isEnable: $isNicknameValid,
+                        action: {
+                            interactor?.request(UserInformationInputModel.Request.OnRequestSignUp(
+                                phone: phoneNumber,
+                                nickname: nickname,
+                                description: introduction
+                            ))
+                        }
+                    )
+                )
+            )
         }
+        .onChange(of: presenter.viewModel.toastModel) { model in
+            switch model {
+            case .signUpFailed:
+                userInformationInputToastModel = .init(status: .warning, text: "회원가입에 실패하였습니다. 개발자에게 문의해주세요")
+            case .unknown:
+                userInformationInputToastModel = .init(status: .warning, text: "잠시 후 다시 시도해 주세요")
+            }
+        }
+        .toast(model: $userInformationInputToastModel)
     }
     
     private struct Input: View {
@@ -134,6 +159,15 @@ public struct UserInformationInputView: View {
 
 struct UserInformationInputView_Previews: PreviewProvider {
     static var previews: some View {
-        UserInformationInputView()
+        let presenter = UserInformationInputPresenter(navigator: .shared)
+        let interactor = UserInformationInputInteractor(
+            presenter: presenter,
+            authManager: .shared
+        )
+        UserInformationInputView(
+            interactor: interactor,
+            presenter: presenter,
+            phoneNumber: "12341234"
+        )
     }
 }
