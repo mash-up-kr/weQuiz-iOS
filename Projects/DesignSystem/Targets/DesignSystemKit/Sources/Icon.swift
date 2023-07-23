@@ -159,4 +159,28 @@ public extension Icon {
             }
         }
     }
+    
+    // MARK: - Share
+    
+    enum Share: IconRepresentable {
+        case fillGray
+        
+        public var name: String {
+            switch self {
+            case .fillGray: return "share_fill_gray_24"
+            }
+        }
+    }
+    
+    // MARK: - Trash Can
+    
+    enum TrashCan: IconRepresentable {
+        case fillGray
+        
+        public var name: String {
+            switch self {
+            case .fillGray: return "trash_can_fill_gray_24"
+            }
+        }
+    }
 }

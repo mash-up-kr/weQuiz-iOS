@@ -11,29 +11,40 @@ import SwiftUI
 import DesignSystemKit
 
 struct IconPreview: View {
-    typealias IconDataSet = (title: String, data: [any IconRepresentable])
+    private struct IconDataSet: Hashable {
+        let title: String
+        let data: [any IconRepresentable]
+        
+        static func == (lhs: IconPreview.IconDataSet, rhs: IconPreview.IconDataSet) -> Bool {
+            lhs.title == rhs.title && lhs.data.count == rhs.data.count
+        }
+        
+        func hash(into hasher: inout Hasher) {
+            hasher.combine(title)
+        }
+    }
     
-    private let chevron: IconDataSet = (
-        "Chevron",
-        [
-           Icon.Chevron.upBig,
-           Icon.Chevron.upMedium,
-           Icon.Chevron.upSmall,
-           Icon.Chevron.downBig,
-           Icon.Chevron.downMedium,
-           Icon.Chevron.downSmall,
-           Icon.Chevron.leftBig,
-           Icon.Chevron.leftMedium,
-           Icon.Chevron.leftSmall,
-           Icon.Chevron.rightBig,
-           Icon.Chevron.rightMedium,
-           Icon.Chevron.rightSmall
-       ]
+    private let chevron: IconDataSet = .init(
+        title: "Chevron",
+        data: [
+            Icon.Chevron.upBig,
+            Icon.Chevron.upMedium,
+            Icon.Chevron.upSmall,
+            Icon.Chevron.downBig,
+            Icon.Chevron.downMedium,
+            Icon.Chevron.downSmall,
+            Icon.Chevron.leftBig,
+            Icon.Chevron.leftMedium,
+            Icon.Chevron.leftSmall,
+            Icon.Chevron.rightBig,
+            Icon.Chevron.rightMedium,
+            Icon.Chevron.rightSmall
+        ]
     )
     
-    private let checkmark: IconDataSet = (
-        "Checkmark",
-        [
+    private let checkmark: IconDataSet = .init(
+        title: "Checkmark",
+        data: [
             Icon.Checkmark.trueFill24,
             Icon.Checkmark.trueFill20,
             Icon.Checkmark.falseLine24,
@@ -43,54 +54,68 @@ struct IconPreview: View {
         ]
     )
     
-    private let circleAlert: IconDataSet = (
-        "CircleAlert",
-        [
+    private let circleAlert: IconDataSet = .init(
+        title: "CircleAlert",
+        data: [
             Icon.CircleAlert.fillMono
         ]
     )
     
-    private let close: IconDataSet = (
-        "Close",
-        [
+    private let close: IconDataSet = .init(
+        title: "Close",
+        data: [
             Icon.Close.fillBlack,
             Icon.Close.fillGray,
             Icon.Close.fillWhite
         ]
     )
     
-    private let edit: IconDataSet = (
-        "Edit",
-        [
+    private let edit: IconDataSet = .init(
+        title: "Edit",
+        data: [
             Icon.Edit.list
         ]
     )
-
-    private let siren: IconDataSet = (
-        "Siren",
-        [
+    
+    private let siren: IconDataSet = .init(
+        title: "Siren",
+        data: [
             Icon.Siren.mono
         ]
     )
     
-    private let magnifier: IconDataSet = (
-        "Magnifier",
-        [
+    private let magnifier: IconDataSet = .init(
+        title: "Magnifier",
+        data: [
             Icon.Magnifier.lineGray
         ]
     )
     
-    private let arrow: IconDataSet = (
-        "Arrow",
-        [
+    private let arrow: IconDataSet = .init(
+        title: "Arrow",
+        data: [
             Icon.Arrow.up
         ]
     )
     
-    private let add: IconDataSet = (
-        "Add",
-        [
+    private let add: IconDataSet = .init(
+        title: "Add",
+        data: [
             Icon.Add.circle
+        ]
+    )
+    
+    private let share: IconDataSet = .init(
+        title: "Share",
+        data: [
+            Icon.Share.fillGray
+        ]
+    )
+    
+    private let trashCan: IconDataSet = .init(
+        title: "TrashCan",
+        data: [
+            Icon.TrashCan.fillGray
         ]
     )
     
@@ -127,35 +152,20 @@ struct IconPreview: View {
             }
         }
     }
-
+    
+    private var datas: [IconDataSet] {
+        [
+            chevron, checkmark, circleAlert, close, edit, siren, magnifier,
+            arrow, add, share, trashCan
+        ]
+    }
+    
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading) {
-                IconSectionView(title: chevron.title, data: chevron.data)
-            }
-            VStack(alignment: .leading) {
-                IconSectionView(title: checkmark.title, data: checkmark.data)
-            }
-            VStack(alignment: .leading) {
-                IconSectionView(title: circleAlert.title, data: circleAlert.data)
-            }
-            VStack(alignment: .leading) {
-                IconSectionView(title: close.title, data: close.data)
-            }
-            VStack(alignment: .leading) {
-                IconSectionView(title: edit.title, data: edit.data)
-            }
-            VStack(alignment: .leading) {
-                IconSectionView(title: siren.title, data: siren.data)
-            }
-            VStack(alignment: .leading) {
-                IconSectionView(title: magnifier.title, data: magnifier.data)
-            }
-            VStack(alignment: .leading) {
-                IconSectionView(title: arrow.title, data: arrow.data)
-            }
-            VStack(alignment: .leading) {
-                IconSectionView(title: add.title, data: add.data)
+            ForEach(datas, id: \.self) { icon in
+                VStack(alignment: .leading) {
+                    IconSectionView(title: icon.title, data: icon.data)
+                }
             }
         }
         .navigationTitle("Icon")

@@ -50,7 +50,7 @@ public struct WQButton: View {
                 }
                 .background {
                     RoundedRectangle(cornerRadius: style.cornerRadius)
-                        .foregroundColor(.designSystem(.g5))
+                        .foregroundColor(.designSystem(.g6))
                 }
                 .frame(height: 52)
                 Button {
