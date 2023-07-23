@@ -31,21 +31,17 @@ extension FriendsRow {
     
     @ViewBuilder
     private var priorityImageView: some View {
-        GeometryReader { geometry in
-            image
-                .padding(.vertical, 16)
-                .position(x: 28, y: geometry.size.height / 2)
-//                .padding(.leading, 16)
-        }
+        image
+            .frame(width: 24, height: 24)
+            .padding(.vertical, 16)
+            .padding(.leading, 16)
     }
     
     private var descriptionView: some View {
-        GeometryReader { geometry in
-            Text(self.friend.userInfoDto.name)
-                .position(x: -40, y: geometry.size.height / 2)
-                .font(.pretendard(.regular, size: ._16))
-                .foregroundColor(.designSystem(.g1))
-        }
+        Text(self.friend.userInfoDto.name)
+            .padding(.leading, 8)
+            .font(.pretendard(.regular, size: ._16))
+            .foregroundColor(.designSystem(.g1))
     }
     
     private var uniqueNumView: some View {

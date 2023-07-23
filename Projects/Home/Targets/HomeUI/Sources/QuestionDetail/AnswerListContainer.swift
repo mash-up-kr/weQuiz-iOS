@@ -18,7 +18,6 @@ enum AnswerListType {
 struct AnswerListContainer: View {
     
     var question: QuestionModel
-//    var questionStatistic: Q
     var questionsCount: Int
     
     @State var backDegree = 180.0

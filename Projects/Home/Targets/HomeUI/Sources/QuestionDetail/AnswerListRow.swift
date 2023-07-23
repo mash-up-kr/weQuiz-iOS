@@ -27,9 +27,3 @@ struct AnswerListRow: View {
         .cornerRadius(16)
     }
 }
-
-//struct QuestionDetailRow_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AnswerListRow(index: 1, contents: questionsSamlple[0].questions.description, percent: 30)
-//    }
-//}
