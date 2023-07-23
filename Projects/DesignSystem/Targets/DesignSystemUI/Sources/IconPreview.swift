@@ -119,6 +119,22 @@ struct IconPreview: View {
         ]
     )
     
+    private let home: IconDataSet = .init(
+        title: "Home",
+        data: [
+            Icon.Home.fillGray
+        ]
+    )
+    
+    private let medal: IconDataSet = .init(
+        title: "Medal",
+        data: [
+            Icon.Medal.gold,
+            Icon.Medal.silver,
+            Icon.Medal.bronze
+        ]
+    )
+    
     private struct IconSectionView: View {
         let title: String
         let data: [any IconRepresentable]
@@ -156,7 +172,7 @@ struct IconPreview: View {
     private var datas: [IconDataSet] {
         [
             chevron, checkmark, circleAlert, close, edit, siren, magnifier,
-            arrow, add, share, trashCan
+            arrow, add, share, trashCan, home, medal
         ]
     }
     

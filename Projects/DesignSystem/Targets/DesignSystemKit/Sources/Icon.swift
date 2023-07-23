@@ -183,4 +183,32 @@ public extension Icon {
             }
         }
     }
+    
+    // MARK: - Home
+    
+    enum Home: IconRepresentable {
+        case fillGray
+
+        public var name: String {
+            switch self {
+            case .fillGray: return "home_fill_gray_24"
+            }
+        }
+    }
+    
+    // MARK: - Medal
+    
+    enum Medal: IconRepresentable {
+        case gold
+        case silver
+        case bronze
+        
+        public var name: String {
+            switch self {
+            case .gold: return "medal_gold"
+            case .silver: return "medal_silver"
+            case .bronze: return "medal_bronze"
+            }
+        }
+    }
 }
