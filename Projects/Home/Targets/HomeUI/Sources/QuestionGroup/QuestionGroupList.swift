@@ -11,7 +11,7 @@ import DesignSystemKit
 
 struct QuestionGroupList: View {
     @Environment(\.dismiss) private var dismiss
-    @Binding var questions: [QuestionGroup]
+    @Binding var questions: [SummaryQuestionModel]
     @State private var isEdited = false
     
     var body: some View {
@@ -59,8 +59,8 @@ extension QuestionGroupList {
         List {
             ForEach($questions) { question in
                 ZStack {
-                    QuestionGroupRow(questionGroup: question)
-                    NavigationLink(destination: QuestionDetail(questionGroup: question, onRemove: { index in
+                    QuestionGroupRow(question: question)
+                    NavigationLink(destination: QuestionDetail(questionDetail: .constant(questionDetailSample), onRemove: { index in
                         questions.removeAll { $0.id == index }
                     })) {
                         EmptyView()
@@ -85,6 +85,6 @@ extension QuestionGroupList {
 
 struct QuestionGroupList_Previews: PreviewProvider {
     static var previews: some View {
-        QuestionGroupList(questions: .constant(questionsSamlple))
+        QuestionGroupList(questions: .constant(questionSample.quiz))
     }
 }

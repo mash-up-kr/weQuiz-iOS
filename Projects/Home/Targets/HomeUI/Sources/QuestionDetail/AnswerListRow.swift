@@ -11,15 +11,13 @@ import DesignSystemKit
 
 struct AnswerListRow: View {
     
-    var index: Int
-    var contents: String
-    var percent: CGFloat
+    var model: AnswerModel
     
     var body: some View {
         
         HStack {
-            AlphabetCircleView(answerNumber: index)
-            Text(contents)
+            AlphabetCircleView(answerNumber: model.id)
+            Text(model.content)
                 .font(.pretendard(.medium, size: ._16))
             Spacer()
         }
@@ -27,11 +25,5 @@ struct AnswerListRow: View {
         .foregroundColor(.designSystem(.g2))
         .background(Color.clear)
         .cornerRadius(16)
-    }
-}
-
-struct QuestionDetailRow_Previews: PreviewProvider {
-    static var previews: some View {
-        AnswerListRow(index: 1, contents: questionsSamlple[0].questions.description, percent: 30)
     }
 }

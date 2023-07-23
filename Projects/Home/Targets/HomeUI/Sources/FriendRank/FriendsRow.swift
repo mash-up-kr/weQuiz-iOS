@@ -10,7 +10,8 @@ import SwiftUI
 import DesignSystemKit
 
 struct FriendsRow: View {
-    @Binding var friend: Friend
+    @Binding var friend: FriendModel
+    var priority: Int
     
     var body: some View {
         HStack {
@@ -27,22 +28,25 @@ struct FriendsRow: View {
 }
 
 extension FriendsRow {
+    
+    @ViewBuilder
     private var priorityImageView: some View {
         image
+            .frame(width: 24, height: 24)
             .padding(.vertical, 16)
             .padding(.leading, 16)
     }
     
     private var descriptionView: some View {
-        Text(self.friend.name)
-            .padding(.horizontal, 8)
+        Text(self.friend.userInfoDto.name)
+            .padding(.leading, 8)
             .font(.pretendard(.regular, size: ._16))
             .foregroundColor(.designSystem(.g1))
     }
     
     private var uniqueNumView: some View {
         ZStack {
-            Text("#" + self.friend.originalNum)
+            Text("#" + "\(self.friend.quizAnswerId)")
                 .padding(.all, 4)
                 .font(.pretendard(.regular, size: ._10))
                 .foregroundColor(.designSystem(.g1))
@@ -52,7 +56,7 @@ extension FriendsRow {
     }
     
     private var scoreView: some View {
-        Text("\(self.friend.Score)점")
+        Text("\(self.friend.score)점")
             .padding(.horizontal, 16)
             .font(.pretendard(.medium, size: ._18))
             .foregroundColor(.designSystem(.g1))
@@ -65,13 +69,13 @@ extension FriendsRow {
                 .padding(.vertical, 16)
                 .padding(.leading, 16)
             
-            Text(self.friend.name)
+            Text(self.friend.userInfoDto.name)
                 .padding(.horizontal, 8)
                 .font(.pretendard(.regular, size: ._16))
                 .foregroundColor(.designSystem(.g1))
             
             ZStack {
-                Text("#" + self.friend.originalNum)
+                Text("#" + "\(self.friend.quizAnswerId)")
                     .padding(.all, 4)
                     .font(.pretendard(.regular, size: ._10))
                     .foregroundColor(.designSystem(.g1))
@@ -81,7 +85,7 @@ extension FriendsRow {
             
             Spacer()
             
-            Text("\(self.friend.Score)점")
+            Text("\(self.friend.score)점")
                 .padding(.horizontal, 16)
                 .font(.pretendard(.medium, size: ._18))
                 .foregroundColor(.designSystem(.g1))
@@ -92,7 +96,7 @@ extension FriendsRow {
     }
     
     private var image: some View {
-        switch friend.rank {
+        switch priority {
         case 1: return Image("GoldGrade")
         case 2: return Image("SilverGrade")
         case 3: return Image("BronzeGrade")

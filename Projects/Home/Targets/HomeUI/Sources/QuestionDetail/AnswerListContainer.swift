@@ -17,7 +17,7 @@ enum AnswerListType {
 
 struct AnswerListContainer: View {
     
-    var question: Question
+    var question: QuestionModel
     var questionsCount: Int
     
     @State var backDegree = 180.0
@@ -56,7 +56,7 @@ extension AnswerListContainer {
 struct AnswerList: View {
     
     var listType: AnswerListType
-    var question: Question
+    var question: QuestionModel
     var questionsCount: Int
     @Binding var degree: Double
     
@@ -64,18 +64,18 @@ struct AnswerList: View {
         ScrollView {
             LazyVStack(alignment: .leading) {
                 HStack {
-                    Text("\(question.num). \(question.title)")
+                    Text("\(question.id). \(question.title)")
                         .font(.pretendard(.medium, size: ._18))
                         .foregroundColor(.designSystem(.g2))
                 }
-                ForEach(question.content.indices) { index in
+                ForEach(question.answers) { answer in
                     GeometryReader { geometry in
                         ZStack(alignment: .leading) {
                             if listType == .back {
-                                AnswerPercentView(index: index)
-                                    .frame(width: geometry.size.width / 2, height: geometry.size.height)
+                                AnswerPercentView(id: answer.id)
+                                    .frame(width: geometry.size.width * CGFloat(answer.order), height: geometry.size.height)
                             }
-                            AnswerListRow(index: index, contents: question.content[index], percent: 10)
+                            AnswerListRow(model: answer)
                                 .frame(width: geometry.size.width, height: geometry.size.height)
                         }
                         .background(Color.designSystem(.g9))
@@ -85,7 +85,7 @@ struct AnswerList: View {
                     .frame(height: 56)
                 }
                 HStack {
-                    Text("\(question.num)/\(questionsCount)")
+                    Text("\(question.id)/\(question.answerCounts)")
                     Spacer()
                     Button(action: {
                         print("버튼을 눌러보세요")

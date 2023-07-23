@@ -30,9 +30,9 @@ extension Home {
     }
     
     private var profileView: some View {
-        let image = viewModel.profile.image
-        let nickname = viewModel.profile.nickname
-        let contents = viewModel.profile.contents
+        let image = viewModel.myInfo.image
+        let nickname = viewModel.myInfo.nickname
+        let contents = viewModel.myInfo.contents
         
         return HStack {
             Image(systemName: image)
@@ -91,8 +91,8 @@ extension Home {
         VStack(spacing: 12) {
             CustomHeader(title: "친구 랭킹", nextView: AnyView(FriendsList(friends: $viewModel.friendsRank)))
             
-            ForEach($viewModel.friendsRank.prefix(3), id: \.id) { friend in
-                FriendsRow(friend: friend)
+            ForEach(viewModel.friendsRank.indices.prefix(3)) { index in
+                FriendsRow(friend: $viewModel.friendsRank[index], priority: index+1)
             }
         }
     }
@@ -112,13 +112,14 @@ extension Home {
     private var myQuestionList: some View {
         ScrollView {
             LazyVStack(spacing: 12) {
-                CustomHeader(title: "내가 낸 문제지 리스트", nextView: AnyView(QuestionGroupList(questions: $viewModel.questionGroups)))
+                CustomHeader(title: "내가 낸 문제지 리스트", nextView: AnyView(QuestionGroupList(questions: $viewModel.questions)))
                     
-                ForEach($viewModel.questionGroups.prefix(4)) { questionGroup in
-                    NavigationLink(destination: QuestionDetail(questionGroup: questionGroup, onRemove: { index in
-                        viewModel.questionGroups.removeAll { $0.id == index }
+                // 여기서 QuestionDetailView로 넘어가기 전에 통신을 통해서 DetailView 데이터를 받아와서 그려줘야 한다.
+                ForEach($viewModel.questions.prefix(4)) { question in
+                    NavigationLink(destination: QuestionDetail(questionDetail: .constant(questionDetailSample), onRemove: { index in
+                        viewModel.questions.removeAll { $0.id == index }
                     })) {
-                        QuestionGroupRow(questionGroup: questionGroup)
+                        QuestionGroupRow(question: question)
                     }
                 }
             }
@@ -127,7 +128,7 @@ extension Home {
     
     @ViewBuilder
     private var friendRankView: some View {
-        if !viewModel.friendsRank.isEmpty {
+        if !$viewModel.friendsRank.isEmpty {
             friendRankList
                 .padding([.leading, .trailing], 20)
                 .padding(.top, 9)
@@ -138,7 +139,7 @@ extension Home {
     
     @ViewBuilder
     private var myQuestionView: some View {
-        if !viewModel.questionGroups.isEmpty {
+        if !$viewModel.questions.isEmpty {
             myQuestionList
                 .padding([.leading, .trailing], 20)
                 .padding(.top, 26)
