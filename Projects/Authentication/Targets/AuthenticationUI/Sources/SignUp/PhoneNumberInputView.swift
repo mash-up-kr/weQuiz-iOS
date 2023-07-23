@@ -12,14 +12,20 @@ import AuthenticationKit
 import DesignSystemKit
 
 public struct PhoneNumberInputView: View {
-    @EnvironmentObject var navigator: Navigator
-    @EnvironmentObject var authManager: AuthManager
+    private var interactor: PhoneNumberInputRequestingLogic?
+    @ObservedObject var presenter: PhoneNumberInputPresenter
     
     @State private var phoneNumberInput: String = ""
     @State private var isPhoneNubmerValid: Bool = false
     @State private var phoneNumberInvalidToastModel: WQToast.Model?
     
-    public init() {}
+    public init(
+        interactor: PhoneNumberInputRequestingLogic,
+        presenter: PhoneNumberInputPresenter
+    ) {
+        self.interactor = interactor
+        self.presenter = presenter
+    }
     
     public var body: some View {
         VStack(alignment: .leading, spacing: .zero) {
@@ -27,7 +33,7 @@ public struct PhoneNumberInputView: View {
                 .init(
                     title: "",
                     action: {
-                        navigator.back()
+                        interactor?.request(PhoneNumberInputModel.Request.OnTouchNavigationBack())
                     })
             ))
             VStack(alignment: .leading, spacing: .zero) {
@@ -65,10 +71,11 @@ public struct PhoneNumberInputView: View {
                         title: "인증번호 받기",
                         isEnable: .constant(!$phoneNumberInput.wrappedValue.isEmpty && $isPhoneNubmerValid.wrappedValue),
                         action: {
-                            authManager.verifyPhoneNumber(phoneNumberInput, completion: { isSucceed in
-                                guard isSucceed else { return }
-                                navigator.path.append(.verificationCodeInput(phoneNumberInput))
-                            })
+                            interactor?.request(
+                                PhoneNumberInputModel.Request.OnTouchGetVerificationCode(
+                                    input: phoneNumberInput
+                                )
+                            )
                         }
                     )
                 )
@@ -86,6 +93,11 @@ public struct PhoneNumberInputView: View {
 
 struct PhoneNumberInputView_Previews: PreviewProvider {
     static var previews: some View {
-        PhoneNumberInputView()
+        let presenter = PhoneNumberInputPresenter(navigator: .shared)
+        let interactor = PhoneNumberInputInteractor(presenter: presenter, authManager: .shared)
+        PhoneNumberInputView(
+            interactor: interactor,
+            presenter: presenter
+        )
     }
 }

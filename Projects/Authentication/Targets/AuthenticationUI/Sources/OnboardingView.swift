@@ -41,7 +41,7 @@ public struct OnboardingView: View {
             .navigationDestination(for: Screen.self) { type in
                 switch type {
                 case .phoneNumber:
-                    PhoneNumberInputView()
+                    phoneNumberInputBuilder()
                         .navigationBarBackButtonHidden()
                 case .verificationCodeInput(let phoneNumber):
                     verificationCodeInputBuilder(phoneNumber)
@@ -52,6 +52,18 @@ public struct OnboardingView: View {
                 }
             }
         }
+    }
+    
+    private func phoneNumberInputBuilder() -> PhoneNumberInputView {
+        let presenter = PhoneNumberInputPresenter(navigator: navigator)
+        let interactor = PhoneNumberInputInteractor(
+            presenter: presenter,
+            authManager: authManager
+        )
+        return PhoneNumberInputView(
+            interactor: interactor,
+            presenter: presenter
+        )
     }
     
     private func verificationCodeInputBuilder(_ phoneNumber: String) -> VerificationCodeInputView {
