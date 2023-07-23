@@ -322,20 +322,6 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6F7B9B7CE4EBFF4998DA553C"
-               BuildableName = "MainKitTests.xctest"
-               BlueprintName = "MainKitTests"
-               ReferencedContainer = "container:Projects/Main/Main.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "AADF4EFEC0E3930FB99C64F4"
                BuildableName = "MainTests.xctest"
                BlueprintName = "MainTests"
@@ -353,20 +339,6 @@
                BlueprintIdentifier = "7AB141E8E57E682F1E117E26"
                BuildableName = "MainUI.framework"
                BlueprintName = "MainUI"
-               ReferencedContainer = "container:Projects/Main/Main.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C386C492042262DABFB7578F"
-               BuildableName = "MainUITests.xctest"
-               BlueprintName = "MainUITests"
                ReferencedContainer = "container:Projects/Main/Main.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -556,29 +528,9 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6F7B9B7CE4EBFF4998DA553C"
-               BuildableName = "MainKitTests.xctest"
-               BlueprintName = "MainKitTests"
-               ReferencedContainer = "container:Projects/Main/Main.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "AADF4EFEC0E3930FB99C64F4"
                BuildableName = "MainTests.xctest"
                BlueprintName = "MainTests"
-               ReferencedContainer = "container:Projects/Main/Main.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C386C492042262DABFB7578F"
-               BuildableName = "MainUITests.xctest"
-               BlueprintName = "MainUITests"
                ReferencedContainer = "container:Projects/Main/Main.xcodeproj">
             </BuildableReference>
          </TestableReference>
