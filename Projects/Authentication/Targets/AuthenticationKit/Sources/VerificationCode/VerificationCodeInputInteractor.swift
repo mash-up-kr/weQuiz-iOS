@@ -32,11 +32,15 @@ extension VerificationCodeInputInteractor: VerificationCodeInputRequestingLogic 
     
     
     public func reqeust(_ request: VerificationCodeInputModel.Request.OnTouchReSend) {
-        authManager.verifyPhoneNumber(
-            request.phoneNumber
-        ) { [weak self] isSucceed in
-            guard isSucceed else { return }
-            self?.presenter?.present(VerificationCodeInputModel.Response.ResetTimer())
+        presenter?.present(VerificationCodeInputModel.Response.Toast(type: .resendCode))
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            self?.authManager.verifyPhoneNumber(
+                request.phoneNumber
+            ) { [weak self] isSucceed in
+                guard isSucceed else { return }
+                self?.presenter?.present(VerificationCodeInputModel.Response.ResetTimer())
+            }
         }
     }
     

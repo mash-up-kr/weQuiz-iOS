@@ -12,12 +12,13 @@ import AuthenticationKit
 import DesignSystemKit
 
 public struct PhoneNumberInputView: View {
-    private var interactor: PhoneNumberInputRequestingLogic?
     @ObservedObject var presenter: PhoneNumberInputPresenter
     
     @State private var phoneNumberInput: String = ""
     @State private var isPhoneNubmerValid: Bool = false
     @State private var phoneNumberInvalidToastModel: WQToast.Model?
+    
+    private var interactor: PhoneNumberInputRequestingLogic?
     
     public init(
         interactor: PhoneNumberInputRequestingLogic,
@@ -81,13 +82,21 @@ public struct PhoneNumberInputView: View {
                 )
             )
         }
-        .toast(model: $phoneNumberInvalidToastModel)
         .onChange(of: phoneNumberInput) { input in
             // ClearButton 터치 시 isVaild 변경되지 않아 임시 처리
             if input.isEmpty {
                 isPhoneNubmerValid = false
             }
         }
+        .onChange(of: presenter.viewModel.toastModel) { model in
+            switch model {
+            case .exceededLimit:
+                phoneNumberInvalidToastModel = .init(status: .warning, text: "인증한도를 초과했습니다. 개발자에게 문의해주세요")
+            case .unknown:
+                phoneNumberInvalidToastModel = .init(status: .warning, text: "잠시 후 다시 시도해 주세요")
+            }
+        }
+        .toast(model: $phoneNumberInvalidToastModel)
     }
 }
 

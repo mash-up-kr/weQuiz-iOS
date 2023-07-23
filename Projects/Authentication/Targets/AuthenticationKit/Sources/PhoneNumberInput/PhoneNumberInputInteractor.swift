@@ -10,11 +10,10 @@ import Foundation
 
 public final class PhoneNumberInputInteractor {
     private var presenter: PhoneNumberInputPresentingLogic?
-    
     private let authManager: AuthManager
     
     public init(
-        presenter: PhoneNumberInputPresentingLogic?,
+        presenter: PhoneNumberInputPresentingLogic,
         authManager: AuthManager
     ) {
         self.presenter = presenter
@@ -32,12 +31,12 @@ extension PhoneNumberInputInteractor: PhoneNumberInputRequestingLogic {
     }
     
     public func request(_ request: PhoneNumberInputModel.Request.OnTouchGetVerificationCode) {
-        authManager.verifyPhoneNumber(request.input, completion: { [weak self] isSucceed in
+        authManager.verifyPhoneNumber(request.input, completion: { isSucceed in
             guard isSucceed else {
-                self?.presenter?.present(PhoneNumberInputModel.Response.Toast(type: .unknown))
+                self.presenter?.present(PhoneNumberInputModel.Response.Toast(type: .unknown))
                 return
             }
-            self?.presenter?.present(
+            self.presenter?.present(
                 PhoneNumberInputModel.Response.Naivgate(
                     destination: .verificationCodeInput(request.input)
                 )

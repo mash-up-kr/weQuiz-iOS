@@ -12,12 +12,11 @@ import AuthenticationKit
 import DesignSystemKit
 
 public struct VerificationCodeInputView: View {
-    @EnvironmentObject var authManager: AuthManager
     @ObservedObject var presenter: VerificationCodeInputPresenter
     
     @State private var input: String = ""
     @State private var isValid: Bool = false
-    @State private var verificationCodeInvalidToastModel: WQToast.Model?
+    @State private var verificationCodeToastModel: WQToast.Model?
     
     private var interactor: VerificationCodeInputRequestingLogic?
     private let phoneNumber: String
@@ -89,16 +88,18 @@ public struct VerificationCodeInputView: View {
         .onChange(of: presenter.viewModel.toastModel, perform: { model in
             switch model {
             case .invalidCode:
-                verificationCodeInvalidToastModel = .init(status: .warning, text: "인증번호가 올바르지 않아요")
+                verificationCodeToastModel = .init(status: .warning, text: "인증번호가 올바르지 않아요")
             case .expiredCode:
-                verificationCodeInvalidToastModel = .init(status: .warning, text: "인증번호가 만료됐어요. 다시 시도해 주세요")
+                verificationCodeToastModel = .init(status: .warning, text: "인증번호가 만료됐어요. 다시 시도해 주세요")
             case .timeout:
-                verificationCodeInvalidToastModel = .init(status: .warning, text: "인증번호 시간이 만료됐어요\n재전송을 눌러 다시 시도해 주세요")
+                verificationCodeToastModel = .init(status: .warning, text: "인증번호 시간이 만료됐어요\n재전송을 눌러 다시 시도해 주세요")
+            case .resendCode:
+                verificationCodeToastModel = .init(status: .success, text: "인증번호를 재전송했어요")
             case .unknown:
-                verificationCodeInvalidToastModel = .init(status: .warning, text: "잠시 후 다시 시도해 주세요")
+                verificationCodeToastModel = .init(status: .warning, text: "잠시 후 다시 시도해 주세요")
             }
         })
-        .toast(model: $verificationCodeInvalidToastModel)
+        .toast(model: $verificationCodeToastModel)
     }
 }
 

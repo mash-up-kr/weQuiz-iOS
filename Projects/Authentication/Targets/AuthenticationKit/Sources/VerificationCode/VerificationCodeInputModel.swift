@@ -62,6 +62,7 @@ public enum VerificationCodeInputModel {
                 case invalidCode
                 case timeout
                 case expiredCode
+                case resendCode
                 case unknown
             }
             public let type: `Type`
