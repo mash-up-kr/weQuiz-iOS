@@ -10,9 +10,7 @@ public struct ContentView: View {
 
     public var body: some View {
         if isLoggedIn {
-            OnboardingView(
-                router: AuthenticationRouter(isPresented: .constant(.main))
-            )
+            OnboardingView()
         } else {
             Home()
                 .environmentObject(HomeViewModel())

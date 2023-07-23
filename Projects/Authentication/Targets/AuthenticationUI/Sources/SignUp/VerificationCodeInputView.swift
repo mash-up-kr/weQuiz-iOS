@@ -12,102 +12,115 @@ import AuthenticationKit
 import DesignSystemKit
 
 public struct VerificationCodeInputView: View {
-    @StateObject private var router: AuthenticationRouter
     @EnvironmentObject var authManager: AuthManager
+    @ObservedObject var presenter: VerificationCodeInputPresenter
     
-    @State private var verificationCodeInput: String = ""
-    @State private var isVerificationCodeValid: Bool = false
-    @State private var verificationCodeTimeLimit: Int = 180
+    @State private var input: String = ""
+    @State private var isValid: Bool = false
     @State private var verificationCodeInvalidToastModel: WQToast.Model?
     
+    private var interactor: VerificationCodeInputRequestingLogic?
     private let phoneNumber: String
     
-    public init(router: AuthenticationRouter, phoneNumber: String) {
-        self._router = StateObject(wrappedValue: router)
+    public init(
+        interactor: VerificationCodeInputRequestingLogic,
+        presenter: VerificationCodeInputPresenter,
+        phoneNumber: String
+    ) {
         self.phoneNumber = phoneNumber
+        self.interactor = interactor
+        self.presenter = presenter
+        
+        self.viewDidLoad()
     }
     
     public var body: some View {
-        RoutingView(router: router) {
+        VStack(alignment: .leading, spacing: .zero) {
+            WQTopBar(style: .navigation(
+                .init(
+                    title: "",
+                    action: {
+                        interactor?.reqeust(VerificationCodeInputModel.Request.OnTouchNavigationBack())
+                    })
+            ))
             VStack(alignment: .leading, spacing: .zero) {
-                WQTopBar(style: .navigation(
-                    .init(
-                        title: "",
-                        action: {
-                            router.navigateBack()
-                        })
-                ))
-                VStack(alignment: .leading, spacing: .zero) {
-                    Text("휴대폰 인증번호를\n입력해 주세요")
-                        .font(.pretendard(.bold, size: ._24))
-                        .foregroundColor(.white)
-                    Spacer()
-                        .frame(height: 36)
-                    VStack(alignment: .leading, spacing: 12) {
-                        Text("인증번호")
-                            .font(.pretendard(.medium, size: ._12))
-                            .foregroundColor(.designSystem(.g2))
-                        WQInputField(style: .verificationCode(
-                            .init(
-                                input: $verificationCodeInput,
-                                isValid: $isVerificationCodeValid,
-                                timeLimit: $verificationCodeTimeLimit,
-                                resendHandler: {
-                                    authManager.verifyPhoneNumber(
-                                        phoneNumber
-                                    )
-                                }
-                            )
-                        ))
-                    }
-                }
-                .padding(
-                    .init(
-                        top: 20,
-                        leading: 20,
-                        bottom: .zero,
-                        trailing: 20
-                    )
-                )
+                Text("휴대폰 인증번호를\n입력해 주세요")
+                    .font(.pretendard(.bold, size: ._24))
+                    .foregroundColor(.white)
                 Spacer()
-            }
-        }
-        .onChange(of: isVerificationCodeValid) { isValid in
-            guard verificationCodeTimeLimit > 0 else {
-                verificationCodeInvalidToastModel = .init(status: .warning, text: "인증번호 시간이 만료됐어요\n재전송을 눌러 다시 시도해 주세요")
-                return
-            }
-            if isValid {
-                authManager.signIn(with: verificationCodeInput) { result in
-                    
-                    verificationCodeInput = ""
-                    isVerificationCodeValid = false
-                    
-                    switch result {
-                    case .success(let isSucceed):
-                        if isSucceed {
-                            verificationCodeTimeLimit = 180
-                            router.push(spec: .userInformationInput)
-                        }
-                    case .failure(let reason):
-                        switch reason {
-                        case .invalidCode:
-                            verificationCodeInvalidToastModel = .init(status: .warning, text: "인증번호가 올바르지 않아요")
-                        case .timeout:
-                            verificationCodeInvalidToastModel = .init(status: .warning, text: "인증번호가 만료됐어요. 다시 시도해 주세요")
-                        case .unknown:
-                            verificationCodeInvalidToastModel = .init(status: .warning, text: "잠시 후 다시 시도해 주세요")
-                        }
-                    }
+                    .frame(height: 36)
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("인증번호")
+                        .font(.pretendard(.medium, size: ._12))
+                        .foregroundColor(.designSystem(.g2))
+                    WQInputField(style: .verificationCode(
+                        .init(
+                            input: $input,
+                            isValid: $isValid,
+                            timeLimit: $presenter.viewModel.remainTime,
+                            resendHandler: {
+                                interactor?.reqeust(
+                                    VerificationCodeInputModel.Request.OnTouchReSend(
+                                        phoneNumber: phoneNumber
+                                    )
+                                )
+                            }
+                        )
+                    ))
                 }
             }
+            .padding(
+                .init(
+                    top: 20,
+                    leading: 20,
+                    bottom: .zero,
+                    trailing: 20
+                )
+            )
+            Spacer()
         }
+        .onChange(of: isValid) { isValid in
+            interactor?.reqeust(VerificationCodeInputModel.Request.OnRequestVerifyCode(
+                remainTime: presenter.viewModel.remainTime,
+                isValid: isValid,
+                code: input
+            ))
+        }
+        .onChange(of: presenter.viewModel.toastModel, perform: { model in
+            switch model {
+            case .invalidCode:
+                verificationCodeInvalidToastModel = .init(status: .warning, text: "인증번호가 올바르지 않아요")
+            case .expiredCode:
+                verificationCodeInvalidToastModel = .init(status: .warning, text: "인증번호가 만료됐어요. 다시 시도해 주세요")
+            case .timeout:
+                verificationCodeInvalidToastModel = .init(status: .warning, text: "인증번호 시간이 만료됐어요\n재전송을 눌러 다시 시도해 주세요")
+            case .unknown:
+                verificationCodeInvalidToastModel = .init(status: .warning, text: "잠시 후 다시 시도해 주세요")
+            }
+        })
         .toast(model: $verificationCodeInvalidToastModel)
+    }
+}
+
+// MARK: - Private
+
+extension VerificationCodeInputView {
+    private func viewDidLoad() {
+        self.interactor?.reqeust(VerificationCodeInputModel.Request.OnLoad())
     }
 }
 
 struct VerificationCodeInputView_Previews: PreviewProvider {
     static var previews: some View {
-        VerificationCodeInputView(router: .init(isPresented: .constant(.userInformationInput)), phoneNumber: "12341234")
+        let presenter = VerificationCodeInputPresenter(navigator: .shared)
+        let interactor = VerificationCodeInputInteractor(
+            presenter: presenter,
+            authManager: .shared
+        )
+        return VerificationCodeInputView(
+            interactor: interactor,
+            presenter: presenter,
+            phoneNumber: "12341234"
+        )
     }
 }

@@ -3,16 +3,14 @@ import SwiftUI
 import AuthenticationKit
 import DesignSystemKit
 
-
 public struct OnboardingView: View {
-    @StateObject private var router: AuthenticationRouter
-    
-    public init(router: AuthenticationRouter) {
-        self._router = StateObject(wrappedValue: router)
-    }
+    @EnvironmentObject var navigator: Navigator
+    @EnvironmentObject var authManager: AuthManager
+
+    public init() {}
     
     public var body: some View {
-        RoutingView(router: router) {
+        NavigationStack(path: $navigator.path) {
             VStack {
                 Spacer()
                 Text("LOGO")
@@ -23,7 +21,7 @@ public struct OnboardingView: View {
                         .init(
                             title: "시작하기",
                             action: {
-                                router.push(spec: .phoneNumberInput)
+                                navigator.path.append(.phoneNumber)
                             }
                         )
                     )
@@ -33,18 +31,44 @@ public struct OnboardingView: View {
                         .font(.pretendard(.regular, size: ._14))
                         .foregroundColor(.designSystem(.g2))
                     Button("로그인") {
-                        router.push(spec: .phoneNumberInput)
+                        navigator.path.append(.phoneNumber)
                     }
                     .font(.pretendard(.bold, size: ._14))
                     .foregroundColor(.designSystem(.p1))
                 }
             }
+            .navigationDestination(for: Screen.self) { type in
+                switch type {
+                case .phoneNumber:
+                    PhoneNumberInputView()
+                        .navigationBarBackButtonHidden()
+                case .verificationCodeInput(let phoneNumber):
+                    verificationCodeInputBuilder(phoneNumber)
+                        .navigationBarBackButtonHidden()
+                case .userInformationInput:
+                    UserInformationInputView()
+                        .navigationBarBackButtonHidden()
+                }
+            }
         }
+    }
+    
+    private func verificationCodeInputBuilder(_ phoneNumber: String) -> VerificationCodeInputView {
+        let presenter = VerificationCodeInputPresenter(navigator: navigator)
+        let interactor = VerificationCodeInputInteractor(
+            presenter: presenter,
+            authManager: authManager
+        )
+        return VerificationCodeInputView(
+            interactor: interactor,
+            presenter: presenter,
+            phoneNumber: phoneNumber
+        )
     }
 }
 
 struct OnboardingView_Previews: PreviewProvider {
     static var previews: some View {
-        OnboardingView(router: .init(isPresented: .constant(.main)))
+        OnboardingView()
     }
 }

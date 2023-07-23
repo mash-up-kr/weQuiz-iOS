@@ -29,14 +29,15 @@ struct AuthenticationApp: App {
     }
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
-    @StateObject private var router = AuthenticationRouter(isPresented: .constant(.main))
     
     private let authManager = AuthManager.shared
+    private let navigator = Navigator.shared
     
     var body: some Scene {
         WindowGroup {
-            OnboardingView(router: router)
+            OnboardingView()
                 .environmentObject(authManager)
+                .environmentObject(navigator)
         }
     }
 }

@@ -39,10 +39,10 @@ public extension AuthManager {
                 if let error = error {
                     debugPrint(error)
                     completion?(false)
+                } else {
+                    UserDefaults.standard.set(verificationID, forKey: "token")
+                    completion?(true)
                 }
-                
-                UserDefaults.standard.set(verificationID, forKey: "token")
-                completion?(true)
             }
     }
     

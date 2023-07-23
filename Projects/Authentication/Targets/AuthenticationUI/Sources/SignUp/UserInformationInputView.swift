@@ -8,65 +8,62 @@
 
 import SwiftUI
 
+import AuthenticationKit
 import DesignSystemKit
 
 public struct UserInformationInputView: View {
-    @StateObject private var router: AuthenticationRouter
+    @EnvironmentObject var navigator: Navigator
     
     @State private var nickname: String = ""
     @State private var isNicknameValid: Bool = false
     @State private var introduction: String = ""
     @State private var isIntroductionValid: Bool = false
     
-    init(router: AuthenticationRouter) {
-        self._router = StateObject(wrappedValue: router)
-    }
+    init() {}
     
     public var body: some View {
-        RoutingView(router: router) {
+        VStack(alignment: .leading, spacing: .zero) {
+            WQTopBar(style: .navigation(
+                .init(
+                    title: "",
+                    action: {
+                        navigator.back()
+                    }
+                )
+            ))
             VStack(alignment: .leading, spacing: .zero) {
-                WQTopBar(style: .navigation(
-                    .init(
-                        title: "",
-                        action: {
-                            router.navigateBack()
-                        }
-                    )
-                ))
-                VStack(alignment: .leading, spacing: .zero) {
-                    Text("{서비스명}에서 사용 할\n닉네임을 입력해 주세요")
-                        .font(.pretendard(.bold, size: ._24))
-                        .foregroundColor(.white)
-                    Spacer()
-                        .frame(height: 36)
-                    Input(
-                        nickname: $nickname,
-                        isNicknameValid: $isNicknameValid,
-                        introduction: $introduction,
-                        isIntroductionValid: $isIntroductionValid
-                    )
-                    Spacer()
-                    WQButton(
-                        style: .fullRadiusSingle(
-                            .init(
-                                title: "다음",
-                                action: {
-                                    // TODO: 인증번호 입력 화면 진입
-                                }
-                            )
-                        )
-                    )
-                }
-                .padding(
-                    .init(
-                        top: 20,
-                        leading: 20,
-                        bottom: .zero,
-                        trailing: 20
-                    )
+                Text("{서비스명}에서 사용 할\n닉네임을 입력해 주세요")
+                    .font(.pretendard(.bold, size: ._24))
+                    .foregroundColor(.white)
+                Spacer()
+                    .frame(height: 36)
+                Input(
+                    nickname: $nickname,
+                    isNicknameValid: $isNicknameValid,
+                    introduction: $introduction,
+                    isIntroductionValid: $isIntroductionValid
                 )
                 Spacer()
+                WQButton(
+                    style: .fullRadiusSingle(
+                        .init(
+                            title: "다음",
+                            action: {
+                                // TODO: 인증번호 입력 화면 진입
+                            }
+                        )
+                    )
+                )
             }
+            .padding(
+                .init(
+                    top: 20,
+                    leading: 20,
+                    bottom: .zero,
+                    trailing: 20
+                )
+            )
+            Spacer()
         }
     }
     
@@ -137,6 +134,6 @@ public struct UserInformationInputView: View {
 
 struct UserInformationInputView_Previews: PreviewProvider {
     static var previews: some View {
-        UserInformationInputView(router: .init(isPresented: .constant(.userInformationInput)))
+        UserInformationInputView()
     }
 }
