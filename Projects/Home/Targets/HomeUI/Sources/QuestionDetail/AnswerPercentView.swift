@@ -11,17 +11,17 @@ import DesignSystemKit
 
 struct AnswerPercentView: View {
     
-    var index: Int
+    var id: Int
     
     var body: some View {
         Rectangle()
-            .fill(answerNum(rawValue: index)?.color ?? Color.designSystem(.s1))
+            .fill(answerNum(rawValue: id)?.color ?? Color.designSystem(.s1))
     }
 }
 
 struct AnswerPercentView_Previews: PreviewProvider {
     static var previews: some View {
-        AnswerPercentView(index: 1)
+        AnswerPercentView(id: 1)
     }
 }
 

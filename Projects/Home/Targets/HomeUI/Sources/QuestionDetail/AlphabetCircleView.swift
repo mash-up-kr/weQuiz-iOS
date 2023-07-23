@@ -16,7 +16,7 @@ public struct AlphabetCircleView: View {
         self.answerNumber = answerNumber
     }
     public var body: some View {
-        Text(String(UnicodeScalar(answerNumber + 65)!))
+        Text(String(UnicodeScalar(answerNumber + 64)!))
             .font(.pretendard(.medium, size: ._16))
             .foregroundColor(
                 Color.designSystem(.g2)

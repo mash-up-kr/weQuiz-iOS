@@ -12,7 +12,7 @@ import DesignSystemKit
 struct QuestionDetail: View {
     
     @Environment(\.dismiss) private var dismiss
-    @Binding var questionGroup: QuestionGroup
+    @Binding var questionDetail: QuestionDetailModel
     @State private var isPresentRemoveModal: Bool = false
     @State private var removeSuccessToastModal: WQToast.Model?
     var onRemove: ((UUID) -> ())?
@@ -35,7 +35,7 @@ struct QuestionDetail: View {
                         isPresentRemoveModal = false
                         removeSuccessToastModal = .init(status: .success, text: "문제를 삭제했어요")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                            onRemove?(questionGroup.id)
+                            onRemove?(questionDetail.id)
                         }
                     }
                 )
@@ -74,8 +74,8 @@ extension QuestionDetail {
     
     private var questionList: some View {
         List {
-            ForEach(questionGroup.questions) { question in
-                AnswerListContainer(question: question, questionsCount: questionGroup.questions.count)
+            ForEach(questionDetail.questions) { question in
+                AnswerListContainer(question: question, questionsCount: questionDetail.questions.count)
             }
         }
         .listStyle(.plain)
@@ -85,7 +85,7 @@ extension QuestionDetail {
 
 struct QuestionDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        QuestionDetail(questionGroup: .constant(questionsSamlple[0]))
+        QuestionDetail(questionDetail: .constant(questionDetailSample))
     }
 }
 

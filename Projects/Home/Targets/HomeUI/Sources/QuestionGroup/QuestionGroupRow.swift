@@ -10,7 +10,7 @@ import SwiftUI
 import DesignSystemKit
 
 struct QuestionGroupRow: View {
-    @Binding var questionGroup: QuestionGroup
+    @Binding var question: SummaryQuestionModel
     
     var body: some View {
         HStack {
@@ -26,7 +26,7 @@ struct QuestionGroupRow: View {
 
 extension QuestionGroupRow {
     private var questionsDescription: some View {
-        Text(questionGroup.title)
+        Text(question.title)
             .foregroundColor(.designSystem(.g1))
             .font(.pretendard(.medium, size: ._16))
             .padding(.leading, 16)
@@ -34,7 +34,8 @@ extension QuestionGroupRow {
     
     @ViewBuilder
     private var writingStateView: some View {
-        let writingState = questionGroup.writingState
+        // writingState 값을 로컬에서 가지고 있고 이를 기반으로 뷰를 바꿔주도록 로직 구현 필요
+        let writingState = true
         
         if writingState {
             ZStack {
