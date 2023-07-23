@@ -4,8 +4,9 @@ import AuthenticationKit
 import DesignSystemKit
 
 public struct OnboardingView: View {
-    @EnvironmentObject var navigator: Navigator
-    @EnvironmentObject var authManager: AuthManager
+    @EnvironmentObject var navigator: AuthenticationNavigator
+    
+    private let authManager: AuthManager = .shared
 
     public init() {}
     

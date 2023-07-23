@@ -12,7 +12,7 @@ import AuthenticationKit
 import DesignSystemKit
 
 public struct UserInformationInputView: View {
-    @EnvironmentObject var navigator: Navigator
+    @EnvironmentObject var navigator: AuthenticationNavigator
     
     @State private var nickname: String = ""
     @State private var isNicknameValid: Bool = false

@@ -15,11 +15,11 @@ public final class VerificationCodeInputPresenter: ObservableObject {
 
     @Published public var viewModel: VerificationCodeInputViewModel = .default
     
-    private var navigator: Navigator
+    private var navigator: AuthenticationNavigator
     private var timer: Timer?
     
     public init(
-        navigator: Navigator
+        navigator: AuthenticationNavigator
     ) {
         self.navigator = navigator
     }

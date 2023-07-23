@@ -30,13 +30,11 @@ struct AuthenticationApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     
-    private let authManager = AuthManager.shared
-    private let navigator = Navigator.shared
+    private let navigator = AuthenticationNavigator.shared
     
     var body: some Scene {
         WindowGroup {
             OnboardingView()
-                .environmentObject(authManager)
                 .environmentObject(navigator)
         }
     }
