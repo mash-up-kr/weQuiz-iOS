@@ -306,24 +306,26 @@ extension Project {
 // MARK: - Authentication
 
 extension Project {
-    public static func authetication(name: String) -> Project {
+    public static func authentication(name: String) -> Project {
         var targets: [Target] = makeAuthenticationAppTarget(name: name)
         let authenticationKitTarget = makeFrameworkTargets(
             name: "AuthenticationKit",
             additionalDependencies: [
-                .project(target: "DesignSystemKit", path: .relativeToRoot("Projects/DesignSystem")),
                 .project(target: "CoreKit", path: .relativeToRoot("Projects/Core")),
                 .external(name: "FirebaseAuth")
             ]
         )
         let authenticationUITarget = makeFrameworkTargets(
             name: "AuthenticationUI",
-            additionalDependencies: []
+            additionalDependencies: [
+                .project(target: "DesignSystemKit", path: .relativeToRoot("Projects/DesignSystem")),
+                .project(target: "AuthenticationKit", path: .relativeToRoot("Projects/Authentication")),
+            ]
         )
         targets.append(contentsOf: authenticationKitTarget)
         targets.append(contentsOf: authenticationUITarget)
         return Project(
-            name: "Authetication",
+            name: "Authentication",
             organizationName: "ommaya.io",
             targets: targets
         )
