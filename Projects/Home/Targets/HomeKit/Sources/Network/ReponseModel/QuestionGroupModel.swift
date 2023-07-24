@@ -8,14 +8,14 @@
 
 import Foundation
 
-struct QuestionGroupModel {
-    var quiz: [SummaryQuestionModel]
-    var nextCursor: Int
+public struct QuestionGroupModel {
+    public var quiz: [SummaryQuestionModel]
+    public var nextCursor: Int
 }
 
-struct SummaryQuestionModel {
-    var id: UUID = UUID()
-    var title: String
+public struct SummaryQuestionModel {
+    public var id: Int
+    public var title: String
 }
 
 extension QuestionGroupModel: Decodable { }
@@ -27,4 +27,4 @@ extension SummaryQuestionModel: Equatable { }
 
 
 // 서버에서 id값을 int로 내려줄텐데 현재 테스트를 위해서 id값을 임의로 UUID로 설정하여 사용
-var questionSample: QuestionGroupModel = QuestionGroupModel(quiz: [SummaryQuestionModel(title: "quiz1"), SummaryQuestionModel(title: "quiz2"), SummaryQuestionModel(title: "quiz3"), SummaryQuestionModel(title: "quiz4"), SummaryQuestionModel(title: "quiz5")], nextCursor: 0)
+public var questionSample: QuestionGroupModel = QuestionGroupModel(quiz: [SummaryQuestionModel(id: 0, title: "quiz1"), SummaryQuestionModel(id: 1, title: "quiz2"), SummaryQuestionModel(id: 2, title: "quiz3"), SummaryQuestionModel(id: 3, title: "quiz4"), SummaryQuestionModel(id: 4, title: "quiz5")], nextCursor: 0)

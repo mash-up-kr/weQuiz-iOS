@@ -8,7 +8,7 @@
 
 import SwiftUI
 import DesignSystemKit
-
+import HomeKit
 
 struct FriendsList: View {
     @Environment(\.dismiss) private var dismiss

@@ -1,6 +1,8 @@
 import SwiftUI
 import HomeUI
 import DesignSystemKit
+import HomeKit
+import CoreKit
 
 @main
 struct HomeApp: App {
@@ -11,7 +13,7 @@ struct HomeApp: App {
     var body: some Scene {
         WindowGroup {
             Home()
-                .environmentObject(HomeViewModel())
+                .environmentObject(HomeViewModel(service: HomeService(Networking())))
         }
     }
 }

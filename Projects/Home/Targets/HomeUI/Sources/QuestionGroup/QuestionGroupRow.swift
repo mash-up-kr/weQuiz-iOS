@@ -8,6 +8,7 @@
 
 import SwiftUI
 import DesignSystemKit
+import HomeKit
 
 struct QuestionGroupRow: View {
     @Binding var question: SummaryQuestionModel

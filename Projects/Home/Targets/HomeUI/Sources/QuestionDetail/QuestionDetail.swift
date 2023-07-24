@@ -8,14 +8,16 @@
 
 import SwiftUI
 import DesignSystemKit
+import HomeKit
 
 struct QuestionDetail: View {
     
     @Environment(\.dismiss) private var dismiss
-    @Binding var questionDetail: QuestionDetailModel
+    @Binding var quizInfo: QuizInfoModel
+    @Binding var quizStatistic: [QuestionStatisticModel]
     @State private var isPresentRemoveModal: Bool = false
     @State private var removeSuccessToastModal: WQToast.Model?
-    var onRemove: ((UUID) -> ())?
+    var onRemove: ((Int) -> ())?
     
     var body: some View {
         VStack {
@@ -35,7 +37,7 @@ struct QuestionDetail: View {
                         isPresentRemoveModal = false
                         removeSuccessToastModal = .init(status: .success, text: "문제를 삭제했어요")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                            onRemove?(questionDetail.id)
+                            onRemove?(quizInfo.id)
                         }
                     }
                 )
@@ -74,8 +76,8 @@ extension QuestionDetail {
     
     private var questionList: some View {
         List {
-            ForEach(questionDetail.questions) { question in
-                AnswerListContainer(question: question, questionsCount: questionDetail.questions.count)
+            ForEach(quizInfo.questions.indices) { index in
+                AnswerListContainer(question: quizInfo.questions[index], questionStatistic: quizStatistic[index], questionsCount: quizInfo.questions.count)
             }
         }
         .listStyle(.plain)
@@ -85,7 +87,7 @@ extension QuestionDetail {
 
 struct QuestionDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        QuestionDetail(questionDetail: .constant(questionDetailSample))
+        QuestionDetail(quizInfo: .constant(questionDetailSample.quizInfo), quizStatistic: .constant(questionDetailSample.statistic))
     }
 }
 

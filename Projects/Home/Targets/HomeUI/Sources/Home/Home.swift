@@ -1,5 +1,7 @@
 import SwiftUI
 import DesignSystemKit
+import HomeKit
+import CoreKit
 
 public struct Home: View {
     public init() { }
@@ -35,10 +37,12 @@ extension Home {
         let contents = viewModel.myInfo.contents
         
         return HStack {
-            Image(systemName: image)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 85, height: 85)
+            if let image = image {
+                Image(systemName: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 85, height: 85)
+            }
             
             VStack(alignment: .leading) {
                 Text(nickname)
@@ -116,7 +120,7 @@ extension Home {
                     
                 // 여기서 QuestionDetailView로 넘어가기 전에 통신을 통해서 DetailView 데이터를 받아와서 그려줘야 한다.
                 ForEach($viewModel.questions.prefix(4)) { question in
-                    NavigationLink(destination: QuestionDetail(questionDetail: .constant(questionDetailSample), onRemove: { index in
+                    NavigationLink(destination: QuestionDetail(quizInfo: .constant(questionDetailSample.quizInfo), quizStatistic: .constant(questionDetailSample.statistic), onRemove: { index in
                         viewModel.questions.removeAll { $0.id == index }
                     })) {
                         QuestionGroupRow(question: question)
@@ -169,6 +173,6 @@ struct CustomHeader: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        Home().environmentObject(HomeViewModel())
+        Home().environmentObject(HomeViewModel(service: HomeService(Networking())))
     }
 }

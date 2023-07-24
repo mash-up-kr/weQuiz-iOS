@@ -7,8 +7,9 @@
 //
 
 import SwiftUI
-import DesignSystemKit
 
+import DesignSystemKit
+import HomeKit
 
 enum AnswerListType {
     case front
@@ -18,6 +19,7 @@ enum AnswerListType {
 struct AnswerListContainer: View {
     
     var question: QuestionModel
+    var questionStatistic: QuestionStatisticModel
     var questionsCount: Int
     
     @State var backDegree = 180.0
@@ -28,9 +30,9 @@ struct AnswerListContainer: View {
     
     var body: some View {
         ZStack {
-            AnswerList(listType: .front, question: question, questionsCount: questionsCount, degree: $frontDegree)
+            AnswerList(listType: .front, question: question, questionStatistic: questionStatistic, questionsCount: questionsCount, degree: $frontDegree)
                 .opacity(isFlipped ? 0 : 1)
-            AnswerList(listType: .back, question: question, questionsCount: questionsCount, degree: $backDegree)
+            AnswerList(listType: .back, question: question, questionStatistic: questionStatistic, questionsCount: questionsCount, degree: $backDegree)
                 .opacity(isFlipped ? 1 : 0)
         }
         .onTapGesture {
@@ -57,6 +59,7 @@ struct AnswerList: View {
     
     var listType: AnswerListType
     var question: QuestionModel
+    var questionStatistic:  QuestionStatisticModel
     var questionsCount: Int
     @Binding var degree: Double
     
@@ -68,14 +71,14 @@ struct AnswerList: View {
                         .font(.pretendard(.medium, size: ._18))
                         .foregroundColor(.designSystem(.g2))
                 }
-                ForEach(question.answers) { answer in
+                ForEach(question.options.indices) { index in
                     GeometryReader { geometry in
                         ZStack(alignment: .leading) {
                             if listType == .back {
-                                AnswerPercentView(id: answer.id)
-                                    .frame(width: geometry.size.width * CGFloat(answer.order), height: geometry.size.height)
+                                AnswerPercentView(id: question.options[index].priority)
+                                    .frame(width: geometry.size.width * CGFloat(questionStatistic.options[index].selectivity), height: geometry.size.height)
                             }
-                            AnswerListRow(model: answer)
+                            AnswerListRow(model: question.options[index])
                                 .frame(width: geometry.size.width, height: geometry.size.height)
                         }
                         .background(Color.designSystem(.g9))
@@ -85,7 +88,7 @@ struct AnswerList: View {
                     .frame(height: 56)
                 }
                 HStack {
-                    Text("\(question.id)/\(question.answerCounts)")
+                    Text("\(question.priorty+1)/\(questionsCount)")
                     Spacer()
                     Button(action: {
                         print("버튼을 눌러보세요")

@@ -8,6 +8,7 @@
 
 import SwiftUI
 import DesignSystemKit
+import HomeKit
 
 struct FriendsRow: View {
     @Binding var friend: FriendModel

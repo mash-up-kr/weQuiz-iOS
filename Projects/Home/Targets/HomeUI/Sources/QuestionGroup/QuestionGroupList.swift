@@ -8,6 +8,7 @@
 
 import SwiftUI
 import DesignSystemKit
+import HomeKit
 
 struct QuestionGroupList: View {
     @Environment(\.dismiss) private var dismiss
@@ -60,7 +61,7 @@ extension QuestionGroupList {
             ForEach($questions) { question in
                 ZStack {
                     QuestionGroupRow(question: question)
-                    NavigationLink(destination: QuestionDetail(questionDetail: .constant(questionDetailSample), onRemove: { index in
+                    NavigationLink(destination: QuestionDetail(quizInfo: .constant(questionDetailSample.quizInfo), quizStatistic: .constant(questionDetailSample.statistic), onRemove: { index in
                         questions.removeAll { $0.id == index }
                     })) {
                         EmptyView()
