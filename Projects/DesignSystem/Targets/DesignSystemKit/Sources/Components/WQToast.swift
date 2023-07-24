@@ -40,8 +40,8 @@ public struct WQToast: View {
                 Image(model.status == .success ? Icon.Checkmark.trueFill24 : Icon.CircleAlert.fillMono)
                     .animation(.easeInOut.delay(0.3))
                 Text(model.text)
+                    .lineSpacing(6)
                     .font(.pretendard(.regular, size: ._16))
-                    .lineLimit(1)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(
@@ -54,7 +54,6 @@ public struct WQToast: View {
             )
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 56)
         .background {
             RoundedRectangle(cornerRadius: 8)
                 .foregroundColor(
