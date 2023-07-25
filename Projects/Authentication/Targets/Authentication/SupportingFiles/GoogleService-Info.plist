@@ -3,21 +3,21 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>79100849862-gah3ihrofv3m0oj1tp55i79qrku1epv8.apps.googleusercontent.com</string>
+	<string>671644513468-p9skf0nj3443f3u18q679obinndd6895.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.79100849862-gah3ihrofv3m0oj1tp55i79qrku1epv8</string>
+	<string>com.googleusercontent.apps.671644513468-p9skf0nj3443f3u18q679obinndd6895</string>
 	<key>API_KEY</key>
-	<string>AIzaSyBpqfNCKyTL52UAXtUArPvyB9ecJOSZzhk</string>
+	<string>AIzaSyDchx901xcIdlovVhz0uMWyub3mDLEuJdo</string>
 	<key>GCM_SENDER_ID</key>
-	<string>79100849862</string>
+	<string>671644513468</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>wequiz.ios.Authentication</string>
 	<key>PROJECT_ID</key>
-	<string>wequiz-3910f</string>
+	<string>sololife-3192c</string>
 	<key>STORAGE_BUCKET</key>
-	<string>wequiz-3910f.appspot.com</string>
+	<string>sololife-3192c.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -29,6 +29,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:79100849862:ios:27b358d9bba7096ad071c7</string>
+	<string>1:671644513468:ios:076442279d6c5a5f6eccb9</string>
+	<key>DATABASE_URL</key>
+	<string>https://sololife-3192c-default-rtdb.firebaseio.com</string>
 </dict>
 </plist>
