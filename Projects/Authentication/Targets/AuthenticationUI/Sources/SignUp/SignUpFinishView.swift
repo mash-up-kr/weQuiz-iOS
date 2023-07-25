@@ -8,9 +8,15 @@
 
 import SwiftUI
 
+import AuthenticationKit
 import DesignSystemKit
 
 struct SignUpFinishView: View {
+    private var navigator: AuthenticationNavigator
+    
+    init(navigator: AuthenticationNavigator) {
+        self.navigator = navigator
+    }
     var body: some View {
         VStack(spacing: 53) {
             RoundedRectangle(cornerRadius: 27)
@@ -18,11 +24,18 @@ struct SignUpFinishView: View {
             Text("반가워요\n{NAME}")
                 .font(.pretendard(.bold, size: ._34))
         }
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                navigator.otherModuleHandler?()
+                
+                AuthenticationKit.didFnish?()
+            }
+        }
     }
 }
 
 struct SignUpFinishView_Previews: PreviewProvider {
     static var previews: some View {
-        SignUpFinishView()
+        SignUpFinishView(navigator: .shared)
     }
 }

@@ -38,7 +38,7 @@ public struct OnboardingView: View {
                     .foregroundColor(.designSystem(.p1))
                 }
             }
-            .navigationDestination(for: Screen.self) { type in
+            .navigationDestination(for: AuthenticationScreen.self) { type in
                 switch type {
                 case .phoneNumber:
                     phoneNumberInputBuilder()
@@ -50,7 +50,7 @@ public struct OnboardingView: View {
                     userInformationInputBuilder(phoneNumber)
                         .navigationBarBackButtonHidden()
                 case .signUpFinsh:
-                    SignUpFinishView()
+                    SignUpFinishView(navigator: navigator)
                         .navigationBarBackButtonHidden()
                 }
             }
