@@ -12,13 +12,13 @@ public struct MyInfoModel {
     public var id: Int
     public var image: String?
     public var nickname: String
-    public var contents: String
+    public var description: String
     
     public init(id: Int, image: String, nickname: String, contents: String) {
         self.id = id
         self.image = image
         self.nickname = nickname
-        self.contents = contents
+        self.description = contents
     }
     
     enum CodigKeys: String, CodingKey {

@@ -34,7 +34,7 @@ extension Home {
     private var profileView: some View {
         let image = viewModel.myInfo.image
         let nickname = viewModel.myInfo.nickname
-        let contents = viewModel.myInfo.contents
+        let contents = viewModel.myInfo.description
         
         return HStack {
             if let image = image {

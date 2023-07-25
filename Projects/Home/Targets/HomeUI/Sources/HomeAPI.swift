@@ -39,10 +39,8 @@ extension HomeAPI: NetworkRequestable {
     
     var headers: HTTPHeaders {
         // 향후 userDefault에 개인 토큰값을 저장하고 해당 값을 넣어준다.
-        // your_token_value는 테스트 토큰이다.
         [
-            "Content-Type": "application/json",
-            "x-wequiz-token": "your_token_value"
+            "x-wequiz-token": "AIE-54Ve5T1TA3ahiwsjfLWjNeFHvQxd4F9E05mRqSqV5OuoZPba-BSrd74JwpBvxobRpO1pocbDLRx0K5sU0Ahb5Q_Uj_53cMNfqf0v_wS3huRVQtQCPvf6-R_vwttoU7qbtN3YOKhW8Seb73kHVThfjsQoqo1hPw"
         ]
     }
     
