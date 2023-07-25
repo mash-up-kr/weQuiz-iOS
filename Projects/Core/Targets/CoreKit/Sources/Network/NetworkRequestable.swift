@@ -42,7 +42,7 @@ public extension NetworkRequestable {
 public extension NetworkRequestable {
     /// Request 시 사용될 BaseURL
     var baseURL: String {
-        ""
+        "http://wequiz-server-env.eba-c2jfzm3b.eu-north-1.elasticbeanstalk.com"
     }
     
     var path: String {
