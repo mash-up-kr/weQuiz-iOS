@@ -284,7 +284,10 @@ extension Project {
             deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
             infoPlist: "Targets/\(name)/SupportingFiles/\(name)-info.plist",
             sources: ["Targets/\(name)/Sources/**"],
-            resources: ["Targets/\(name)/Resources/**"],
+            resources: [
+                "Targets/\(name)/Resources/**",
+                "Targets/\(name)/SupportingFiles/GoogleService-Info.plist"
+            ],
             dependencies: dependencies
         )
         let testTarget = Target(
@@ -349,6 +352,74 @@ extension Project {
             dependencies: [
                 TargetDependency.target(name: "AuthenticationKit"),
                 TargetDependency.target(name: "AuthenticationUI")
+            ]
+        )
+        let tests =  Target(
+            name: "\(name)Tests",
+            platform: .iOS,
+            product: .unitTests,
+            bundleId: "wequiz.ios.\(name)Tests",
+            deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
+            infoPlist: "Targets/\(name)/SupportingFiles/\(name)Tests-info.plist",
+            sources: ["Targets/\(name)/Tests/**"],
+            dependencies: [
+                .target(name: "\(name)")
+            ])
+        
+        return [
+            main, tests
+        ]
+    }
+}
+
+
+// MARK: - Quiz
+
+extension Project {
+    public static func quiz(name: String) -> Project {
+        var targets: [Target] = makeQuizAppTarget(name: name)
+        let authenticationKitTarget = makeFrameworkTargets(
+            name: "QuizKit",
+            additionalDependencies: [
+                .project(target: "HomeKit", path: .relativeToRoot("Projects/Home")),
+                .project(target: "CoreKit", path: .relativeToRoot("Projects/Core")),
+                .project(target: "AuthenticationKit", path: .relativeToRoot("Projects/Authentication"))
+            ]
+        )
+        let authenticationUITarget = makeFrameworkTargets(
+            name: "QuizUI",
+            additionalDependencies: [
+                .project(target: "DesignSystemKit", path: .relativeToRoot("Projects/DesignSystem")),
+                .project(target: "HomeUI", path: .relativeToRoot("Projects/Home")),
+                .project(target: "QuizKit", path: .relativeToRoot("Projects/Quiz"))
+            ]
+        )
+        targets.append(contentsOf: authenticationKitTarget)
+        targets.append(contentsOf: authenticationUITarget)
+        return Project(
+            name: "Quiz",
+            organizationName: "ommaya.io",
+            targets: targets
+        )
+    }
+    
+    private static func makeQuizAppTarget(name: String) -> [Target] {
+        let main = Target(
+            name: name,
+            platform: .iOS,
+            product: .app,
+            bundleId: "wequiz.ios.\(name)",
+            deploymentTarget: .iOS(targetVersion: "16.0", devices: .iphone),
+            infoPlist: "Targets/\(name)/SupportingFiles/\(name)-info.plist",
+            sources: [
+                "Targets/\(name)/Sources/**"
+            ],
+            resources: [
+                "Targets/\(name)/Resources/**"
+            ],
+            dependencies: [
+                TargetDependency.target(name: "QuizKit"),
+                TargetDependency.target(name: "QuizUI")
             ]
         )
         let tests =  Target(
