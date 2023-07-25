@@ -2,6 +2,7 @@ import SwiftUI
 import Combine
 import DesignSystemKit
 import QuizKit
+import CoreKit
 
 public struct MakeQuizView: View {
     public init() {}
@@ -18,6 +19,8 @@ public struct MakeQuizView: View {
     
     @State private var removeSuccessToastModal: WQToast.Model?
     @State private var routeToCompletionView = false
+    
+    private var cancellables = Set<AnyCancellable>()
     
 
     public var body: some View {
@@ -131,11 +134,13 @@ public struct MakeQuizView: View {
             )
             .navigationDestination(isPresented: $routeToCompletionView) {
                  QuizCompletionView()
-             }
+            }
         }
-        
-        
+        .onAppear {
+            MakeQuizInteractor(service: QuizService(Networking())).makeQuiz()
+        }
     }
+
     
     private func moveListItem(from source: IndexSet, to destination: Int) {
         viewModel.quiz.questions.move(fromOffsets: source, toOffset: destination)
