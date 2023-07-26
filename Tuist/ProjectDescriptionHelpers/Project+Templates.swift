@@ -288,6 +288,7 @@ extension Project {
                 "Targets/\(name)/Resources/**",
                 "Targets/\(name)/SupportingFiles/GoogleService-Info.plist"
             ],
+            entitlements: .relativeToRoot("Projects/Main/Main.entitlements"),
             dependencies: dependencies
         )
         let testTarget = Target(
