@@ -350,6 +350,7 @@ extension Project {
                 "Targets/\(name)/Resources/**",
                 "Targets/\(name)/SupportingFiles/GoogleService-Info.plist"
             ],
+            entitlements: .relativeToRoot("Projects/Authentication/Authentication.entitlements"),
             dependencies: [
                 TargetDependency.target(name: "AuthenticationKit"),
                 TargetDependency.target(name: "AuthenticationUI")
