@@ -11,14 +11,14 @@ import SwiftUI
 import CoreKit
 import Alamofire
 
-enum QuizAPI {
+public enum QuizAPI {
     case makeQuiz(MakeQuizRequestModel)
     case getQuiz(Int, GetQuizRequestModel)
     case getQuizRank(Int, GetQuizRankRequestModel)
 }
 
 extension QuizAPI: NetworkRequestable {
-    var path: String {
+    public var path: String {
         switch self {
         case .makeQuiz:
             return "/api/v1/quiz"
@@ -29,14 +29,14 @@ extension QuizAPI: NetworkRequestable {
         }
     }
     
-    var headers: HTTPHeaders {
+    public var headers: HTTPHeaders {
         [
             "Content-Type": "application/json",
-            "x-wequiz-token": "AIE-54Ve5T1TA3ahiwsjfLWjNeFHvQxd4F9E05mRqSqV5OuoZPba-BSrd74JwpBvxobRpO1pocbDLRx0K5sU0Ahb5Q_Uj_53cMNfqf0v_wS3huRVQtQCPvf6-R_vwttoU7qbtN3YOKhW8Seb73kHVThfjsQoqo1hPw"
+            "x-wequiz-token": "AIE-54W-amwtn2V03BQXn5ibwu3my68KXVAL4b7wQMa7gIDLV_QGwcQji_5lQ30sV20L5igMhn4Daig6w4JhTPOF_rQ_c-CF5rojgpVw8EVKnNgJF2ePgAt4bRJ86Mvml51yWvWl2wcTX30StvIeSomDhlhUx2jcMw"
         ]
     }
     
-    var method: HTTPMethod {
+    public var method: HTTPMethod {
         switch self {
         case .makeQuiz(_):
             return .post
@@ -47,7 +47,7 @@ extension QuizAPI: NetworkRequestable {
         }
     }
     
-    var parameters: Encodable? {
+    public var parameters: Encodable? {
         switch self {
         case .makeQuiz(let model):
             return model
@@ -58,7 +58,7 @@ extension QuizAPI: NetworkRequestable {
         }
     }
     
-    var encoding: ParameterEncoding {
+    public var encoding: ParameterEncoding {
         return JSONEncoding.default
     }
 }

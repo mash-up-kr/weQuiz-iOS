@@ -4,23 +4,22 @@ import DesignSystemKit
 import QuizKit
 import CoreKit
 
+protocol MakeQuizDisplayLogic {
+    func displayCompletionView(viewModel: MakeQuiz.RequestMakeQuiz.ViewModel)
+}
+
 public struct MakeQuizView: View {
+    
+    var interactor: MakeQuizBusinessLogic?
+    
+    @ObservedObject var viewModel = MakeQuizDataStore()
+    
     public init() {}
-    
-    let quizNameLimit: Int = 38
-    
-    @ObservedObject var viewModel = MakeQuizViewModel()
-    
-    @State private var quizName: String = ""
     
     @Environment(\.editMode) private var editMode
     @State private var removeItemPopupPresented = false
     @State private var removedIndex: (popupPresented: Bool, index: UUID?) = (false, nil)
-    
     @State private var removeSuccessToastModal: WQToast.Model?
-    @State private var routeToCompletionView = false
-    
-    private var cancellables = Set<AnyCancellable>()
     
 
     public var body: some View {
@@ -45,8 +44,8 @@ public struct MakeQuizView: View {
                         VStack {
                             TextField("", text: $viewModel.quiz.title, prompt: Text("제목없는 시험지").foregroundColor(Color.designSystem(.g4)))
                                 .frame(height: 34)
-                                .onReceive(Just(quizName)) { _ in
-                                    limitQuizName(quizNameLimit)
+                                .onReceive(Just(viewModel.quiz.title)) { _ in
+                                    viewModel.limitQuizName()
                                 }
                                 .font(.pretendard(.medium, size: ._24))
                                 .foregroundColor(Color.designSystem(.g4))
@@ -102,13 +101,11 @@ public struct MakeQuizView: View {
                           style: .single(
                               .init(title: "시험지 완성하기",
                                   action: {
-                                      routeToCompletionView = true
+                                      interactor?.requestMakeQuiz(request: .init(quiz: viewModel.quiz))
                                   }))
                         )
                         .frame(height: 52)
                     }
-                    
-                    
                 }
                 .frame(maxWidth: .infinity)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
@@ -132,15 +129,13 @@ public struct MakeQuizView: View {
             .background(
                 Color.designSystem(.g9)
             )
-            .navigationDestination(isPresented: $routeToCompletionView) {
-                 QuizCompletionView()
+            .navigationDestination(isPresented: $viewModel.routeToCompletionView) {
+                if let quizId = viewModel.quizId {
+                    QuizCompletionView(quizId: quizId)
+                }
             }
         }
-        .onAppear {
-            MakeQuizInteractor(service: QuizService(Networking())).makeQuiz()
-        }
     }
-
     
     private func moveListItem(from source: IndexSet, to destination: Int) {
         viewModel.quiz.questions.move(fromOffsets: source, toOffset: destination)
@@ -151,11 +146,11 @@ public struct MakeQuizView: View {
         removedIndex = (false, nil)
         removeSuccessToastModal = .init(status: .success, text: "문제를 삭제했어요")
     }
-    
-    private func limitQuizName(_ upper: Int) {
-        if quizName.count > upper {
-            quizName = String(quizName.prefix(upper))
-        }
+}
+extension MakeQuizView: MakeQuizDisplayLogic {
+    func displayCompletionView(viewModel: MakeQuiz.RequestMakeQuiz.ViewModel) {
+        self.viewModel.routeToCompletionView = true
+        self.viewModel.quizId = viewModel.quizId
     }
 }
 

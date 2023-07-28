@@ -19,25 +19,21 @@ public struct MakeQuizRequestModel: Codable {
     
     public struct QuestionModel: Codable {
         public let title: String
-        public let priority: Int
         public let duplicatedOption: Bool
         public let options: [AnswerModel]
 
-        public init(title: String, priority: Int, duplicatedOption: Bool, options: [AnswerModel]) {
+        public init(title: String, duplicatedOption: Bool, options: [AnswerModel]) {
             self.title = title
-            self.priority = priority
             self.duplicatedOption = duplicatedOption
             self.options = options
         }
 
         public struct AnswerModel: Codable {
             public let content: String
-            public let priority: Int
             public let isCorrect: Bool
 
-            public init(content: String, priority: Int, isCorrect: Bool) {
+            public init(content: String, isCorrect: Bool) {
                 self.content = content
-                self.priority = priority
                 self.isCorrect = isCorrect
             }
         }
