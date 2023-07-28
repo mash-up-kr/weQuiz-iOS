@@ -49,8 +49,8 @@ public struct OnboardingView: View {
                 case .userInformationInput(let phoneNumber):
                     userInformationInputBuilder(phoneNumber)
                         .navigationBarBackButtonHidden()
-                case .signUpFinsh:
-                    SignUpFinishView()
+                case .signUpFinsh(let nickname):
+                    SignUpFinishView(nickname: nickname)
                         .navigationBarBackButtonHidden()
                 }
             }
@@ -86,7 +86,8 @@ public struct OnboardingView: View {
         let presenter = UserInformationInputPresenter(navigator: navigator)
         let interactor = UserInformationInputInteractor(
             presenter: presenter,
-            authManager: authManager
+            authManager: authManager,
+            authenticationService: AuthenticationService()
         )
         return UserInformationInputView(
             interactor: interactor,

@@ -31,7 +31,7 @@ public enum UserInformationInputModel {
         public struct Navigate {
             public enum Destination {
                 case back
-                case finish
+                case finish(String)
             }
             public let destination: Destination
         }

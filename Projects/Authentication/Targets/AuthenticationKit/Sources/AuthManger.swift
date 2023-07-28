@@ -18,9 +18,10 @@ public class AuthManager: ObservableObject {
     }
     
     public static let shared: AuthManager = .init()
-    private var verificationID: String?
     
     private init() { }
+    
+    private(set) var verificationID: String?
 }
 
 public extension AuthManager {

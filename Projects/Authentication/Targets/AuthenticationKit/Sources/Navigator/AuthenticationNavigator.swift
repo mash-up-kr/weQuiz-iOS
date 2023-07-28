@@ -12,7 +12,7 @@ public enum Screen: Hashable {
     case phoneNumber
     case verificationCodeInput(String)
     case userInformationInput(String)
-    case signUpFinsh
+    case signUpFinsh(String)
 }
 
 public final class AuthenticationNavigator: ObservableObject {

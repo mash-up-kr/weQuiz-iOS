@@ -23,9 +23,9 @@ extension UserInformationInputPresenter: UserInformationInputPresentingLogic {
         switch response.destination {
         case .back:
             navigator.back()
-        case .finish:
+        case .finish(let nickname):
             navigator.path = [
-                .signUpFinsh
+                .signUpFinsh(nickname)
             ]
         }
     }
