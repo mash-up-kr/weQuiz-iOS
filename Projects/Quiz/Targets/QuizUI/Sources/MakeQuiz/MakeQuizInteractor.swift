@@ -45,8 +45,7 @@ final class MakeQuizInteractor: MakeQuizBusinessLogic {
             for answer in question.answers {
                 answers.append(.init(content: answer.answer, isCorrect: answer.isCorrect))
             }
-            //TODO: - duplicatedOption 수정해야함
-            questions.append(.init(title: question.title, duplicatedOption: true, options: answers))
+            questions.append(.init(title: question.title, duplicatedOption: question.duplicatedOption, options: answers))
         }
         return MakeQuizRequestModel(title: request.quiz.title, questions: questions)
     }
