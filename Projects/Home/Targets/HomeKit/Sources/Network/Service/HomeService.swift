@@ -27,7 +27,7 @@ public protocol HomeServiceLogic {
         _ requestable: NetworkRequestable)
         -> AnyPublisher<T?, Error>
     
-    func getQuestionStatistic<T: Decodable>(
+    func getQuestionDetail<T: Decodable>(
         _ model: T.Type,
         _ requestable: NetworkRequestable)
         -> AnyPublisher<T?, Error>
@@ -87,7 +87,7 @@ extension HomeService: HomeServiceLogic {
         }.eraseToAnyPublisher()
     }
     
-    public func getQuestionStatistic<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
+    public func getQuestionDetail<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
         return Future { [weak self] promise in
             self?.networking.request(T.self, requestable) { result in
                 switch result {

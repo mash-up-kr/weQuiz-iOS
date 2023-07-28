@@ -15,6 +15,7 @@ struct QuestionDetail: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var quizInfo: QuizInfoModel
     @Binding var quizStatistic: [QuestionStatisticModel]
+    @Binding var quizDetail: QuestionDetailModel
     @State private var isPresentRemoveModal: Bool = false
     @State private var removeSuccessToastModal: WQToast.Model?
     var onRemove: ((Int) -> ())?
@@ -50,7 +51,10 @@ struct QuestionDetail: View {
 
 extension QuestionDetail {
     private var topBarView: some View {
-        WQTopBar(style: .navigationWithButtons(
+        
+        
+        
+        return WQTopBar(style: .navigationWithButtons(
             .init(
                 title: "",
                 bttons: [
@@ -75,19 +79,27 @@ extension QuestionDetail {
     }
     
     private var questionList: some View {
-        List {
-            ForEach(quizInfo.questions.indices) { index in
-                AnswerListContainer(question: quizInfo.questions[index], questionStatistic: quizStatistic[index], questionsCount: quizInfo.questions.count)
-            }
-        }
-        .listStyle(.plain)
+        return EmptyView()
+//        List {
+//            ForEach(quizInfo.questions.indices) { index in
+//                AnswerListContainer(questionDetail: quizDetail, question: quizInfo.questions[index], questionStatistic: quizStatistic[index], questionsCount: quizInfo.questions.count)
+//            }
+//        }
+//        .listStyle(.plain)
+        
+//        List {
+//            ForEach(quizInfo.questions.indices) { index in
+//                AnswerListContainer(question: quizInfo.questions[index], questionStatistic: quizStatistic[index], questionsCount: quizInfo.questions.count)
+//            }
+//        }
+//        .listStyle(.plain)
     }
 }
 
 
-struct QuestionDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        QuestionDetail(quizInfo: .constant(questionDetailSample.quizInfo), quizStatistic: .constant(questionDetailSample.statistic))
-    }
-}
+//struct QuestionDetailView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        QuestionDetail(quizInfo: .constant(questionDetailSample.quizInfo), quizStatistic: .constant(questionDetailSample.statistic))
+//    }
+//}
 

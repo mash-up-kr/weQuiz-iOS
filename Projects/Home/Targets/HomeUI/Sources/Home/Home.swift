@@ -2,25 +2,33 @@ import SwiftUI
 import DesignSystemKit
 import HomeKit
 import CoreKit
+import QuizUI
+
 
 public struct Home: View {
     public init() { }
     
     @EnvironmentObject var viewModel: HomeViewModel
-    @State var isEdited: Bool = false
+    @State private var isEdited: Bool = false
+    @State private var isDetailViewShown: Bool = false
+    @State private var isPresentedMakeQuiz: Bool = false
+    @State private var isLoading: Bool = false
     
     public var body: some View {
-        NavigationView {
+        NavigationStack(root: {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 0) {
                     self.topBarView
                     self.profileView
-                    self.questionButton
+                    self.makeQuestionButton
                     self.friendRankView
                     self.myQuestionView
                 }
             }
-        }
+            .navigationDestination(isPresented: $isPresentedMakeQuiz) {
+                MakeQuizView()
+            }
+        })
         .preferredColorScheme(.dark)
     }
 }
@@ -32,13 +40,13 @@ extension Home {
     }
     
     private var profileView: some View {
-        let image = viewModel.myInfo.image
+        let image = viewModel.myInfo.image != nil ? viewModel.myInfo.image : "profileImage"
         let nickname = viewModel.myInfo.nickname
         let contents = viewModel.myInfo.description
         
         return HStack {
             if let image = image {
-                Image(systemName: image)
+                Image(image)
                     .resizable()
                     .scaledToFill()
                     .frame(width: 85, height: 85)
@@ -68,13 +76,13 @@ extension Home {
         .padding([.top, .bottom], 11)
     }
     
-    private var questionButton: some View {
+    private var makeQuestionButton: some View {
         WQButton(
             style: .single(
                 .init(
                     title: "문제만들기 💬",
                     action: {
-                        print("버튼이 눌렸습니다")
+                        isPresentedMakeQuiz.toggle()
                     }
                 )
             )
@@ -113,19 +121,45 @@ extension Home {
         }
     }
     
+//    private var myQuestionList: some View {
+//        ScrollView {
+//            LazyVStack(spacing: 12) {
+//                CustomHeader(title: "내가 낸 문제지 리스트", nextView: AnyView(QuestionGroupList(questions: $viewModel.questions)))
+//
+//                // 여기서 QuestionDetailView로 넘어가기 전에 통신을 통해서 DetailView 데이터를 받아와서 그려줘야 한다.
+//                ForEach($viewModel.questions.prefix(4)) { question in
+//                    NavigationLink(destination: QuestionDetail(quizInfo: .constant(questionDetailSample.quizInfo), quizStatistic: .constant(questionDetailSample.statistic), onRemove: { index in
+//                        viewModel.questions.removeAll { $0.id == index }
+//                    })) {
+//                        QuestionGroupRow(question: question)
+//                    }
+//                }
+//            }
+//        }
+//    }
+    
+    
     private var myQuestionList: some View {
         ScrollView {
             LazyVStack(spacing: 12) {
                 CustomHeader(title: "내가 낸 문제지 리스트", nextView: AnyView(QuestionGroupList(questions: $viewModel.questions)))
-                    
-                // 여기서 QuestionDetailView로 넘어가기 전에 통신을 통해서 DetailView 데이터를 받아와서 그려줘야 한다.
+                
                 ForEach($viewModel.questions.prefix(4)) { question in
-                    NavigationLink(destination: QuestionDetail(quizInfo: .constant(questionDetailSample.quizInfo), quizStatistic: .constant(questionDetailSample.statistic), onRemove: { index in
-                        viewModel.questions.removeAll { $0.id == index }
-                    })) {
+                    Button {
+//                        isLoading = true
+                        viewModel.getQuestionStatistic(QuestionStatisticRequestModel(quizId: Int(question.id)))
+                        self.isDetailViewShown = true
+                    } label: {
                         QuestionGroupRow(question: question)
+//                        if isLoading {
+//                            ProgressView()
+//                        }
                     }
                 }
+//                .disabled(isLoading)
+                .background(NavigationLink(destination: QuestionDetail(quizInfo: $viewModel.detailQuizInfo, quizStatistic: $viewModel.detailQuizStatistic, quizDetail: $viewModel.detailQuiz), isActive: $isDetailViewShown, label: {
+                    EmptyView()
+                }))
             }
         }
     }

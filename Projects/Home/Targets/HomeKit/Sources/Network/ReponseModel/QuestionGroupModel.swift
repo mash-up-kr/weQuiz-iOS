@@ -11,11 +11,21 @@ import Foundation
 public struct QuestionGroupModel {
     public var quiz: [SummaryQuestionModel]
     public var nextCursor: Int
+    
+    public init(quiz: [SummaryQuestionModel], nextCursor: Int) {
+        self.quiz = quiz
+        self.nextCursor = nextCursor
+    }
 }
 
 public struct SummaryQuestionModel {
     public var id: Int
     public var title: String
+    
+    public init(id: Int, title: String) {
+        self.id = id
+        self.title = title
+    }
 }
 
 extension QuestionGroupModel: Decodable { }

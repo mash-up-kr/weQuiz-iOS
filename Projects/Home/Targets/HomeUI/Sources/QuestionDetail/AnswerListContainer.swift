@@ -18,9 +18,11 @@ enum AnswerListType {
 
 struct AnswerListContainer: View {
     
+    var questionDetail: QuestionDetailModel
     var question: QuestionModel
     var questionStatistic: QuestionStatisticModel
     var questionsCount: Int
+    var questionId: Int
     
     @State var backDegree = 180.0
     @State var frontDegree = 0.0
@@ -67,7 +69,7 @@ struct AnswerList: View {
         ScrollView {
             LazyVStack(alignment: .leading) {
                 HStack {
-                    Text("\(question.id). \(question.title)")
+                    Text("\(question.id). \(question.questionTitle)")
                         .font(.pretendard(.medium, size: ._18))
                         .foregroundColor(.designSystem(.g2))
                 }
@@ -75,7 +77,7 @@ struct AnswerList: View {
                     GeometryReader { geometry in
                         ZStack(alignment: .leading) {
                             if listType == .back {
-                                AnswerPercentView(id: question.options[index].priority)
+                                AnswerPercentView(id: index)
                                     .frame(width: geometry.size.width * CGFloat(questionStatistic.options[index].selectivity), height: geometry.size.height)
                             }
                             AnswerListRow(model: question.options[index])
@@ -88,7 +90,7 @@ struct AnswerList: View {
                     .frame(height: 56)
                 }
                 HStack {
-                    Text("\(question.priorty+1)/\(questionsCount)")
+                    Text("\(question.id)/\(questionsCount)")
                     Spacer()
                     Button(action: {
                         print("버튼을 눌러보세요")

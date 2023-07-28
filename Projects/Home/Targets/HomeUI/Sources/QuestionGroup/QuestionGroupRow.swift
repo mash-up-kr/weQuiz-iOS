@@ -36,7 +36,7 @@ extension QuestionGroupRow {
     @ViewBuilder
     private var writingStateView: some View {
         // writingState 값을 로컬에서 가지고 있고 이를 기반으로 뷰를 바꿔주도록 로직 구현 필요
-        let writingState = true
+        let writingState = false
         
         if writingState {
             ZStack {

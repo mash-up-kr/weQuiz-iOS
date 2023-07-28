@@ -59,19 +59,19 @@ extension QuestionGroupList {
     private var listView: some View {
         List {
             ForEach($questions) { question in
-                ZStack {
-                    QuestionGroupRow(question: question)
-                    NavigationLink(destination: QuestionDetail(quizInfo: .constant(questionDetailSample.quizInfo), quizStatistic: .constant(questionDetailSample.statistic), onRemove: { index in
-                        questions.removeAll { $0.id == index }
-                    })) {
-                        EmptyView()
-                    }
-                    .opacity(0)
-                }
-                .listRowBackground(Color.clear)
-                .padding(.horizontal, 20)
-                .listRowInsets(EdgeInsets(top: 6, leading: 0, bottom: 6, trailing: 0))
-                .listRowSeparator(.hidden)
+//                ZStack {
+//                    QuestionGroupRow(question: question)
+//                    NavigationLink(destination: QuestionDetail(quizInfo: .constant(questionDetailSample.quizInfo), quizStatistic: .constant(questionDetailSample.statistic), quizDetail: <#Binding<QuestionDetailModel>#>, onRemove: { index in
+//                        questions.removeAll { $0.id == index }
+//                    })) {
+//                        EmptyView()
+//                    }
+//                    .opacity(0)
+//                }
+//                .listRowBackground(Color.clear)
+//                .padding(.horizontal, 20)
+//                .listRowInsets(EdgeInsets(top: 6, leading: 0, bottom: 6, trailing: 0))
+//                .listRowSeparator(.hidden)
             }
             .onDelete(perform: removeItem)
         }
