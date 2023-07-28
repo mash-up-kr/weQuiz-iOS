@@ -16,6 +16,12 @@ public protocol NetworkingProtocol {
         _ requestable: NetworkRequestable,
         _ completion: @escaping ((Result<T?, Error>) -> ())
     )
+    
+    func request<T: Decodable>(
+        _ model: T.Type,
+        _ requestable: NetworkRequestable
+    ) async -> Result<T?, Error>
+    
     func requestMultipartFormData<T:Decodable>(
         _ model: T.Type,
         _ requestable: NetworkRequestable,
@@ -51,29 +57,30 @@ public final class Networking: NetworkingProtocol {
                 headers: requestable.headers?.httpHeaders ?? .default
             )
             .validate(statusCode: 200..<300)
-            .response { response in
-                if let error = response.error {
-                    completion(.failure(NetworkingError.response(error)))
-                }
-                guard let data = response.data else {
-                    completion(.failure(NetworkingError.emptyResponse))
-                    return
-                }
-                
-                self.decode(model, data, { result in
-                    DispatchQueue.main.async {
-                        switch result {
-                        case .success(let success):
-                            completion(.success(success))
-                        case .failure(let failure):
-                            completion(.failure(failure))
-                        }
+            .responseDecodable(
+                of: model.self,
+                completionHandler: { response in
+                    switch response.result {
+                    case .success(let value):
+                        completion(.success(value))
+                    case .failure(let error):
+                        completion(.failure(error))
                     }
-                })
-            }
+            })
         } catch {
-            self.requestErrorHandling(error)
+            requestErrorHandling(error)
             completion(.failure(NetworkingError.wrongRequest))
+        }
+    }
+    
+    public func request<T: Decodable>(
+        _ model: T.Type,
+        _ requestable: NetworkRequestable
+    ) async -> Result<T?, Error> {
+        await withCheckedContinuation{ continuation in
+            request(model, requestable) {
+                continuation.resume(returning: $0)
+            }
         }
     }
     
@@ -110,27 +117,17 @@ public final class Networking: NetworkingProtocol {
             ) {
                 $0.timeoutInterval = 10
             }
-            .response { response in
-                
-                if let error = response.error {
-                    completion(.failure(NetworkingError.response(error)))
-                }
-                guard let data = response.data else {
-                    completion(.failure(NetworkingError.emptyResponse))
-                    return
-                }
-                
-                self.decode(model, data, { result in
-                    DispatchQueue.main.async {
-                        switch result {
-                        case .success(let success):
-                            completion(.success(success))
-                        case .failure(let failure):
-                            completion(.failure(failure))
-                        }
+            .responseDecodable(
+                of: model.self,
+                completionHandler: {  response in
+                    switch response.result {
+                    case .success(let value):
+                        completion(.success(value))
+                    case .failure(let error):
+                        completion(.failure(error))
                     }
-                })
-            }
+                }
+            )
         } catch {
             self.requestErrorHandling(error)
             completion(.failure(NetworkingError.wrongRequest))
@@ -152,40 +149,6 @@ extension Networking {
             debugPrint("** WrongRequestError occurs")
         default:
             debugPrint("** UnhandledReuqestError occurs")
-        }
-    }
-    
-    private func checkError(with data: Data?, _ response: URLResponse?, _ error: Error?, completion: @escaping (Result<Data, Error>) -> ()) {
-        if let error = error {
-            completion(.failure(error))
-            return
-        }
-        
-        guard let response = response as? HTTPURLResponse else {
-            completion(.failure(NetworkError.unknownError))
-            return
-        }
-        
-        guard (200...299).contains(response.statusCode) else {
-            completion(.failure(NetworkError.serverError(ServerError(rawValue: response.statusCode) ?? .unkonown)))
-            return
-        }
-        
-        guard let data = data else {
-            completion(.failure(NetworkError.emptyData))
-            return
-        }
-        
-        completion(.success((data)))
-    }
-    
-    private func decode<T: Decodable>(_: T.Type ,_ data: Data, _ completion: @escaping ((Result<T?, Error>) -> ()))  {
-        do {
-            let result = try JSONDecoder().decode(T.self, from: data)
-            completion(.success(result))
-        } catch (let error) {
-            debugPrint("Error: JSONDecode \(error)")
-            completion(.failure(NetworkingError.decodingError))
         }
     }
 }
