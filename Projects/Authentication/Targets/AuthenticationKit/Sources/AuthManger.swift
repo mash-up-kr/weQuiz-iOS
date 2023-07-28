@@ -18,6 +18,7 @@ public class AuthManager: ObservableObject {
     }
     
     public static let shared: AuthManager = .init()
+    private var verificationID: String?
     
     private init() { }
 }
@@ -35,19 +36,22 @@ public extension AuthManager {
             .verifyPhoneNumber(
                 "+82\(convertedPhoneNumber)",
                 uiDelegate: nil
-            ) { verificationID, error in
+            ) { [weak self] verificationID, error in
                 if let error = error {
                     debugPrint(error)
                     completion?(false)
                 } else {
-                    UserDefaults.standard.set(verificationID, forKey: "token")
+                    self?.verificationID = verificationID
                     completion?(true)
                 }
             }
     }
     
-    func signIn(with code: String, completion: @escaping (Result<Bool, SignInError>) -> Void) {
-        guard let token = token else { return }
+    func registerPhoneNumber(with code: String, completion: @escaping (Result<Bool, SignInError>) -> Void) {
+        guard let token = verificationID else {
+            completion(.failure(.unknown))
+            return
+        }
         let credential = PhoneAuthProvider.provider().credential(
           withVerificationID: token,
           verificationCode: code
@@ -74,5 +78,11 @@ public extension AuthManager {
             
             completion(.success(true))
         }
+    }
+    
+    func storeToken(_ completion: @escaping () -> Void) {
+        UserDefaults.standard.set(verificationID, forKey: "token")
+        verificationID = nil
+        completion()
     }
 }

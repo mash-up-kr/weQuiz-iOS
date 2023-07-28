@@ -55,7 +55,7 @@ extension VerificationCodeInputInteractor: VerificationCodeInputRequestingLogic 
             return
         }
         
-        authManager.signIn(with: request.code) { [weak self] result in
+        authManager.registerPhoneNumber(with: request.code) { [weak self] result in
             switch result {
             case .success(let isSucceed):
                 if isSucceed {

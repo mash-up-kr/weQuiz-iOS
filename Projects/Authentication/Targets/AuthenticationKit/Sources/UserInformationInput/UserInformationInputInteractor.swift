@@ -29,7 +29,9 @@ extension UserInformationInputInteractor: UserInformationInputRequestingLogic {
     public func request(_ request: UserInformationInputModel.Request.OnRequestSignUp) {
         // TODO: Networking
         // onSuccess
-        presenter.present(.init(destination: .finish))
+        AuthManager.shared.storeToken { [weak self] in
+            self?.presenter.present(.init(destination: .finish))
+        }
         // onFailure
         // presenter.present(UserInformationInputModel.Response.Toast(type: .signUpFailed))
     }
