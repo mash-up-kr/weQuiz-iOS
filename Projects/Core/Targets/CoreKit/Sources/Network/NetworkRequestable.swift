@@ -10,17 +10,57 @@ import Foundation
 
 import Alamofire
 
+public enum NetworkMethod {
+    case get
+    case post
+    case delete
+    
+    var httpMethod: HTTPMethod {
+        switch self {
+        case .get: return .get
+        case .post: return .post
+        case .delete: return .delete
+        }
+    }
+}
+
+public enum NetworkParameterEncoding {
+    /// for parmeter
+    case urlEncoding
+    /// for body
+    case jsonEncoding
+    
+    var parmeterEncoding: ParameterEncoding {
+        switch self {
+        case .urlEncoding: return URLEncoding.default
+        case .jsonEncoding: return JSONEncoding.default
+        }
+    }
+}
+
+public struct NetworkHeader {
+    var header: [String: String]
+    
+    public init(_ header: [String : String]) {
+        self.header = header
+    }
+    
+    var httpHeaders: HTTPHeaders {
+        .init(header)
+    }
+}
+
 public protocol NetworkRequestable {
     /// Request Path
     var path: String { get }
     /// HttpMethod
-    var method: HTTPMethod { get }
+    var method: NetworkMethod { get }
     /// Request 시 필요한 parameters
     var parameters: Encodable? { get }
     /// Request Headers
-    var headers: HTTPHeaders { get }
+    var headers: NetworkHeader? { get }
     /// Request Encoding
-    var encoding: ParameterEncoding { get }
+    var encoding: NetworkParameterEncoding { get }
     
     /// Endpoint
     /// -  WrongEndPoint Error를 발생시키기 위해 함수로 작성
@@ -42,14 +82,14 @@ public extension NetworkRequestable {
 public extension NetworkRequestable {
     /// Request 시 사용될 BaseURL
     var baseURL: String {
-        ""
+        "http://wequiz-server-env.eba-c2jfzm3b.eu-north-1.elasticbeanstalk.com"
     }
     
     var path: String {
         ""
     }
     
-    var method: HTTPMethod {
+    var method: NetworkMethod {
         .get
     }
     
@@ -57,13 +97,11 @@ public extension NetworkRequestable {
         nil
     }
     
-    var headers: HTTPHeaders {
-        .default
+    var headers: NetworkHeader? {
+        nil
     }
     
-    var encoding: ParameterEncoding {
-        URLEncoding.default
+    var encoding: NetworkParameterEncoding {
+        .urlEncoding
     }
 }
-
-
