@@ -19,13 +19,25 @@ public struct PhoneNumberInputView: View {
     @State private var phoneNumberInvalidToastModel: WQToast.Model?
     
     private var interactor: PhoneNumberInputRequestingLogic?
+    private let signType: Screen.SignType
+    
+    private var title: String {
+        switch signType {
+        case .signUp:
+            return "회원가입을 위해\n휴대폰 번호를 입력해주세요"
+        case .signIn:
+            return "반가워요!\n휴대폰 번호로 로그인 해주세요"
+        }
+    }
     
     public init(
         interactor: PhoneNumberInputRequestingLogic,
-        presenter: PhoneNumberInputPresenter
+        presenter: PhoneNumberInputPresenter,
+        _ signType: Screen.SignType = .signUp
     ) {
         self.interactor = interactor
         self.presenter = presenter
+        self.signType = signType
     }
     
     public var body: some View {
@@ -38,7 +50,7 @@ public struct PhoneNumberInputView: View {
                     })
             ))
             VStack(alignment: .leading, spacing: .zero) {
-                Text("회원가입을 위해\n휴대폰 번호를 입력해주세요")
+                Text(title)
                     .font(.pretendard(.bold, size: ._24))
                     .foregroundColor(.white)
                 Spacer()
@@ -74,6 +86,7 @@ public struct PhoneNumberInputView: View {
                         action: {
                             interactor?.request(
                                 PhoneNumberInputModel.Request.OnTouchGetVerificationCode(
+                                    signType: signType,
                                     input: phoneNumberInput
                                 )
                             )

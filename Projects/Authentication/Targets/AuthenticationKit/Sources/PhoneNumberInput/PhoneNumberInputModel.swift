@@ -15,9 +15,11 @@ public enum PhoneNumberInputModel {
         }
         
         public struct OnTouchGetVerificationCode {
-            public let input: String
+            let signType: Screen.SignType
+            let input: String
             
-            public init(input: String) {
+            public init(signType: Screen.SignType, input: String) {
+                self.signType = signType
                 self.input = input
             }
         }
@@ -27,7 +29,7 @@ public enum PhoneNumberInputModel {
         public struct Naivgate {
             public enum Destination {
                 case back
-                case verificationCodeInput(String)
+                case verificationCodeInput(String, Screen.SignType)
             }
             
             public let destination: Destination

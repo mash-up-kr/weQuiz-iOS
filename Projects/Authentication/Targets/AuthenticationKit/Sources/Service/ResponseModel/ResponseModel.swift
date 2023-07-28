@@ -9,3 +9,9 @@
 import Foundation
 
 struct EmptyResponseModel: Decodable { }
+
+public struct UserResponseModel: Decodable {
+    let id: Int
+    let nickname: String
+    let descritpion: String?
+}

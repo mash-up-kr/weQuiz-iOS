@@ -31,16 +31,28 @@ public enum VerificationCodeInputModel {
         }
         
         public struct OnRequestVerifyCode {
+            let type: Screen.SignType
             let phoneNumber: String
             let remainTime: Int
             let isValid: Bool
             let code: String
             
-            public init(phoneNumber: String, remainTime: Int, isValid: Bool, code: String) {
+            public init(type: Screen.SignType, phoneNumber: String, remainTime: Int, isValid: Bool, code: String) {
+                self.type = type
                 self.phoneNumber = phoneNumber
                 self.remainTime = remainTime
                 self.isValid = isValid
                 self.code = code
+            }
+        }
+        
+        public struct OnTouchSignUp {
+            let type: Screen.SignType
+            let phoneNumber: String
+            
+            public init(type: Screen.SignType, phoneNumber: String) {
+                self.type = type
+                self.phoneNumber = phoneNumber
             }
         }
     }
@@ -64,6 +76,14 @@ public enum VerificationCodeInputModel {
                 case timeout
                 case expiredCode
                 case resendCode
+                case unknown
+            }
+            public let type: `Type`
+        }
+        
+        public struct Modal {
+            public enum `Type` {
+                case notSignedUpUser
                 case unknown
             }
             public let type: `Type`

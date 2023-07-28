@@ -25,8 +25,8 @@ extension PhoneNumberInputPresenter: PhoneNumberInputPresentingLogic {
         switch response.destination {
         case .back:
             navigator.back()
-        case .verificationCodeInput(let phoneNumber):
-            navigator.path.append(.verificationCodeInput(phoneNumber))
+        case let .verificationCodeInput(phoneNumber, signType):
+            navigator.path.append(.verificationCodeInput(phoneNumber, signType))
         }
     }
     

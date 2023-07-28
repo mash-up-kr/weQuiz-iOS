@@ -9,8 +9,12 @@
 import Foundation
 
 public enum Screen: Hashable {
-    case phoneNumber
-    case verificationCodeInput(String)
+    public enum SignType {
+        case signIn
+        case signUp
+    }
+    case phoneNumber(SignType)
+    case verificationCodeInput(String, SignType)
     case userInformationInput(String)
     case signUpFinsh(String)
 }

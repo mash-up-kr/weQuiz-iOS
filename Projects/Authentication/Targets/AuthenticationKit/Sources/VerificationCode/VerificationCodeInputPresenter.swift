@@ -10,7 +10,7 @@ import Foundation
 
 public final class VerificationCodeInputPresenter: ObservableObject {
     private enum Const {
-        static let timeLimit = 180
+        static let timeLimit = 120
     }
 
     @Published public var viewModel: VerificationCodeInputViewModel = .default
@@ -42,6 +42,11 @@ extension VerificationCodeInputPresenter: VerificationCodeInputPresentingLogic {
     public func present(_ response: VerificationCodeInputModel.Response.Toast) {
         viewModel.toastModel = response.type
     }
+    
+    public func present(_ response: VerificationCodeInputModel.Response.Modal) {
+        viewModel.modalModel.isPresented = true
+        viewModel.modalModel.type = response.type
+    }
 }
 
 // MARK: - Private
@@ -66,4 +71,5 @@ public protocol VerificationCodeInputPresentingLogic {
     func present(_ response: VerificationCodeInputModel.Response.Naivgate)
     func present(_ response: VerificationCodeInputModel.Response.ResetTimer)
     func present(_ response: VerificationCodeInputModel.Response.Toast)
+    func present(_ response: VerificationCodeInputModel.Response.Modal)
 }

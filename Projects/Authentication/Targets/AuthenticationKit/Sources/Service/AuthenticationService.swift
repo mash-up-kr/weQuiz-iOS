@@ -10,43 +10,9 @@ import Foundation
 
 import CoreKit
 
-public enum AuthenticationAPIError: Error {
-    case fail
-}
-
-enum AuthenticationAPI {
-    case join(JoinRequestModel)
-}
-
-extension AuthenticationAPI: NetworkRequestable {
-    var path: String {
-        switch self {
-        case .join: return "/api/v1/user/join"
-        }
-    }
-    
-    var method: NetworkMethod {
-        switch self {
-        case .join: return .post
-        }
-    }
-    
-    var encoding: NetworkParameterEncoding {
-        switch self {
-        case .join: return .jsonEncoding
-        }
-    }
-    
-    var parameters: Encodable? {
-        switch self {
-        case .join(let model):
-            return model
-        }
-    }
-}
-
 public protocol AuthenticationServiceLogic {
     func join(_ model: JoinRequestModel, _ completion: @escaping ((Result<Void, AuthenticationAPIError>)) -> Void)
+    @MainActor func user(_ id: String) async -> UserResponseModel?
 }
 
 public final class AuthenticationService {
@@ -66,6 +32,15 @@ extension AuthenticationService: AuthenticationServiceLogic {
             case .failure:
                 completion(.failure(.fail))
             }
+        }
+    }
+    
+    public func user(_ id: String) async -> UserResponseModel? {
+        switch await networking.request(UserResponseModel.self, AuthenticationAPI.user(id)) {
+        case .success(let model):
+            return model
+        case .failure:
+            return nil
         }
     }
 }

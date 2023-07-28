@@ -38,7 +38,7 @@ extension PhoneNumberInputInteractor: PhoneNumberInputRequestingLogic {
             }
             self.presenter.present(
                 PhoneNumberInputModel.Response.Naivgate(
-                    destination: .verificationCodeInput(request.input)
+                    destination: .verificationCodeInput(request.input, request.signType)
                 )
             )
         })
