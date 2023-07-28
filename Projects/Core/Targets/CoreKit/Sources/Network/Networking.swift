@@ -27,6 +27,7 @@ public final class Networking: NetworkingProtocol {
     
     public enum NetworkingError: Error {
         case emptyResponse
+        case decodingError
         case wrongRequest
         case wrongEndpoint
         case response(AFError)
@@ -44,11 +45,13 @@ public final class Networking: NetworkingProtocol {
             let parameters = requestable.parameters?.requestable ?? [:]
             AF.request(
                 endpoint,
-                method: requestable.method,
+                method: requestable.method.httpMethod,
                 parameters: parameters,
-                encoding: requestable.encoding,
-                headers: requestable.headers
-            ).response { response in
+                encoding: requestable.encoding.parmeterEncoding,
+                headers: requestable.headers?.httpHeaders ?? .default
+            )
+            .validate(statusCode: 200..<300)
+            .response { response in
                 if let error = response.error {
                     completion(.failure(NetworkingError.response(error)))
                 }
@@ -103,7 +106,7 @@ public final class Networking: NetworkingProtocol {
                     }
                 },
                 to: endPoint,
-                headers: requestable.headers
+                headers: requestable.headers?.httpHeaders ?? .default
             ) {
                 $0.timeoutInterval = 10
             }
@@ -182,7 +185,7 @@ extension Networking {
             completion(.success(result))
         } catch (let error) {
             debugPrint("Error: JSONDecode \(error)")
-            completion(.failure(NetworkingError.emptyResponse))
+            completion(.failure(NetworkingError.decodingError))
         }
     }
 }
