@@ -26,7 +26,7 @@ extension QuizAPI: NetworkRequestable {
         case .getQuiz(let quizId):
             return "/api/v1/quiz/\(quizId)"
         case .quizResult(let quizId, _):
-            return "/api/v1/\(quizId)/answers"
+            return "/api/v1/quiz/\(quizId)/answers"
         case .getQuizRank(let quizId, _):
             return "/api/v1/ranking/quiz/\(quizId)"
         }

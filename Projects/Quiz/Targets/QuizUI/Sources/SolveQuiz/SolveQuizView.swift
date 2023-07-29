@@ -11,6 +11,7 @@ import QuizKit
 
 protocol SolveQuizDisplayLogic {
     func displayQuiz(viewModel: SolveQuiz.LoadSolveQuiz.ViewModel)
+    func displayQuizResult(viewModel: SolveQuiz.LoadQuizResult.ViewModel)
 }
 
 public struct SolveQuizView: View {
@@ -93,6 +94,11 @@ public struct SolveQuizView: View {
         .task {
             interactor?.loadQuiz(request: .init(quizId: quizId))
         }
+        .fullScreenCover(isPresented: $viewModel.routeToResultView) {
+            if let quizResult = viewModel.quizResult {
+                QuizResultView(quizResult)
+            }
+        }
     }
 
     private func onNextQuestion() {
@@ -101,8 +107,7 @@ public struct SolveQuizView: View {
                 currentIndex += 1
                 selectedCount = 0
             } else {
-                // TODO: - 문제 다 풀었을 때
-                print("solve quiz complete")
+                interactor?.requestQuizResult(request: .init(quizId: self.quizId, quiz: viewModel.quiz))
             }
         }
     }
@@ -131,6 +136,11 @@ public struct SolveQuizView: View {
 extension SolveQuizView: SolveQuizDisplayLogic {
     func displayQuiz(viewModel: SolveQuiz.LoadSolveQuiz.ViewModel) {
         self.viewModel.quiz = viewModel.quiz
+    }
+    
+    func displayQuizResult(viewModel: SolveQuiz.LoadQuizResult.ViewModel) {
+        self.viewModel.quizResult = viewModel.result
+        self.viewModel.routeToResultView = true
     }
 }
 

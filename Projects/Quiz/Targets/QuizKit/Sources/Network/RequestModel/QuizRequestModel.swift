@@ -41,11 +41,20 @@ public struct MakeQuizRequestModel: Codable {
 }
 
 public struct QuizResultRequestModel: Codable {
-    public let answers: [AnswerModel]
+    public var answers: [AnswerModel]
+    
+    public init(answers: [AnswerModel]?) {
+        self.answers = answers ?? []
+    }
     
     public struct AnswerModel: Codable {
-        public let questionId: Int
-        public let optionIds: [Int]
+        public var questionId: Int
+        public var optionIds: [Int]
+        
+        public init(questionId: Int, optionIds: [Int]?) {
+            self.questionId = questionId
+            self.optionIds = optionIds ?? []
+        }
     }
 }
 

@@ -8,9 +8,10 @@
 import Foundation
 import QuizKit
 
-final class SolveQuizDataStore: ObservableObject {    
-    // Output
-    @Published public var quiz = SolveQuizModel.init()
+final class SolveQuizDataStore: ObservableObject {
+    @Published var quiz = SolveQuizModel.init()
+    @Published var routeToResultView = false
+    @Published var quizResult: QuizResultModel?
 
     public init() {
         self.quiz = .init()
