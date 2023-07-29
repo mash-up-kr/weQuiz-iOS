@@ -18,7 +18,7 @@ public struct SolveQuizView: View {
     var interactor: SolveQuizBusinessLogic?
     
     @ObservedObject var viewModel = SolveQuizDataStore()
-    @State var currentIndex: Int = 0
+    
     @State var selectedCount: Int = 0
     public let quizId: Int
     
@@ -28,20 +28,22 @@ public struct SolveQuizView: View {
 
     public var body: some View {
         ZStack {
-            if viewModel.quiz.questions.count > 0 {
+            if viewModel.solvedQuiz.questions.count > 0 {
                 VStack {
                     WQTopBar(style: .navigationWithButtons(
                         .init(title: "",
                               bttons: [
                                 .init(icon: Icon.Siren.mono, action: {
                             print("신고하기 버튼 클릭")
+                        })], action: {
+                            self.selectedCount = 0
+                            viewModel.goToPreviousQuestion()
                         })
-                        ])
                     ))
 
                     WQGradientProgressBar(
-                        standard: viewModel.quiz.questions.count,
-                        current: .constant(currentIndex + 1)
+                        standard: viewModel.solvedQuiz.questions.count,
+                        current: .constant(viewModel.currentIndex + 1)
                     )
 
                     tooltip()
@@ -53,7 +55,7 @@ public struct SolveQuizView: View {
                 VStack(alignment: .center) {
                     
                     HStack(spacing: 10) {
-                        Text("\(currentIndex + 1)")
+                        Text("\(viewModel.currentIndex + 1)")
                             .font(.pretendard(.bold, size: ._20))
                             .foregroundColor(Color.designSystem(.g1))
                             .frame(alignment: .leading)
@@ -63,12 +65,12 @@ public struct SolveQuizView: View {
                     }
 
                     
-                    Text(viewModel.quiz.questions[currentIndex].title)
+                    Text(viewModel.solvedQuiz.questions[viewModel.currentIndex].title)
                         .font(.pretendard(.medium, size: ._24))
                         .foregroundColor(Color.designSystem(.g1))
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .frame(height: 34)
-                    Text("답 \(viewModel.quiz.questions[currentIndex].answerCount)개")
+                    Text("답 \(viewModel.solvedQuiz.questions[viewModel.currentIndex].answerCount)개")
                         .font(.pretendard(.bold, size: ._16))
                         .foregroundStyle(
                             DesignSystemKit.Gradient.gradientS1.linearGradient
@@ -76,11 +78,11 @@ public struct SolveQuizView: View {
                         .frame(maxWidth: .infinity, alignment: .trailing)
                         .frame(height: 24)
 
-                    ForEach($viewModel.quiz.questions[currentIndex].answers, id: \.id) { answer in
+                    ForEach($viewModel.solvedQuiz.questions[viewModel.currentIndex].answers, id: \.id) { answer in
                         SolveQuizAnswerView(answer)
                             .onChange(of: answer.isSelected.wrappedValue, perform: { isSelected in
                                 selectedCount = (isSelected == true) ? selectedCount + 1 : selectedCount - 1
-                                if selectedCount == viewModel.quiz.questions[currentIndex].answerCount {
+                                if selectedCount == viewModel.solvedQuiz.questions[viewModel.currentIndex].answerCount {
                                     onNextQuestion()
                                 }
                             })
@@ -94,26 +96,31 @@ public struct SolveQuizView: View {
         .task {
             interactor?.loadQuiz(request: .init(quizId: quizId))
         }
-        .fullScreenCover(isPresented: $viewModel.routeToResultView) {
+        .fullScreenCover(isPresented: $viewModel.routeToResultView, onDismiss: {
+            
+            viewModel.resetQuiz()
+            self.selectedCount = 0
+        }) {
             if let quizResult = viewModel.quizResult {
-                QuizResultView(quizId: quizId, quizResult).configureView()
+                QuizResultView(isPresented: $viewModel.routeToResultView, quizId: quizId, quizResult).configureView()
             }
         }
+
     }
 
     private func onNextQuestion() {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
-            if currentIndex + 1 < viewModel.quiz.questions.count {
-                currentIndex += 1
+            if viewModel.currentIndex + 1 < viewModel.solvedQuiz.questions.count {
+                viewModel.currentIndex += 1
                 selectedCount = 0
             } else {
-                interactor?.requestQuizResult(request: .init(quizId: self.quizId, quiz: viewModel.quiz))
+                interactor?.requestQuizResult(request: .init(quizId: self.quizId, quiz: viewModel.solvedQuiz))
             }
         }
     }
 
     private func tooltip() -> some View {
-        Text("\(viewModel.quiz.questions.count)문제 중 \(currentIndex + 1)번째 문제")
+        Text("\(viewModel.solvedQuiz.questions.count)문제 중 \(viewModel.currentIndex + 1)번째 문제")
             .font(.pretendard(.bold, size: ._14))
             .foregroundColor(.designSystem(.g4))
             .padding(.horizontal, 16)
@@ -124,7 +131,7 @@ public struct SolveQuizView: View {
     }
     
     private func scoreView() -> some View {
-        Text("\(viewModel.quiz.questions[currentIndex].score)점")
+        Text("\(viewModel.solvedQuiz.questions[viewModel.currentIndex].score)점")
             .font(.pretendard(.medium, size: ._14))
             .foregroundColor(.designSystem(.g4))
             .padding(.vertical, 4)
@@ -135,7 +142,7 @@ public struct SolveQuizView: View {
 
 extension SolveQuizView: SolveQuizDisplayLogic {
     func displayQuiz(viewModel: SolveQuiz.LoadSolveQuiz.ViewModel) {
-        self.viewModel.quiz = viewModel.quiz
+        self.viewModel.setQuiz(viewModel.quiz)
     }
     
     func displayQuizResult(viewModel: SolveQuiz.LoadQuizResult.ViewModel) {

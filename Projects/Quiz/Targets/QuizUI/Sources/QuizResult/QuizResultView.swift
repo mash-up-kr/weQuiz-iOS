@@ -18,9 +18,11 @@ public struct QuizResultView: View {
     
     @ObservedObject var model = QuizResultDataStore()
 
+    @Binding var isPresented: Bool
     @State private var isSharePresented = false
     
-    public init(quizId: Int,_ quizResult: QuizResultModel) {
+    public init(isPresented: Binding<Bool>, quizId: Int,_ quizResult: QuizResultModel) {
+        self._isPresented = isPresented
         self.model.quizId = quizId
         self.model.result = quizResult
     }
@@ -32,12 +34,12 @@ public struct QuizResultView: View {
                     VStack(alignment: .center, spacing: 20) {
                         if let result = model.result {
                             socreView(result.myScore)
-                            descriptionView(me: result.myNickname, friend: result.friendNickname, myScore: result.myScore)
+                            descriptionView(me: result.myNickname, friend: result.friendNickname, description: result.scoreDescription)
                         }
                         
                     }
 
-                    Image(Icon.Checkmark.trueFill24)
+                    Image(model.result?.resultImage ?? "quizResult_5")
                         .resizable()
                         .aspectRatio(1.0, contentMode: .fit)
 
@@ -65,7 +67,8 @@ public struct QuizResultView: View {
                     WQButton(style: .double(WQButton.Style.DobuleButtonStyleModel(
                         titles: (leftTitle: "다시 풀기", rightTitle: "결과 공유하기"),
                         leftAction: {
-                        print("다시 풀기 클릭")},
+                            isPresented = false
+                        },
                         rightAction: {
                             isSharePresented = true
                         }
@@ -110,14 +113,14 @@ extension QuizResultView {
         }
     }
 
-    private func descriptionView(me: String, friend: String, myScore: Int) -> some View {
+    private func descriptionView(me: String, friend: String, description: String) -> some View {
         VStack(alignment: .center, spacing: 0) {
             Text("\(me) & \(friend)")
                 .foregroundColor(Color.designSystem(.g4))
                 .font(.pretendard(.regular, size: ._18))
                 .frame(height: 26)
 
-            Text("\(getScoreDescription(myScore))")
+            Text(description)
                 .foregroundColor(Color.designSystem(.g1))
                 .font(.pretendard(.bold, size: ._28))
                 .frame(height: 38)
@@ -161,21 +164,5 @@ extension QuizResultView {
         }
         .frame(height: 56)
         .background(Color.designSystem(.g9))
-    }
-
-    // TODO: - 통신 추가하면 모델 만드는 쪽으로 이동
-    private func getScoreDescription(_ score: Int) -> String {
-        switch score {
-        case 90...100:
-            return "영혼을 공유한 사이"
-        case 70..<90:
-            return "아직 거리가 있는 친구"
-        case 50..<70:
-            return "거리가 머네요"
-        case 30..<50:
-            return "그냥 얼굴만 아는 사이"
-        default:
-            return "엽짚보다도 못한 사이"
-        }
     }
 }

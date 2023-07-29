@@ -12,12 +12,16 @@ public struct QuizResultModel {
     public let myScore: Int
     public let myNickname: String
     public let friendNickname: String
+    public let resultImage: String
+    public let scoreDescription: String
     public var ranking: [RankUserModel]?
     
-    public init(myScore: Int, myNickname: String, friendNickname: String, ranking: [RankUserModel]? = nil) {
+    public init(myScore: Int, myNickname: String, friendNickname: String, resultImage: String, scoreDescription: String, ranking: [RankUserModel]? = nil) {
         self.myScore = myScore
         self.myNickname = myNickname
         self.friendNickname = friendNickname
+        self.resultImage = resultImage
+        self.scoreDescription = scoreDescription
         self.ranking = ranking
     }
 }
