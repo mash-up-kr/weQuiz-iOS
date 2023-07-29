@@ -22,7 +22,7 @@ public struct OnboardingView: View {
                         .init(
                             title: "시작하기",
                             action: {
-                                navigator.path.append(.phoneNumber)
+                                navigator.path.append(.phoneNumber(.signUp))
                             }
                         )
                     )
@@ -32,7 +32,7 @@ public struct OnboardingView: View {
                         .font(.pretendard(.regular, size: ._14))
                         .foregroundColor(.designSystem(.g2))
                     Button("로그인") {
-                        navigator.path.append(.phoneNumber)
+                        navigator.path.append(.phoneNumber(.signIn))
                     }
                     .font(.pretendard(.bold, size: ._14))
                     .foregroundColor(.designSystem(.p1))
@@ -40,24 +40,24 @@ public struct OnboardingView: View {
             }
             .navigationDestination(for: AuthenticationScreen.self) { type in
                 switch type {
-                case .phoneNumber:
-                    phoneNumberInputBuilder()
+                case .phoneNumber(let signType):
+                    phoneNumberInputBuilder(signType)
                         .navigationBarBackButtonHidden()
-                case .verificationCodeInput(let phoneNumber):
-                    verificationCodeInputBuilder(phoneNumber)
+                case let .verificationCodeInput(phoneNumber, signType):
+                    verificationCodeInputBuilder(phoneNumber, signType)
                         .navigationBarBackButtonHidden()
-                case .userInformationInput(let phoneNumber):
+                case let .userInformationInput(phoneNumber):
                     userInformationInputBuilder(phoneNumber)
                         .navigationBarBackButtonHidden()
-                case .signUpFinsh:
-                    SignUpFinishView(navigator: navigator)
+                case .signUpFinsh(let nickname):
+                    SignUpFinishView(navigator: navigator, nickname: nickname)
                         .navigationBarBackButtonHidden()
                 }
             }
         }
     }
     
-    private func phoneNumberInputBuilder() -> PhoneNumberInputView {
+    private func phoneNumberInputBuilder(_ signType: AuthenticationScreen.SignType) -> PhoneNumberInputView {
         let presenter = PhoneNumberInputPresenter(navigator: navigator)
         let interactor = PhoneNumberInputInteractor(
             presenter: presenter,
@@ -65,20 +65,26 @@ public struct OnboardingView: View {
         )
         return PhoneNumberInputView(
             interactor: interactor,
-            presenter: presenter
+            presenter: presenter,
+            signType
         )
     }
     
-    private func verificationCodeInputBuilder(_ phoneNumber: String) -> VerificationCodeInputView {
+    private func verificationCodeInputBuilder(
+        _ phoneNumber: String,
+        _ signType: AuthenticationScreen.SignType
+    ) -> VerificationCodeInputView {
         let presenter = VerificationCodeInputPresenter(navigator: navigator)
         let interactor = VerificationCodeInputInteractor(
             presenter: presenter,
-            authManager: authManager
+            authManager: authManager,
+            authenticationService: AuthenticationService()
         )
         return VerificationCodeInputView(
             interactor: interactor,
             presenter: presenter,
-            phoneNumber: phoneNumber
+            phoneNumber: phoneNumber,
+            signType
         )
     }
     
@@ -86,7 +92,8 @@ public struct OnboardingView: View {
         let presenter = UserInformationInputPresenter(navigator: navigator)
         let interactor = UserInformationInputInteractor(
             presenter: presenter,
-            authManager: authManager
+            authManager: authManager,
+            authenticationService: AuthenticationService()
         )
         return UserInformationInputView(
             interactor: interactor,

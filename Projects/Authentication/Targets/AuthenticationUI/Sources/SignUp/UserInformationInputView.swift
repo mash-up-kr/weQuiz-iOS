@@ -162,7 +162,8 @@ struct UserInformationInputView_Previews: PreviewProvider {
         let presenter = UserInformationInputPresenter(navigator: .shared)
         let interactor = UserInformationInputInteractor(
             presenter: presenter,
-            authManager: .shared
+            authManager: .shared,
+            authenticationService: nil
         )
         UserInformationInputView(
             interactor: interactor,

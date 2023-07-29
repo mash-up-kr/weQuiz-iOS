@@ -20,16 +20,18 @@ public struct VerificationCodeInputView: View {
     
     private var interactor: VerificationCodeInputRequestingLogic?
     private let phoneNumber: String
-    
+    private let signType: AuthenticationScreen.SignType
+
     public init(
         interactor: VerificationCodeInputRequestingLogic,
         presenter: VerificationCodeInputPresenter,
-        phoneNumber: String
+        phoneNumber: String,
+        _ signType: AuthenticationScreen.SignType = .signIn
     ) {
         self.phoneNumber = phoneNumber
         self.interactor = interactor
         self.presenter = presenter
-        
+        self.signType = signType
         self.viewDidLoad()
     }
     
@@ -79,12 +81,15 @@ public struct VerificationCodeInputView: View {
             Spacer()
         }
         .onChange(of: isValid) { isValid in
-            interactor?.reqeust(VerificationCodeInputModel.Request.OnRequestVerifyCode(
-                phoneNumber: phoneNumber,
-                remainTime: presenter.viewModel.remainTime,
-                isValid: isValid,
-                code: input
-            ))
+            Task {
+                await interactor?.reqeust(VerificationCodeInputModel.Request.OnRequestVerifyCode(
+                    type: signType,
+                    phoneNumber: phoneNumber,
+                    remainTime: presenter.viewModel.remainTime,
+                    isValid: isValid,
+                    code: input
+                ))
+            }
         }
         .onChange(of: presenter.viewModel.toastModel, perform: { model in
             switch model {
@@ -101,6 +106,30 @@ public struct VerificationCodeInputView: View {
             }
         })
         .toast(model: $verificationCodeToastModel)
+        .modal(
+            .init(message: "가입되지 않은 휴대폰 번호에요\n회원가입을 도와드릴까요?", doubleButtonStyleModel: .init(
+                titles: ("아니오", "회원가입"),
+                leftAction: {
+                    input = ""
+                    isValid = false
+                    interactor?.reqeust(VerificationCodeInputModel.Request.OnLoad())
+                    presenter.viewModel.modalModel.isPresented = false
+                },
+                rightAction: {
+                    interactor?.reqeust(
+                        VerificationCodeInputModel.Request.OnTouchSignUp(
+                            type: signType,
+                            phoneNumber: phoneNumber
+                        )
+                    )
+                    input = ""
+                    isValid = false
+                    interactor?.reqeust(VerificationCodeInputModel.Request.OnLoad())
+                    presenter.viewModel.modalModel.isPresented = false
+                }
+            )),
+            isPresented: $presenter.viewModel.modalModel.isPresented
+        )
     }
 }
 
@@ -108,21 +137,6 @@ public struct VerificationCodeInputView: View {
 
 extension VerificationCodeInputView {
     private func viewDidLoad() {
-        self.interactor?.reqeust(VerificationCodeInputModel.Request.OnLoad())
-    }
-}
-
-struct VerificationCodeInputView_Previews: PreviewProvider {
-    static var previews: some View {
-        let presenter = VerificationCodeInputPresenter(navigator: .shared)
-        let interactor = VerificationCodeInputInteractor(
-            presenter: presenter,
-            authManager: .shared
-        )
-        return VerificationCodeInputView(
-            interactor: interactor,
-            presenter: presenter,
-            phoneNumber: "12341234"
-        )
+        interactor?.reqeust(VerificationCodeInputModel.Request.OnLoad())
     }
 }

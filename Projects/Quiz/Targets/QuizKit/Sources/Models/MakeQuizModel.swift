@@ -20,11 +20,12 @@ public struct MakeQuizModel {
 
 public struct MakeQuestionModel: Identifiable {
     public var id: UUID = UUID()
-    public var title: String?
+    public var title: String
     public var answers: [MakeAnswerModel]
+    public var duplicatedOption: Bool = false
     public var isExpand: Bool = false
     
-    public init(title: String? = nil) {
+    public init(title: String = "") {
         self.title = title
         self.answers = [MakeAnswerModel(answer: "", isCorrect: false),
                         MakeAnswerModel(answer: "", isCorrect: false)]
