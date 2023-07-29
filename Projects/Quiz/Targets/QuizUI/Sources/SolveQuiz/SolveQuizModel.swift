@@ -22,4 +22,19 @@ enum SolveQuiz {
             let quiz: SolveQuizModel
         }
     }
+    
+    enum LoadQuizResult {
+        struct Request {
+            let quizId: Int
+            let quiz: SolveQuizModel
+        }
+        
+        struct Response {
+            let result: QuizResultResponseModel
+        }
+        
+        struct ViewModel {
+            let result: QuizResultModel
+        }
+    }
 }
