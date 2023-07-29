@@ -25,18 +25,18 @@ public final class AuthenticationService {
 
 extension AuthenticationService: AuthenticationServiceLogic {
     public func join(_ model: JoinRequestModel, _ completion: @escaping ((Result<Void, AuthenticationAPIError>)) -> Void) {
-        networking.request(EmptyResponseModel.self, AuthenticationAPI.join(model)) { result in
+        networking.request(BaseDataResponseModel<EmptyResponseModel>.self, AuthenticationAPI.join(model)) { result in
             switch result {
             case .success:
                 completion(.success(Void()))
-            case .failure:
-                completion(.failure(.fail))
+            case .failure(let error):
+                completion(.failure(.fail(error.message)))
             }
         }
     }
     
     public func user(_ id: String) async -> UserResponseModel? {
-        switch await networking.request(UserResponseModel.self, AuthenticationAPI.user(id)) {
+        switch await networking.request(BaseDataResponseModel<UserResponseModel>.self, AuthenticationAPI.user(id)) {
         case .success(let model):
             return model
         case .failure:

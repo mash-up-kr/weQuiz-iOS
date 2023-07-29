@@ -11,21 +11,21 @@ import Foundation
 import Alamofire
 
 public protocol NetworkingProtocol {
-    func request<T:Decodable>(
-        _ model: T.Type,
+    func request<T: Decodable>(
+        _ model: BaseDataResponseModel<T>.Type,
         _ requestable: NetworkRequestable,
-        _ completion: @escaping ((Result<T?, Error>) -> ())
+        _ completion: @escaping ((Result<T?, Networking.NetworkingError>) -> ())
     )
     
     func request<T: Decodable>(
-        _ model: T.Type,
+        _ model: BaseDataResponseModel<T>.Type,
         _ requestable: NetworkRequestable
-    ) async -> Result<T?, Error>
+    ) async -> Result<T?, Networking.NetworkingError>
     
     func requestMultipartFormData<T:Decodable>(
         _ model: T.Type,
         _ requestable: NetworkRequestable,
-        _ completion: @escaping ((Result<T?, Error>) -> ())
+        _ completion: @escaping ((Result<T?, Networking.NetworkingError>) -> ())
     )
 }
 
@@ -37,15 +37,25 @@ public final class Networking: NetworkingProtocol {
         case wrongRequest
         case wrongEndpoint
         case response(AFError)
+        case errorMessage(String)
+        
+        public var message: String {
+            switch self {
+            case .errorMessage(let message):
+                return message
+            default:
+                return "네트워크 에러입니다."
+            }
+        }
     }
     
     public init() { }
     
-    public func request<T>(
-        _ model: T.Type,
+    public func request<T: Decodable>(
+        _ model: BaseDataResponseModel<T>.Type,
         _ requestable: NetworkRequestable,
-        _ completion: @escaping ((Result<T?, Error>) -> ())
-    ) where T : Decodable {
+        _ completion: @escaping ((Result<T?, Networking.NetworkingError>) -> ())
+    ) {
         do {
             let endpoint = try requestable.endpoint()
             let parameters = requestable.parameters?.requestable ?? [:]
@@ -56,15 +66,18 @@ public final class Networking: NetworkingProtocol {
                 encoding: requestable.encoding.parmeterEncoding,
                 headers: requestable.headers?.httpHeaders ?? .default
             )
-            .validate(statusCode: 200..<300)
             .responseDecodable(
                 of: model.self,
                 completionHandler: { response in
                     switch response.result {
                     case .success(let value):
-                        completion(.success(value))
+                        if value.code != "SUCCESS" {
+                            completion(.failure(NetworkingError.errorMessage(value.message ?? "")))
+                        } else {
+                            completion(.success(value.data))
+                        }
                     case .failure(let error):
-                        completion(.failure(error))
+                        completion(.failure(.response(error)))
                     }
             })
         } catch {
@@ -74,9 +87,9 @@ public final class Networking: NetworkingProtocol {
     }
     
     public func request<T: Decodable>(
-        _ model: T.Type,
+        _ model: BaseDataResponseModel<T>.Type,
         _ requestable: NetworkRequestable
-    ) async -> Result<T?, Error> {
+    ) async -> Result<T?, Networking.NetworkingError> {
         await withCheckedContinuation{ continuation in
             request(model, requestable) {
                 continuation.resume(returning: $0)
@@ -87,7 +100,7 @@ public final class Networking: NetworkingProtocol {
     public func requestMultipartFormData<T>(
         _ model: T.Type,
         _ requestable: NetworkRequestable,
-        _ completion: @escaping ((Result<T?, Error>) -> ())
+        _ completion: @escaping ((Result<T?, Networking.NetworkingError>) -> ())
     ) where T : Decodable {
         do {
             let endPoint = try requestable.endpoint()
@@ -124,7 +137,7 @@ public final class Networking: NetworkingProtocol {
                     case .success(let value):
                         completion(.success(value))
                     case .failure(let error):
-                        completion(.failure(error))
+                        completion(.failure(.response(error)))
                     }
                 }
             )
