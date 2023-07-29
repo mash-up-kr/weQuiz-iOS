@@ -23,8 +23,7 @@ struct AnswerListRow: View {
                 .font(.pretendard(.medium, size: ._16))
             Spacer()
             if listType == .back {
-                Text("\(model.selectivity)%")
-                    .padding(16)
+                Text("\(Int(model.selectivity * 100))%")
             }
         }
         .padding()

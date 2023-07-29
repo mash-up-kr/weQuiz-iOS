@@ -47,7 +47,6 @@ public final class HomeService {
 }
 
 extension HomeService: HomeServiceLogic {
-    
     public func getMyInfo<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
         return Future { [weak self] promise in
             self?.networking.request(BaseDataResponseModel<T>.self, requestable) { result in
@@ -60,7 +59,7 @@ extension HomeService: HomeServiceLogic {
             }
         }.eraseToAnyPublisher()
     }
-    
+
     public func getFriendRank<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
         return Future { [weak self] promise in
             self?.networking.request(BaseDataResponseModel<T>.self, requestable) { result in
@@ -73,7 +72,7 @@ extension HomeService: HomeServiceLogic {
             }
         }.eraseToAnyPublisher()
     }
-    
+
     public func getQuestionGroup<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
         return Future { [weak self] promise in
             self?.networking.request(BaseDataResponseModel<T>.self, requestable) { result in
@@ -86,7 +85,7 @@ extension HomeService: HomeServiceLogic {
             }
         }.eraseToAnyPublisher()
     }
-    
+
     public func getQuestionDetail<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
         return Future { [weak self] promise in
             self?.networking.request(BaseDataResponseModel<T>.self, requestable) { result in
@@ -99,7 +98,7 @@ extension HomeService: HomeServiceLogic {
             }
         }.eraseToAnyPublisher()
     }
-    
+
     public func deleteQuestion<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
         return Future { [weak self] promise in
             self?.networking.request(BaseDataResponseModel<T>.self, requestable) { result in

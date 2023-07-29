@@ -10,10 +10,12 @@ struct HomeApp: App {
         _ = try? DesignSystemKit.Pretendard.registerFonts()
     }
     
+    private let navigator = HomeNavigator.shared
+    
     var body: some Scene {
         WindowGroup {
             Home()
-                .environmentObject(HomeNavigator.shared)
+                .environmentObject(navigator)
         }
     }
 }

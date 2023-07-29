@@ -44,13 +44,13 @@ public struct AnswerModel: Decodable, Identifiable {
     public var optionId: Int
     public var content: String
     public var isCorrect: Bool
-    public var selectivity: Int
+    public var selectivity: Double
     
     public var id: Int {
         return optionId
     }
     
-    public init(optionId: Int, content: String, isCorrect: Bool, selectivity: Int) {
+    public init(optionId: Int, content: String, isCorrect: Bool, selectivity: Double) {
         self.optionId = optionId
         self.content = content
         self.isCorrect = isCorrect

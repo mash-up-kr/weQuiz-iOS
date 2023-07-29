@@ -79,7 +79,7 @@ struct AnswerList: View {
                         ZStack(alignment: .leading) {
                             if listType == .back {
                                 AnswerPercentView(id: answer.rank)
-                                    .frame(width: geometry.size.width * CGFloat(answer.selectivity)/100, height: geometry.size.height)
+                                    .frame(width: geometry.size.width * CGFloat(answer.selectivity), height: geometry.size.height)
                                     .animation(.easeInOut(duration: 1), value: isAnimating)
                                     .onAppear(perform: {
                                         isAnimating = true

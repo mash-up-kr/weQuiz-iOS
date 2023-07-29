@@ -20,12 +20,14 @@ public struct Home: View {
                 self.topBarView
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 0) {
-                        
                         self.profileView
                         self.makeQuestionButton
                         self.friendRankView
                         self.myQuestionView
                     }
+                }
+                .onAppear() {
+                    viewModel.getQuestionGroup(QuestionGroupRequestModel(size: 15, cursor: nil))
                 }
                 .navigationDestination(for: Screen.self) { type in
                     switch type {
@@ -50,7 +52,7 @@ public struct Home: View {
     }
     
     private func questionGroupBuilder() -> some View {
-        QuestionGroupList(naivgator: navigator, viewModel: QuestionGroupViewModel(service: HomeService(Networking())))
+        QuestionGroupList(naivgator: navigator, viewModel: QuestionGroupViewModel(service: HomeService(Networking()), questions: viewModel.questions))
     }
     
     private func questionDetailBuilder(quizId: Int) -> some View {
@@ -58,7 +60,8 @@ public struct Home: View {
     }
     
     private func makeQuizBuilder() -> some View {
-        MakeQuizView()
+        MakeQuizView().configureView()
+            .navigationBarBackButtonHidden()
     }
 }
 
@@ -171,9 +174,6 @@ extension Home {
                         navigator.path.append(.questionDetail(quizId: question.id))
                     }
                 }
-            }
-            .onAppear() {
-                viewModel.getQuestionGroup(QuestionGroupRequestModel(size: 15, cursor: nil))
             }
         }
     }

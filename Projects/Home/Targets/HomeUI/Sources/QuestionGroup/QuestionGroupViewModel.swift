@@ -17,26 +17,9 @@ public class QuestionGroupViewModel: ObservableObject {
     private var service: HomeService
     private var cancellables = Set<AnyCancellable>()
     
-    public init(service: HomeService) {
+    public init(service: HomeService, questions: [SummaryQuestionModel]) {
         self.service = service
-        
-        getQuestionGroup(QuestionGroupRequestModel(size: 15, cursor: nil))
-    }
-    
-    func getQuestionGroup(_ request: QuestionGroupRequestModel) {
-        self.service.getQuestionGroup(QuestionGroupModel.self, HomeAPI.getQuestionGroup(request))
-            .sink(receiveCompletion: { completion in
-                switch completion {
-                case .failure(let error):
-                    print("Error: \(error)")
-                case .finished:
-                    break
-                }
-            }, receiveValue: { [weak self] value in
-                guard let value = value else { return }
-                self?.questions = value.quiz
-            })
-            .store(in: &cancellables)
+        self.questions = questions
     }
     
     func deleteQuestion(_ request: QuestionDeleteRequestModel) {

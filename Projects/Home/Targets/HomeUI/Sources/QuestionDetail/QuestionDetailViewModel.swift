@@ -97,18 +97,24 @@ struct AnswerViewModel: Identifiable {
     var optionId: Int
     var content: String
     var isCorrect: Bool
-    var selectivity: Int
+    var selectivity: Double
     var rank: Int
     
     var id: Int {
         return optionId
     }
     
-    public init(optionId: Int, content: String, isCorrect: Bool, selectivity: Int, rank: Int) {
+    public init(optionId: Int, content: String, isCorrect: Bool, selectivity: Double, rank: Int) {
         self.optionId = optionId
         self.content = content
         self.isCorrect = isCorrect
         self.selectivity = selectivity
         self.rank = rank
+    }
+}
+
+extension Double  {
+    func customDouble(place: Double) -> Double {
+        return (10 * place * self).rounded() / (10 * place)
     }
 }
