@@ -13,10 +13,7 @@ import QuizKit
 public struct QuestionView: View {
     
     @Binding private var model: MakeQuestionModel
-    
-    @State private var questionTitle: String = ""
     @State private var expandedHeight: CGFloat = 250
-    @State private var isMultipleSelection = false
     
     private var onRemove: ((UUID) -> ())?
     private var onExpand: ((UUID) -> ())?
@@ -39,8 +36,8 @@ public struct QuestionView: View {
                             addAnswer()
                         }
                     
-                    MultipleSelectionView(isSelected: $isMultipleSelection)
-                        .onChange(of: isMultipleSelection) { newValue in
+                    MultipleSelectionView(isSelected: $model.duplicatedOption)
+                        .onChange(of: model.duplicatedOption) { newValue in
                             if newValue == false {
                                 deselectAllList()
                             }
@@ -73,7 +70,7 @@ public struct QuestionView: View {
     }
     
     private func questionTextField() -> some View {
-            TextField("", text: $questionTitle, prompt: Text("문제 입력")
+        TextField("", text: $model.title, prompt: Text("문제 입력")
                 .font(.pretendard(.medium, size: ._18))
                 .foregroundColor(.designSystem(.g4))
             )
@@ -97,7 +94,7 @@ public struct QuestionView: View {
             AnswerView(index: index,
                             answer: $model.answers[index],
                             isCorrectAnswer: { isCorrect in
-                if isCorrect == true && $isMultipleSelection.wrappedValue == false {
+                if isCorrect == true && model.duplicatedOption == false {
                     deselectAllList()
                     model.answers[index].isCorrect = true
                 }

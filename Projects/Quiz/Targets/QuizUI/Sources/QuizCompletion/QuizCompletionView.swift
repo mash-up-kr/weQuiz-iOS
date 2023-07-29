@@ -14,8 +14,11 @@ public struct QuizCompletionView: View {
     
     @Environment(\.presentationMode) var presentation
     @State var isSharePresented = false
+    private var quizId: Int
     
-    public init() {}
+    public init(quizId: Int) {
+        self.quizId = quizId
+    }
     
     public var body: some View {
         ZStack {
@@ -68,6 +71,6 @@ public struct QuizCompletionView: View {
 
 struct QuizCompletionView_Previews: PreviewProvider {
     static var previews: some View {
-        QuizCompletionView()
+        QuizCompletionView(quizId: 1)
     }
 }

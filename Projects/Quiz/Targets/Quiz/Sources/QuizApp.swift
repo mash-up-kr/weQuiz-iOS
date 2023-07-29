@@ -12,7 +12,7 @@ struct QuizApp: App {
     
     var body: some Scene {
         WindowGroup {
-            MakeQuizView()
+            MakeQuizView().configureView()
         }
     }
 }
