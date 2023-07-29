@@ -89,9 +89,3 @@ extension QuestionDetail {
         .listStyle(.plain)
     }
 }
-
-//struct QuestionDetailView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        QuestionDetail(quizInfo: .constant(questionDetailSample.quizInfo), quizStatistic: .constant(questionDetailSample.statistic))
-//    }
-//}

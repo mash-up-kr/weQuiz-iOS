@@ -14,7 +14,7 @@ public class HomeViewModel: ObservableObject {
     public static let `default`: HomeViewModel = .init(service: HomeService())
     // output
     @Published var questions: [SummaryQuestionModel] = []
-    @Published var friendsRank: [FriendModel] = []
+    @Published var friendsRank: [RankUserModel] = []
     @Published var myInfo: MyInfoModel = MyInfoModel(id: 0, image: "", nickname: "", contents: "")
 
     @Published var detailQuizInfo: QuizInfoModel = QuizInfoModel(quizId: 0, quizTitle: "", questions: [])
@@ -40,7 +40,11 @@ public class HomeViewModel: ObservableObject {
         
         friendRankGroup
             .sink {
-                self.friendsRank = $0.rankings
+                var viewModel: [RankUserModel] = []
+                for (index, content) in $0.rankings.enumerated() {
+                    viewModel.append(RankUserModel(id: content.userInfoDto.id, name: content.userInfoDto.name, rank: (index+1), score: content.score))
+                }
+                self.friendsRank = viewModel
             }
             .store(in: &cancellables)
         
@@ -139,5 +143,19 @@ public class HomeViewModel: ObservableObject {
                 print("delete 완료")
             })
             .store(in: &cancellables)
+    }
+}
+
+struct RankUserModel: Identifiable {
+    public let id: Int
+    public let name: String
+    public let rank: Int
+    public let score: Int
+    
+    public init(id: Int, name: String, rank: Int, score: Int) {
+        self.id = id
+        self.name = name
+        self.rank = rank
+        self.score = score
     }
 }

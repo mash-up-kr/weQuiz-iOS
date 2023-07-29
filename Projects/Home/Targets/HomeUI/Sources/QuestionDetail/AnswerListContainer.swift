@@ -18,7 +18,7 @@ enum AnswerListType {
 
 struct AnswerListContainer: View {
 
-    var question: QuestionModel
+    var question: QuestionViewModel
     var questionsCount: Int
     var questionId: Int
     
@@ -58,7 +58,7 @@ extension AnswerListContainer {
 struct AnswerList: View {
     
     var listType: AnswerListType
-    var question: QuestionModel
+    var question: QuestionViewModel
     var questionsCount: Int
     @Binding var degree: Double
     
@@ -66,7 +66,7 @@ struct AnswerList: View {
         ScrollView {
             LazyVStack(alignment: .leading) {
                 HStack {
-                    Text("\(question.id). \(question.questionTitle)")
+                    Text("\(question.rank). \(question.questionTitle)")
                         .font(.pretendard(.medium, size: ._18))
                         .foregroundColor(.designSystem(.g2))
                 }
@@ -75,7 +75,7 @@ struct AnswerList: View {
                     GeometryReader { geometry in
                         ZStack(alignment: .leading) {
                             if listType == .back {
-                                AnswerPercentView(id: answer.optionId)
+                                AnswerPercentView(id: answer.rank)
                                     .frame(width: geometry.size.width * CGFloat(answer.selectivity), height: geometry.size.height)
                             }
                             AnswerListRow(model: answer)
@@ -88,7 +88,7 @@ struct AnswerList: View {
                     .frame(height: 56)
                 }
                 HStack {
-                    Text("\(question.id)/\(questionsCount)")
+                    Text("\(question.rank)/\(questionsCount)")
                     Spacer()
                     Button(action: {
                         print("버튼을 눌러보세요")

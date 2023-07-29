@@ -12,12 +12,12 @@ import HomeKit
 
 struct AnswerListRow: View {
     
-    var model: AnswerModel
+    var model: AnswerViewModel
     
     var body: some View {
         
         HStack {
-            AlphabetCircleView(answerNumber: model.id)
+            AlphabetCircleView(answerNumber: model.rank)
             Text(model.content)
                 .font(.pretendard(.medium, size: ._16))
             Spacer()

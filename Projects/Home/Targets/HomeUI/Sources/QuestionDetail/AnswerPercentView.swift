@@ -19,12 +19,6 @@ struct AnswerPercentView: View {
     }
 }
 
-struct AnswerPercentView_Previews: PreviewProvider {
-    static var previews: some View {
-        AnswerPercentView(id: 1)
-    }
-}
-
 enum answerNum: Int {
     case first = 0
     case second

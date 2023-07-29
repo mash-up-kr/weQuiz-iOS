@@ -132,8 +132,8 @@ extension Home {
                     navigator.path.append(.friendRankView)
                 }
             
-            ForEach(viewModel.friendsRank.indices.prefix(3)) { index in
-                FriendsRow(friend: viewModel.friendsRank[index], priority: index+1)
+            ForEach($viewModel.friendsRank.prefix(3)) { friend in
+                FriendsRow(friend: friend)
             }
         }
     }
@@ -149,24 +149,6 @@ extension Home {
                 .font(.pretendard(.regular, size: ._14))
         }
     }
-    
-    //    private var myQuestionList: some View {
-    //        ScrollView {
-    //            LazyVStack(spacing: 12) {
-    //                CustomHeader(title: "내가 낸 문제지 리스트", nextView: AnyView(QuestionGroupList(questions: $viewModel.questions)))
-    //
-    //                // 여기서 QuestionDetailView로 넘어가기 전에 통신을 통해서 DetailView 데이터를 받아와서 그려줘야 한다.
-    //                ForEach($viewModel.questions.prefix(4)) { question in
-    //                    NavigationLink(destination: QuestionDetail(quizInfo: .constant(questionDetailSample.quizInfo), quizStatistic: .constant(questionDetailSample.statistic), onRemove: { index in
-    //                        viewModel.questions.removeAll { $0.id == index }
-    //                    })) {
-    //                        QuestionGroupRow(question: question)
-    //                    }
-    //                }
-    //            }
-    //        }
-    //    }
-    
     
     private var myQuestionList: some View {
         ScrollView {
@@ -184,6 +166,9 @@ extension Home {
                         navigator.path.append(.questionDetail(quizId: question.id))
                     }
                 }
+            }
+            .onAppear() {
+                viewModel.getQuestionGroup(QuestionGroupRequestModel(size: 15, cursor: nil))
             }
         }
     }

@@ -13,7 +13,7 @@ import HomeKit
 struct FriendsList: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject var viewModel: FriendRankViewModel
-    
+
     private let naivgator: HomeNavigator
     
     public init(navigator: HomeNavigator, viewModel: FriendRankViewModel) {
@@ -43,8 +43,11 @@ extension FriendsList {
     private var listView: some View {
         ScrollView {
             LazyVStack(spacing: 12) {
-                ForEach(viewModel.friendsRank.indices) { index in
-                    FriendsRow(friend: viewModel.friendsRank[index], priority: index+1)
+//                ForEach($viewModel.friendsRank.indices) { index in
+//                    FriendsRow(friend: $viewModel.friendsRank[index], priority: index+1)
+//                }
+                ForEach($viewModel.friendsRank) { rank in
+                    FriendsRow(friend: rank)
                 }
             }
             .padding(20)

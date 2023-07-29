@@ -13,6 +13,13 @@ public struct FriendRankGroupModel {
     public var cursorUserId: Int?
     public var cursorScore: Int?
     public var rankings: [FriendModel]
+    
+    public init(hasNext: Bool, cursorUserId: Int? = nil, cursorScore: Int? = nil, rankings: [FriendModel]) {
+        self.hasNext = hasNext
+        self.cursorUserId = cursorUserId
+        self.cursorScore = cursorScore
+        self.rankings = rankings
+    }
 }
 
 public struct FriendModel {
@@ -21,11 +28,21 @@ public struct FriendModel {
     }
     public var userInfoDto: UserInfoModel
     public var score: Int
+    
+    public init(userInfoDto: UserInfoModel, score: Int) {
+        self.userInfoDto = userInfoDto
+        self.score = score
+    }
 }
 
 public struct UserInfoModel {
     public var id: Int
     public var name: String
+    
+    public init(id: Int, name: String) {
+        self.id = id
+        self.name = name
+    }
 }
 
 extension FriendRankGroupModel: Decodable { }

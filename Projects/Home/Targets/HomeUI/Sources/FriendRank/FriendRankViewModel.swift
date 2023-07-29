@@ -12,17 +12,27 @@ import HomeKit
 
 public class FriendRankViewModel: ObservableObject {
     
-    public static let `default`: FriendRankViewModel = .init(service: HomeService())
-    
-    @Published var friendsRank: [FriendModel] = []
+    @Published var friendsRank: [RankUserModel] = []
     
     private let service: HomeService
+    private var friendRankGroup = PassthroughSubject<FriendRankGroupModel, Never>()
     private var cancellables = Set<AnyCancellable>()
     
     public init(service: HomeService) {
         self.service = service
         
+        friendRankGroup
+            .sink {
+                var viewModel: [RankUserModel] = []
+                for (index, content) in $0.rankings.enumerated() {
+                    viewModel.append(RankUserModel(id: content.userInfoDto.id, name: content.userInfoDto.name, rank: (index+1), score: content.score))
+                }
+                self.friendsRank = viewModel
+            }
+            .store(in: &cancellables)
+        
         getFriendRank(FriendRankRequestModel(cursorScore: nil, cursorUserId: nil))
+        
     }
     
     
@@ -37,7 +47,7 @@ public class FriendRankViewModel: ObservableObject {
                 }
             }, receiveValue: { [weak self] value in
                 guard let value = value else { return }
-                self?.friendsRank = value.rankings
+                self?.friendRankGroup.send(value)
             })
             .store(in: &cancellables)
     }
