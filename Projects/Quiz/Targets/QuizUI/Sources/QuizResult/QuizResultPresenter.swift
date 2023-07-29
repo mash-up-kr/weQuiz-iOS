@@ -6,19 +6,22 @@
 //  Copyright © 2023 ommaya.io. All rights reserved.
 //
 import Foundation
+import QuizKit
 
 protocol QuizResultPresentationLogic {
-    func present(response: QuizResult.LoadQuizResult.Response)
+    func presentRanking(response: QuizResult.LoadRanking.Response)
 }
 
 final class QuizResultPresenter {
-    typealias Response = QuizResult.LoadQuizResult.Response
-    typealias ViewModel = QuizResult.LoadQuizResult.ViewModel
     var view: QuizResultDisplayLogic?
 }
 
 extension QuizResultPresenter: QuizResultPresentationLogic {
-    func present(response: Response) {
-    //    view?.display(viewModel: viewModel)
+    func presentRanking(response: QuizResult.LoadRanking.Response) {
+        var viewModel: [RankUserModel] = []
+        for (idx, rank) in response.result.rankings.enumerated() {
+            viewModel.append(.init(id: rank.userInfoDto.id, name: rank.userInfoDto.name, rank: (idx + 1), score: rank.score))
+        }
+        view?.displayRanking(viewModel: .init(rank: viewModel))
     }
 }

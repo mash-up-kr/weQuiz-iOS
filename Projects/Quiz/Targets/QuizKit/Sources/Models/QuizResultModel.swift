@@ -12,7 +12,7 @@ public struct QuizResultModel {
     public let myScore: Int
     public let myNickname: String
     public let friendNickname: String
-    public let ranking: [RankUserModel]?
+    public var ranking: [RankUserModel]?
     
     public init(myScore: Int, myNickname: String, friendNickname: String, ranking: [RankUserModel]? = nil) {
         self.myScore = myScore

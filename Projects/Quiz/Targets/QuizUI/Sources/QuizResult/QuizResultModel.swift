@@ -6,13 +6,20 @@
 //  Copyright © 2023 ommaya.io. All rights reserved.
 //
 import Foundation
+import QuizKit
 
 enum QuizResult {
-    enum LoadQuizResult {
-        struct Request {}
+    enum LoadRanking {
+        struct Request {
+            let quizId: Int
+        }
         
-        struct Response {}
+        struct Response {
+            let result: GetQuizRankResponseModel
+        }
         
-        struct ViewModel {}
+        struct ViewModel {
+            let rank: [RankUserModel]
+        }
     }
 }

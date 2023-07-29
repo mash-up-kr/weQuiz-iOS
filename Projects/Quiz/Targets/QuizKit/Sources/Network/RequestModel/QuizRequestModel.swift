@@ -61,4 +61,9 @@ public struct QuizResultRequestModel: Codable {
 public struct GetQuizRankRequestModel: Codable {
     public let size: Int
     public let quizAnswerCursorId: Int?
+    
+    public init(size: Int, quizAnswerCursorId: Int? = nil) {
+        self.size = size
+        self.quizAnswerCursorId = quizAnswerCursorId
+    }
 }

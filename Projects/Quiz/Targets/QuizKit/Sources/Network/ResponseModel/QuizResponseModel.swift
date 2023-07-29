@@ -84,12 +84,10 @@ public struct GetQuizRankResponseModel: Decodable {
     public struct RankModel: Decodable {
         public let userInfoDto: User
         public let score: Int
-        public let quizAnswerId: Int
 
-        public init(userInfoDto: User, score: Int, quizAnswerId: Int) {
+        public init(userInfoDto: User, score: Int) {
             self.userInfoDto = userInfoDto
             self.score = score
-            self.quizAnswerId = quizAnswerId
         }
     }
 }
