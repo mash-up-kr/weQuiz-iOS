@@ -22,11 +22,9 @@ struct QuizResultRankView: View {
         HStack(alignment: .center) {
             
             ZStack {
-                // TODO: 메달 아이콘으로 수정
-                Image(Icon.Checkmark.falseFill20)
-                    .resizable()
-                .frame(width: 24, height: 24)
-                .hidden(model.rank > 3)
+                medalImage()
+                    .frame(width: 24, height: 24)
+                    .hidden(model.rank > 3)
                 
                 Text("\(model.rank)")
                     .font(.pretendard(.bold, size: ._18))
@@ -51,6 +49,17 @@ struct QuizResultRankView: View {
         .padding(.horizontal, 16)
         .frame(height: 58)
         
+    }
+    
+    private func medalImage() -> some View {
+        switch model.rank {
+        case 1:
+            return Image(Icon.Medal.gold)
+        case 2:
+            return Image(Icon.Medal.silver)
+        default:
+            return Image(Icon.Medal.bronze)
+        }
     }
 }
 

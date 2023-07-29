@@ -40,16 +40,30 @@ public struct MakeQuizRequestModel: Codable {
     }
 }
 
-public struct GetQuizRequestModel: Codable {
-    public let answers: [AnswerModel]
+public struct QuizResultRequestModel: Codable {
+    public var answers: [AnswerModel]
+    
+    public init(answers: [AnswerModel]?) {
+        self.answers = answers ?? []
+    }
     
     public struct AnswerModel: Codable {
-        public let questionId: Int
-        public let optionIds: [Int]
+        public var questionId: Int
+        public var optionIds: [Int]
+        
+        public init(questionId: Int, optionIds: [Int]?) {
+            self.questionId = questionId
+            self.optionIds = optionIds ?? []
+        }
     }
 }
 
 public struct GetQuizRankRequestModel: Codable {
     public let size: Int
     public let quizAnswerCursorId: Int?
+    
+    public init(size: Int, quizAnswerCursorId: Int? = nil) {
+        self.size = size
+        self.quizAnswerCursorId = quizAnswerCursorId
+    }
 }
