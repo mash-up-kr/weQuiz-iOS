@@ -22,7 +22,7 @@ public class FriendRankViewModel: ObservableObject {
     public init(service: HomeService) {
         self.service = service
         
-        getFriendRank(FriendRankRequestModel(quizAnswerCursorId: nil))
+        getFriendRank(FriendRankRequestModel(cursorScore: nil, cursorUserId: nil))
     }
     
     

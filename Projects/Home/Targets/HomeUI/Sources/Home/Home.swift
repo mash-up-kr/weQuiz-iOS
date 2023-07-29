@@ -37,12 +37,6 @@ public struct Home: View {
                     makeQuizBuilder()
                 }
             }
-            //            .navigationDestination(isPresented: $isPresentedMakeQuiz) {
-            //                MakeQuizView()
-            //            }
-            //            .navigationDestination(isPresented: $isPresentedQuestionDetail) {
-            //                QuestionDetail(viewModel: QuestionDetailViewModel(quizId: question.id, service: HomeService(Networking())))
-            //            }
         })
         .preferredColorScheme(.dark)
     }

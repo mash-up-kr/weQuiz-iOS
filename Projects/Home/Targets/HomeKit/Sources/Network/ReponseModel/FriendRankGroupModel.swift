@@ -10,7 +10,8 @@ import Foundation
 
 public struct FriendRankGroupModel {
     public var hasNext: Bool
-    public var cursorQuizAnswerId: Int?
+    public var cursorUserId: Int?
+    public var cursorScore: Int?
     public var rankings: [FriendModel]
 }
 
@@ -20,7 +21,6 @@ public struct FriendModel {
     }
     public var userInfoDto: UserInfoModel
     public var score: Int
-    public var quizAnswerId: Int
 }
 
 public struct UserInfoModel {
@@ -38,11 +38,3 @@ extension FriendModel: Identifiable { }
 extension UserInfoModel: Decodable { }
 extension UserInfoModel: Identifiable { }
 extension UserInfoModel: Equatable { }
-
-public var friendsRankSample = FriendRankGroupModel(hasNext: true, cursorQuizAnswerId: 0,
-                                             rankings: [FriendModel(userInfoDto: UserInfoModel(id: 0, name: "이름1"), score: 100, quizAnswerId: 0),
-                                                        FriendModel(userInfoDto: UserInfoModel(id: 1, name: "이름2"), score: 90, quizAnswerId: 0),
-                                                        FriendModel(userInfoDto: UserInfoModel(id: 2, name: "이름3"), score: 80, quizAnswerId: 0),
-                                                        FriendModel(userInfoDto: UserInfoModel(id: 3, name: "이름4"), score: 70, quizAnswerId: 0),
-                                                        FriendModel(userInfoDto: UserInfoModel(id: 4, name: "이름5"), score: 60, quizAnswerId: 0),
-                              ])

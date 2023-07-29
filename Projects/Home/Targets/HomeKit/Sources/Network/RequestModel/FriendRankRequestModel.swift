@@ -10,10 +10,12 @@ import Foundation
 
 public struct FriendRankRequestModel: Codable {
     public var size: Int
-    public var quizAnswerCursorId: Int?
+    public var cursorScore: Int?
+    public var cursorUserId: Int?
     
-    public init(size: Int = 15, quizAnswerCursorId: Int?) {
+    public init(size: Int = 15, cursorScore: Int?, cursorUserId: Int?) {
         self.size = size
-        self.quizAnswerCursorId = quizAnswerCursorId
+        self.cursorScore = cursorScore
+        self.cursorUserId = cursorUserId
     }
 }

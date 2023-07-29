@@ -50,7 +50,7 @@ extension HomeService: HomeServiceLogic {
     
     public func getMyInfo<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
         return Future { [weak self] promise in
-            self?.networking.request(T.self, requestable) { result in
+            self?.networking.request(BaseDataResponseModel<T>.self, requestable) { result in
                 switch result {
                 case .success(let success):
                     promise(.success(success))
@@ -63,7 +63,7 @@ extension HomeService: HomeServiceLogic {
     
     public func getFriendRank<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
         return Future { [weak self] promise in
-            self?.networking.request(T.self, requestable) { result in
+            self?.networking.request(BaseDataResponseModel<T>.self, requestable) { result in
                 switch result {
                 case .success(let success):
                     promise(.success(success))
@@ -76,7 +76,7 @@ extension HomeService: HomeServiceLogic {
     
     public func getQuestionGroup<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
         return Future { [weak self] promise in
-            self?.networking.request(T.self, requestable) { result in
+            self?.networking.request(BaseDataResponseModel<T>.self, requestable) { result in
                 switch result {
                 case .success(let success):
                     promise(.success(success))
@@ -89,7 +89,7 @@ extension HomeService: HomeServiceLogic {
     
     public func getQuestionDetail<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
         return Future { [weak self] promise in
-            self?.networking.request(T.self, requestable) { result in
+            self?.networking.request(BaseDataResponseModel<T>.self, requestable) { result in
                 switch result {
                 case .success(let success):
                     promise(.success(success))
@@ -102,7 +102,7 @@ extension HomeService: HomeServiceLogic {
     
     public func deleteQuestion<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
         return Future { [weak self] promise in
-            self?.networking.request(T.self, requestable) { result in
+            self?.networking.request(BaseDataResponseModel<T>.self, requestable) { result in
                 switch result {
                 case .success(let success):
                     promise(.success(success))

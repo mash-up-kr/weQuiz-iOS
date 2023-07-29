@@ -57,7 +57,7 @@ public class HomeViewModel: ObservableObject {
             .store(in: &cancellables)
         
         self.getMyInfo()
-        self.getFriendRank(FriendRankRequestModel(size: 10, quizAnswerCursorId: nil))
+        self.getFriendRank(FriendRankRequestModel(cursorScore: nil, cursorUserId: nil))
         self.getQuestionGroup(QuestionGroupRequestModel(size: 15, cursor: nil))
     }
     

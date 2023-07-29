@@ -47,7 +47,7 @@ extension FriendsRow {
     
     private var uniqueNumView: some View {
         ZStack {
-            Text("#" + "\(self.friend.quizAnswerId)")
+            Text("#" + "\(self.friend.id)")
                 .padding(.all, 4)
                 .font(.pretendard(.regular, size: ._10))
                 .foregroundColor(.designSystem(.g1))
@@ -76,7 +76,7 @@ extension FriendsRow {
                 .foregroundColor(.designSystem(.g1))
             
             ZStack {
-                Text("#" + "\(self.friend.quizAnswerId)")
+                Text("#" + "\(self.friend.id)")
                     .padding(.all, 4)
                     .font(.pretendard(.regular, size: ._10))
                     .foregroundColor(.designSystem(.g1))
@@ -105,4 +105,3 @@ extension FriendsRow {
         }
     }
 }
-

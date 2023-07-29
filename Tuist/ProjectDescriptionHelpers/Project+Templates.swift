@@ -392,7 +392,6 @@ extension Project {
             name: "QuizUI",
             additionalDependencies: [
                 .project(target: "DesignSystemKit", path: .relativeToRoot("Projects/DesignSystem")),
-                .project(target: "HomeUI", path: .relativeToRoot("Projects/Home")),
                 .project(target: "QuizKit", path: .relativeToRoot("Projects/Quiz"))
             ]
         )
