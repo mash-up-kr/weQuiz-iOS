@@ -28,4 +28,18 @@ final class SolveQuizDataStore: ObservableObject {
         self.currentIndex = 0
         self.solvedQuiz = self.quiz
     }
+    
+    public func unselectAnswer() {
+        for index in 0..<solvedQuiz.questions[currentIndex].answers.count {
+            self.solvedQuiz.questions[currentIndex].answers[index].isSelected = false
+        }
+    }
+    
+    public func goToPreviousQuestion() {
+        if currentIndex > 0 {
+            currentIndex -= 1
+            unselectAnswer()
+        }
+    }
+
 }

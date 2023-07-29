@@ -35,8 +35,10 @@ public struct SolveQuizView: View {
                               bttons: [
                                 .init(icon: Icon.Siren.mono, action: {
                             print("신고하기 버튼 클릭")
+                        })], action: {
+                            self.selectedCount = 0
+                            viewModel.goToPreviousQuestion()
                         })
-                        ])
                     ))
 
                     WQGradientProgressBar(
