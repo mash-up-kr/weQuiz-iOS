@@ -41,6 +41,18 @@
                   <FileRef
                      location = "group:Alamofire/Alamofire.xcodeproj">
                   </FileRef>
+                  <FileRef
+                     location = "group:GoogleUtilities/GoogleUtilities.xcodeproj">
+                  </FileRef>
+                  <FileRef
+                     location = "group:firebase-ios-sdk/Firebase.xcodeproj">
+                  </FileRef>
+                  <FileRef
+                     location = "group:gtm-session-fetcher/GTMSessionFetcher.xcodeproj">
+                  </FileRef>
+                  <FileRef
+                     location = "group:promises/Promises.xcodeproj">
+                  </FileRef>
                </Group>
             </Group>
          </Group>

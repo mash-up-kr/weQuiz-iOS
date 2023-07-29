@@ -14,7 +14,8 @@ let dependencies = Dependencies(swiftPackageManager: SwiftPackageManagerDependen
 extension SwiftPackageManagerDependencies {
     public static var dependencies: SwiftPackageManagerDependencies {
         .init([
-            .remote(url: "https://github.com/Alamofire/Alamofire.git", requirement: .exact("5.6.1"))
+            .remote(url: "https://github.com/Alamofire/Alamofire.git", requirement: .exact("5.6.1")),
+            .remote(url: "https://github.com/firebase/firebase-ios-sdk", requirement: .exact("10.10.0"))
         ])
     }
 }

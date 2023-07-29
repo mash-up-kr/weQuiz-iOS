@@ -8,66 +8,88 @@
 
 import SwiftUI
 
+import AuthenticationKit
 import DesignSystemKit
 
 public struct UserInformationInputView: View {
-    @StateObject private var router: AuthenticationRouter
+    @ObservedObject private var presenter: UserInformationInputPresenter
     
     @State private var nickname: String = ""
     @State private var isNicknameValid: Bool = false
     @State private var introduction: String = ""
     @State private var isIntroductionValid: Bool = false
+    @State private var userInformationInputToastModel: WQToast.Model?
     
-    init(router: AuthenticationRouter) {
-        self._router = StateObject(wrappedValue: router)
+    private let interactor: UserInformationInputRequestingLogic?
+    private let phoneNumber: String
+    
+    public init(
+        interactor: UserInformationInputRequestingLogic,
+        presenter: UserInformationInputPresenter,
+        phoneNumber: String
+    ) {
+        self.presenter = presenter
+        self.interactor = interactor
+        self.phoneNumber = phoneNumber
     }
     
     public var body: some View {
-        RoutingView(router: router) {
+        VStack(alignment: .leading, spacing: .zero) {
+            WQTopBar(style: .navigation(
+                .init(
+                    title: "",
+                    action: {
+                        interactor?.request(UserInformationInputModel.Request.OnTouchNavigationBack())
+                    }
+                )
+            ))
             VStack(alignment: .leading, spacing: .zero) {
-                WQTopBar(style: .navigation(
+                Text("{서비스명}에서 사용 할\n닉네임을 입력해 주세요")
+                    .font(.pretendard(.bold, size: ._24))
+                    .foregroundColor(.white)
+                Spacer()
+                    .frame(height: 36)
+                Input(
+                    nickname: $nickname,
+                    isNicknameValid: $isNicknameValid,
+                    introduction: $introduction,
+                    isIntroductionValid: $isIntroductionValid
+                )
+            }
+            .padding(
+                .init(
+                    top: 20,
+                    leading: 20,
+                    bottom: .zero,
+                    trailing: 20
+                )
+            )
+            Spacer()
+            WQButton(
+                style: .fullRadiusSingle(
                     .init(
-                        title: "",
+                        title: "다음",
+                        isEnable: $isNicknameValid,
                         action: {
-                            router.navigateBack()
+                            interactor?.request(UserInformationInputModel.Request.OnRequestSignUp(
+                                phone: phoneNumber,
+                                nickname: nickname,
+                                description: introduction
+                            ))
                         }
                     )
-                ))
-                VStack(alignment: .leading, spacing: .zero) {
-                    Text("{서비스명}에서 사용 할\n닉네임을 입력해 주세요")
-                        .font(.pretendard(.bold, size: ._24))
-                        .foregroundColor(.white)
-                    Spacer()
-                        .frame(height: 36)
-                    Input(
-                        nickname: $nickname,
-                        isNicknameValid: $isNicknameValid,
-                        introduction: $introduction,
-                        isIntroductionValid: $isIntroductionValid
-                    )
-                    Spacer()
-                    WQButton(
-                        style: .fullRadiusSingle(
-                            .init(
-                                title: "다음",
-                                action: {
-                                    // TODO: 인증번호 입력 화면 진입
-                                }
-                            )
-                        )
-                    )
-                }
-                .padding(
-                    .init(
-                        top: 20,
-                        leading: 20,
-                        bottom: .zero,
-                        trailing: 20
-                    )
                 )
-                Spacer()
+            )
+        }
+        .onChange(of: presenter.viewModel.toastModel) { model in
+            switch model {
+            case .signUpFailed:
+                userInformationInputToastModel = .init(status: .warning, text: "회원가입에 실패하였습니다. 개발자에게 문의해주세요")
+            case .unknown:
+                userInformationInputToastModel = .init(status: .warning, text: "잠시 후 다시 시도해 주세요")
             }
         }
+        .toast(model: $userInformationInputToastModel)
     }
     
     private struct Input: View {
@@ -137,6 +159,16 @@ public struct UserInformationInputView: View {
 
 struct UserInformationInputView_Previews: PreviewProvider {
     static var previews: some View {
-        UserInformationInputView(router: .init(isPresented: .constant(.userInformationInput)))
+        let presenter = UserInformationInputPresenter(navigator: .shared)
+        let interactor = UserInformationInputInteractor(
+            presenter: presenter,
+            authManager: .shared,
+            authenticationService: nil
+        )
+        UserInformationInputView(
+            interactor: interactor,
+            presenter: presenter,
+            phoneNumber: "12341234"
+        )
     }
 }
