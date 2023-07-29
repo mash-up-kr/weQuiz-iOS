@@ -6,11 +6,13 @@
 //  Copyright © 2023 ommaya.io. All rights reserved.
 //
 import SwiftUI
+import QuizKit
+import CoreKit
 
 extension QuizResultView {
-    func configureView() -> some View {
+    public func configureView() -> some View {
         var view = self
-        let interactor = QuizResultInteractor()
+        let interactor = QuizResultInteractor(service: QuizService(Networking()))
         let presenter = QuizResultPresenter()
         view.interactor = interactor
         interactor.presenter = presenter

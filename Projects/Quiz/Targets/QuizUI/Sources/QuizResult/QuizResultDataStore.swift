@@ -9,6 +9,7 @@ import Foundation
 import QuizKit
 
 final class QuizResultDataStore: ObservableObject {
+    @Published var quizId: Int?
     @Published var result: QuizResultModel?
     
     public init() {}

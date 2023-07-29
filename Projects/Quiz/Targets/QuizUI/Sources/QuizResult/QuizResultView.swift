@@ -10,17 +10,18 @@ import QuizKit
 import DesignSystemKit
 
 protocol QuizResultDisplayLogic {
-    func display(viewModel: QuizResult.LoadQuizResult.ViewModel)
+    func displayRanking(viewModel: QuizResult.LoadRanking.ViewModel)
 }
 
 public struct QuizResultView: View {
     var interactor: QuizResultBusinessLogic?
     
-    @ObservedObject var model = QuizResultDataStore.init()
+    @ObservedObject var model = QuizResultDataStore()
 
     @State private var isSharePresented = false
     
-    public init(_ quizResult:QuizResultModel) {
+    public init(quizId: Int,_ quizResult: QuizResultModel) {
+        self.model.quizId = quizId
         self.model.result = quizResult
     }
     
@@ -81,11 +82,17 @@ public struct QuizResultView: View {
             }
         }
         .background(Color.designSystem(.g9))
+        .task {
+            if let quizId = model.quizId {
+                interactor?.requestRanking(request: .init(quizId: quizId))
+            }
+        }
     }
 }
 extension QuizResultView: QuizResultDisplayLogic {
-    func display(viewModel: QuizResult.LoadQuizResult.ViewModel) {}
-    func fetch() {}
+    func displayRanking(viewModel: QuizResult.LoadRanking.ViewModel) {
+        self.model.result?.ranking = viewModel.rank
+    }
 }
 extension QuizResultView {
 
@@ -130,14 +137,12 @@ extension QuizResultView {
                 .fill(Color.designSystem(.g7))
                 .frame(height: 8)
 
-            // TODO: - 데이터 받아서 수정
             if let ranking = model.result?.ranking {
-                ForEach(ranking, id: \.id) { user in
+                ForEach(ranking, id: \.rank) { user in
                     QuizResultRankView(user)
                 }
                 .padding(.horizontal, 20)
             }
-
         }
     }
 
