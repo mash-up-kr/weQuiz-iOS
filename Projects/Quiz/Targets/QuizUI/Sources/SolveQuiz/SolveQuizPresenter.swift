@@ -27,7 +27,7 @@ extension SolveQuizPresenter: SolveQuizPresentationLogic {
         var viewModel = SolveQuizModel.init()
         viewModel.title = response.quiz.title
         for question in response.quiz.questions {
-            var questionModel = SolveQuestionModel(title: question.title, answerCount: question.answerCounts, answers: [])
+            var questionModel = SolveQuestionModel(title: question.title, answerCount: question.answerCounts, score: question.score, answers: [])
             for answer in question.options {
                 questionModel.answers.append(.init(answer: answer.content, isCorrect: answer.isCorrect))
             }

@@ -22,11 +22,13 @@ public struct SolveQuestionModel: Identifiable {
     public var id: UUID = UUID()
     public var title: String
     public var answerCount: Int
+    public var score: Int
     public var answers: [SolveAnswerModel]
     
-    public init(title: String, answerCount: Int, answers: [SolveAnswerModel]) {
+    public init(title: String, answerCount: Int, score: Int, answers: [SolveAnswerModel]) {
         self.title = title
         self.answerCount = answerCount
+        self.score = score
         self.answers = answers
     }
 }

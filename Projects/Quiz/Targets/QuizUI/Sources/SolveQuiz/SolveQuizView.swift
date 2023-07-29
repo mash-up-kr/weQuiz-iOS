@@ -50,12 +50,18 @@ public struct SolveQuizView: View {
                 .background(Color.designSystem(.g9))
 
                 VStack(alignment: .center) {
+                    
+                    HStack(spacing: 10) {
+                        Text("\(currentIndex + 1)")
+                            .font(.pretendard(.bold, size: ._20))
+                            .foregroundColor(Color.designSystem(.g1))
+                            .frame(alignment: .leading)
+                            .frame(height: 26)
+                        scoreView()
+                        Spacer()
+                    }
 
-                    Text("\(currentIndex + 1)")
-                        .font(.pretendard(.bold, size: ._20))
-                        .foregroundColor(Color.designSystem(.g1))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .frame(height: 26)
+                    
                     Text(viewModel.quiz.questions[currentIndex].title)
                         .font(.pretendard(.medium, size: ._24))
                         .foregroundColor(Color.designSystem(.g1))
@@ -110,6 +116,15 @@ public struct SolveQuizView: View {
             .background(Color.designSystem(.g8))
             .cornerRadius(16)
             .frame(height: 32)
+    }
+    
+    private func scoreView() -> some View {
+        Text("\(viewModel.quiz.questions[currentIndex].score)점")
+            .font(.pretendard(.medium, size: ._14))
+            .foregroundColor(.designSystem(.g4))
+            .padding(.vertical, 4)
+            .padding(.horizontal, 8)
+            .background(Color.designSystem(.g8))
     }
 }
 
