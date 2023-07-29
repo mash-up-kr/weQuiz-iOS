@@ -19,7 +19,6 @@ enum AnswerListType {
 struct AnswerListContainer: View {
 
     var question: QuestionModel
-//    var questionStatistic: QuestionStatisticModel
     var questionsCount: Int
     var questionId: Int
     
@@ -60,7 +59,6 @@ struct AnswerList: View {
     
     var listType: AnswerListType
     var question: QuestionModel
-//    var questionStatistic:  QuestionStatisticModel
     var questionsCount: Int
     @Binding var degree: Double
     
@@ -78,7 +76,7 @@ struct AnswerList: View {
                         ZStack(alignment: .leading) {
                             if listType == .back {
                                 AnswerPercentView(id: answer.optionId)
-                                    .frame(width: geometry.size.width * CGFloat(answer.selectivity ?? 0.0), height: geometry.size.height)
+                                    .frame(width: geometry.size.width * CGFloat(answer.selectivity), height: geometry.size.height)
                             }
                             AnswerListRow(model: answer)
                                 .frame(width: geometry.size.width, height: geometry.size.height)

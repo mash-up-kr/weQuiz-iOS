@@ -13,6 +13,7 @@ struct HomeApp: App {
     var body: some Scene {
         WindowGroup {
             Home()
+                .environmentObject(HomeNavigator.shared)
         }
     }
 }

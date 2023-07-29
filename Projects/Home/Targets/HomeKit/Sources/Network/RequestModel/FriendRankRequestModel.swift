@@ -12,7 +12,7 @@ public struct FriendRankRequestModel: Codable {
     public var size: Int
     public var quizAnswerCursorId: Int?
     
-    public init(size: Int, quizAnswerCursorId: Int?) {
+    public init(size: Int = 15, quizAnswerCursorId: Int?) {
         self.size = size
         self.quizAnswerCursorId = quizAnswerCursorId
     }

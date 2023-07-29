@@ -11,7 +11,7 @@ import DesignSystemKit
 import HomeKit
 
 struct FriendsRow: View {
-    @Binding var friend: FriendModel
+    var friend: FriendModel
     var priority: Int
     
     var body: some View {

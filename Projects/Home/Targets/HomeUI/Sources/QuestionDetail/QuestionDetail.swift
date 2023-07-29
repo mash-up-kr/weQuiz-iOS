@@ -12,14 +12,16 @@ import HomeKit
 
 struct QuestionDetail: View {
     
-    @EnvironmentObject var viewModel: HomeViewModel
-    @Environment(\.dismiss) private var dismiss
-    @Binding var quizInfo: QuizInfoModel
-//    @Binding var quizStatistic: [QuestionStatisticModel]
-//    @Binding var quizDetail: QuestionDetailModel
+    @ObservedObject var viewModel: QuestionDetailViewModel
     @State private var isPresentRemoveModal: Bool = false
     @State private var removeSuccessToastModal: WQToast.Model?
-    var onRemove: ((Int) -> Void)?
+    
+    private let navigator: HomeNavigator
+    
+    public init(viewModel: QuestionDetailViewModel, navigator: HomeNavigator) {
+        self.viewModel = viewModel
+        self.navigator = navigator
+    }
     
     var body: some View {
         VStack {
@@ -39,8 +41,8 @@ struct QuestionDetail: View {
                         isPresentRemoveModal = false
                         removeSuccessToastModal = .init(status: .success, text: "문제를 삭제했어요")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                            onRemove?(quizInfo.id)
-                            dismiss()
+                            viewModel.deleteQuestion(QuestionDeleteRequestModel(quizId: viewModel.detailQuizInfo.id))
+                            navigator.back()
                         }
                     }
                 )
@@ -54,8 +56,6 @@ struct QuestionDetail: View {
 extension QuestionDetail {
     private var topBarView: some View {
         
-        
-        
         return WQTopBar(style: .navigationWithButtons(
             .init(
                 title: "",
@@ -66,10 +66,9 @@ extension QuestionDetail {
                     ,
                     .init(icon: Icon.TrashCan.fillGray, action: {
                         isPresentRemoveModal = true
-                        viewModel.deleteQuestion(QuestionDeleteRequestModel(quizId: quizInfo.quizId))
                     })
                 ], action: {
-                    dismiss()
+                    navigator.back()
                 }
             )
         ))
@@ -82,27 +81,12 @@ extension QuestionDetail {
     }
     
     private var questionList: some View {
-        return EmptyView()
-//        List {
-//            ForEach(quizInfo.questions.indices) { index in
-//                AnswerListContainer(questionDetail: quizDetail, question: quizInfo.questions[index], questionStatistic: quizStatistic[index], questionsCount: quizInfo.questions.count)
-//            }
-//        }
-//        .listStyle(.plain)
-        
-//        List {
-//            ForEach(quizInfo.questions.indices) { index in
-//                AnswerListContainer(question: quizInfo.questions[index], questionStatistic: quizStatistic[index], questionsCount: quizInfo.questions.count)
-//            }
-//        }
-//        .listStyle(.plain)
-
-//        List {
-//            ForEach(quizInfo.questions) { question in
-//                AnswerListContainer(question: question, questionsCount: quizInfo.questions.count, questionId: question.id)
-//            }
-//        }
-//        .listStyle(.plain)
+        List {
+            ForEach(viewModel.detailQuizInfo.questions) { question in
+                AnswerListContainer(question: question, questionsCount: viewModel.detailQuizInfo.questions.count, questionId: question.id)
+            }
+        }
+        .listStyle(.plain)
     }
 }
 

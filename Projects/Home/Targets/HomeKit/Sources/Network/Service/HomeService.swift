@@ -41,7 +41,7 @@ public protocol HomeServiceLogic {
 public final class HomeService {
     private let networking: NetworkingProtocol
     
-    public init(_ networking: NetworkingProtocol) {
+    public init(_ networking: NetworkingProtocol = Networking()) {
         self.networking = networking
     }
 }

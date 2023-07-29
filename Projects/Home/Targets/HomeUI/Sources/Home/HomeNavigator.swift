@@ -11,7 +11,8 @@ import Foundation
 public enum Screen: Hashable {
     case friendRankView
     case questionGroupView
-    case questionDetail
+    case questionDetail(quizId: Int)
+    case makeQuiz
 }
 
 

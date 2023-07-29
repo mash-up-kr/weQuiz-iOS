@@ -12,7 +12,14 @@ import HomeKit
 
 struct FriendsList: View {
     @Environment(\.dismiss) private var dismiss
-    @Binding var friends: [FriendModel]
+    @ObservedObject var viewModel: FriendRankViewModel
+    
+    private let naivgator: HomeNavigator
+    
+    public init(navigator: HomeNavigator, viewModel: FriendRankViewModel) {
+        self.naivgator = navigator
+        self.viewModel = viewModel
+    }
     
     var body: some View {
         self.topBarView
@@ -29,15 +36,15 @@ extension FriendsList {
             .init(
             title: title,
             action: {
-                dismiss()
+                naivgator.back()
             })))
     }
     
     private var listView: some View {
         ScrollView {
             LazyVStack(spacing: 12) {
-                ForEach(friends.indices) { index in
-                    FriendsRow(friend: $friends[index], priority: index+1)
+                ForEach(viewModel.friendsRank.indices) { index in
+                    FriendsRow(friend: viewModel.friendsRank[index], priority: index+1)
                 }
             }
             .padding(20)
@@ -46,8 +53,8 @@ extension FriendsList {
     }
 }
 
-struct FriendsList_Previews: PreviewProvider {
-    static var previews: some View {
-        FriendsList(friends: .constant(friendsRankSample.rankings))
-    }
-}
+//struct FriendsList_Previews: PreviewProvider {
+//    static var previews: some View {
+//        FriendsList(friends: .constant(friendsRankSample.rankings))
+//    }
+//}

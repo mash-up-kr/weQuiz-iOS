@@ -11,7 +11,7 @@ import SwiftUI
 import HomeKit
 
 public class HomeViewModel: ObservableObject {
-    
+    public static let `default`: HomeViewModel = .init(service: HomeService())
     // output
     @Published var questions: [SummaryQuestionModel] = []
     @Published var friendsRank: [FriendModel] = []
@@ -23,7 +23,7 @@ public class HomeViewModel: ObservableObject {
     private var myInfoGroup = PassthroughSubject<MyInfoModel, Never>()
     private var friendRankGroup = PassthroughSubject<FriendRankGroupModel, Never>()
     private var questionGroup = PassthroughSubject<QuestionGroupModel, Never>()
-    private var questionDetailGroup = PassthroughSubject<QuestionDetailModel, Never>()
+    private var questionDetailGroup = PassthroughSubject<QuizInfoModel, Never>()
     private var cancellables = Set<AnyCancellable>()
     
     private let service: HomeService
@@ -52,13 +52,13 @@ public class HomeViewModel: ObservableObject {
 
         questionDetailGroup
             .sink {
-                self.detailQuizInfo = $0.quizInfo
+                self.detailQuizInfo = $0
             }
             .store(in: &cancellables)
         
         self.getMyInfo()
         self.getFriendRank(FriendRankRequestModel(size: 10, quizAnswerCursorId: nil))
-        self.getQuestionGroup(QuestionGroupRequestModel(size: 100, cursor: nil))
+        self.getQuestionGroup(QuestionGroupRequestModel(size: 15, cursor: nil))
     }
     
     func getMyInfo() {
@@ -110,7 +110,7 @@ public class HomeViewModel: ObservableObject {
     }
     
     func getQuestionStatistic(_ request: QuestionStatisticRequestModel) {
-        self.service.getQuestionDetail(QuestionDetailModel.self, HomeAPI.getQuestionStatistic(request))
+        self.service.getQuestionDetail(QuizInfoModel.self, HomeAPI.getQuestionStatistic(request))
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .failure(let error):
@@ -126,7 +126,7 @@ public class HomeViewModel: ObservableObject {
     }
     
     func deleteQuestion(_ request: QuestionDeleteRequestModel) {
-        self.service.deleteQuestion(QuestionDetailModel.self, HomeAPI.deleteQuestion(request))
+        self.service.deleteQuestion(QuestionDeleteModel.self, HomeAPI.deleteQuestion(request))
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .failure(let error):
@@ -136,7 +136,7 @@ public class HomeViewModel: ObservableObject {
                 }
             }, receiveValue: { [weak self] value in
                 guard let value = value else { return }
-                self?.questionDetailGroup.send(value)
+                print("delete 완료")
             })
             .store(in: &cancellables)
     }

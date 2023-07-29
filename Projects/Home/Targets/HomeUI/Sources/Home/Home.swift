@@ -14,38 +14,8 @@ public struct Home: View {
     @State private var isPresentedQuestionDetail: Bool = false
     @State private var isPresentedMakeQuiz: Bool = false
     
-    
     public var body: some View {
-        //        NavigationStack(path: $navigator.path) {
-        //            ScrollView(.vertical, showsIndicators: false) {
-        //                VStack(spacing: 0) {
-        //                    self.topBarView
-        //                    self.profileView
-        //                    self.makeQuestionButton
-        //                    self.friendRankView
-        //                    self.myQuestionView
-        //                }
-        //            }
-        //            .navigationDestination(for: Screen.self) { type in
-        //                switch type {
-        //                case .friendRankView:
-        //                case .questionDetail:
-        //                case .questionGroupView:
-        //
-        //                }
-        //            }
-        //        }
-        //        .preferredColorScheme(.dark)
-        
-        //        private func friendRankBuilder() -> FriendsList {
-        //            return FriendsList(friends: <#T##Binding<[FriendModel]>#>)
-        //        }
-        //
-        //        private func questionDetailBuilder() -> QuestionDetail {
-        //            return QuestionDetail(friends: <#T##Binding<[FriendModel]>#>)
-        //        }
-        
-        NavigationStack(root: {
+        NavigationStack(path: $navigator.path,  root: {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 0) {
                     self.topBarView
@@ -55,16 +25,43 @@ public struct Home: View {
                     self.myQuestionView
                 }
             }
-            .navigationDestination(isPresented: $isPresentedMakeQuiz) {
-                MakeQuizView()
+            .navigationDestination(for: Screen.self) { type in
+                switch type {
+                case .friendRankView:
+                    friendRankBuilder()
+                case .questionDetail(let quizId):
+                    questionDetailBuilder(quizId: quizId)
+                case .questionGroupView:
+                    questionGroupBuilder()
+                case .makeQuiz:
+                    makeQuizBuilder()
+                }
             }
-            .navigationDestination(isPresented: $isPresentedQuestionDetail) {
-                QuestionDetail(quizInfo: $viewModel.detailQuizInfo, onRemove: { quizId in
-                    viewModel.getQuestionGroup(QuestionGroupRequestModel(size: 100, cursor: nil)) })
-                .environmentObject(viewModel)
-            }
+            //            .navigationDestination(isPresented: $isPresentedMakeQuiz) {
+            //                MakeQuizView()
+            //            }
+            //            .navigationDestination(isPresented: $isPresentedQuestionDetail) {
+            //                QuestionDetail(viewModel: QuestionDetailViewModel(quizId: question.id, service: HomeService(Networking())))
+            //            }
         })
         .preferredColorScheme(.dark)
+    }
+    
+    
+    private func friendRankBuilder() -> some View {
+        FriendsList(navigator: navigator, viewModel: FriendRankViewModel(service: HomeService(Networking())))
+    }
+    
+    private func questionGroupBuilder() -> some View {
+        QuestionGroupList(naivgator: navigator, viewModel: QuestionGroupViewModel(service: HomeService(Networking())))
+    }
+    
+    private func questionDetailBuilder(quizId: Int) -> some View {
+        QuestionDetail(viewModel: QuestionDetailViewModel(quizId: quizId, service: HomeService(Networking())), navigator: navigator)
+    }
+    
+    private func makeQuizBuilder() -> some View {
+        MakeQuizView()
     }
 }
 
@@ -117,7 +114,7 @@ extension Home {
                 .init(
                     title: "문제만들기 💬",
                     action: {
-                        isPresentedMakeQuiz.toggle()
+                        navigator.path.append(.makeQuiz)
                     }
                 )
             )
@@ -136,10 +133,13 @@ extension Home {
     
     private var friendRankList: some View {
         VStack(spacing: 12) {
-            CustomHeader(title: "친구 랭킹", nextView: AnyView(FriendsList(friends: $viewModel.friendsRank)))
+            CustomHeader(title: "친구 랭킹")
+                .onTapGesture {
+                    navigator.path.append(.friendRankView)
+                }
             
             ForEach(viewModel.friendsRank.indices.prefix(3)) { index in
-                FriendsRow(friend: $viewModel.friendsRank[index], priority: index+1)
+                FriendsRow(friend: viewModel.friendsRank[index], priority: index+1)
             }
         }
     }
@@ -156,39 +156,38 @@ extension Home {
         }
     }
     
-//    private var myQuestionList: some View {
-//        ScrollView {
-//            LazyVStack(spacing: 12) {
-//                CustomHeader(title: "내가 낸 문제지 리스트", nextView: AnyView(QuestionGroupList(questions: $viewModel.questions)))
-//
-//                // 여기서 QuestionDetailView로 넘어가기 전에 통신을 통해서 DetailView 데이터를 받아와서 그려줘야 한다.
-//                ForEach($viewModel.questions.prefix(4)) { question in
-//                    NavigationLink(destination: QuestionDetail(quizInfo: .constant(questionDetailSample.quizInfo), quizStatistic: .constant(questionDetailSample.statistic), onRemove: { index in
-//                        viewModel.questions.removeAll { $0.id == index }
-//                    })) {
-//                        QuestionGroupRow(question: question)
-//                    }
-//                }
-//            }
-//        }
-//    }
+    //    private var myQuestionList: some View {
+    //        ScrollView {
+    //            LazyVStack(spacing: 12) {
+    //                CustomHeader(title: "내가 낸 문제지 리스트", nextView: AnyView(QuestionGroupList(questions: $viewModel.questions)))
+    //
+    //                // 여기서 QuestionDetailView로 넘어가기 전에 통신을 통해서 DetailView 데이터를 받아와서 그려줘야 한다.
+    //                ForEach($viewModel.questions.prefix(4)) { question in
+    //                    NavigationLink(destination: QuestionDetail(quizInfo: .constant(questionDetailSample.quizInfo), quizStatistic: .constant(questionDetailSample.statistic), onRemove: { index in
+    //                        viewModel.questions.removeAll { $0.id == index }
+    //                    })) {
+    //                        QuestionGroupRow(question: question)
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
     
     
     private var myQuestionList: some View {
         ScrollView {
             LazyVStack(spacing: 12) {
-                CustomHeader(title: "내가 낸 문제지 리스트", nextView: AnyView(QuestionGroupList(questions: $viewModel.questions)))
+                CustomHeader(title: "내가 낸 문제지 리스트")
+                    .onTapGesture {
+                        navigator.path.append(.questionGroupView)
+                    }
                 
                 ForEach($viewModel.questions.prefix(4)) { question in
-                    Button(action: {
-                        // 아래 통신을 하는 함수는 서버 모델이 제대로 떨어지면 그 때 반영해야한다.
-                        viewModel.getQuestionStatistic(QuestionStatisticRequestModel(quizId: Int(question.id)))
-                        self.isPresentedQuestionDetail = true
-                    }) {
+                    ZStack {
                         QuestionGroupRow(question: question)
-//                        if isLoading {
-//                            ProgressView()
-//                        }
+                    }
+                    .onTapGesture {
+                        navigator.path.append(.questionDetail(quizId: question.id))
                     }
                 }
             }
@@ -222,10 +221,9 @@ extension Home {
 
 struct CustomHeader: View {
     var title: String
-    var nextView: AnyView
     
     var body: some View {
-        NavigationLink(destination: nextView) {
+        HStack {
             Text(title)
                 .foregroundColor(.designSystem(.g2))
                 .font(.pretendard(.bold, size: ._20))
