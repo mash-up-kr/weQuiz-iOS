@@ -145,8 +145,7 @@ extension QuizResultView {
         HStack {
             Spacer()
 
-            // TODO: - 홈 아이콘으로 수정
-            Image(Icon.Add.circle)
+            Image(Icon.Home.fillGray)
                 .resizable()
                 .frame(width: 24, height: 24)
                 .padding(.trailing, 20)
