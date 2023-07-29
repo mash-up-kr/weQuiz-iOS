@@ -18,9 +18,11 @@ public struct QuizResultView: View {
     
     @ObservedObject var model = QuizResultDataStore()
 
+    @Binding var isPresented: Bool
     @State private var isSharePresented = false
     
-    public init(quizId: Int,_ quizResult: QuizResultModel) {
+    public init(isPresented: Binding<Bool>, quizId: Int,_ quizResult: QuizResultModel) {
+        self._isPresented = isPresented
         self.model.quizId = quizId
         self.model.result = quizResult
     }
@@ -65,7 +67,8 @@ public struct QuizResultView: View {
                     WQButton(style: .double(WQButton.Style.DobuleButtonStyleModel(
                         titles: (leftTitle: "다시 풀기", rightTitle: "결과 공유하기"),
                         leftAction: {
-                        print("다시 풀기 클릭")},
+                            isPresented = false
+                        },
                         rightAction: {
                             isSharePresented = true
                         }

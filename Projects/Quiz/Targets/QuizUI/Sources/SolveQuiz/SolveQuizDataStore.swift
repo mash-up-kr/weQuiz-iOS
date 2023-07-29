@@ -9,7 +9,9 @@ import Foundation
 import QuizKit
 
 final class SolveQuizDataStore: ObservableObject {
+    @Published var currentIndex = 0
     @Published var quiz = SolveQuizModel.init()
+    @Published var solvedQuiz = SolveQuizModel.init()
     @Published var routeToResultView = false
     @Published var quizResult: QuizResultModel?
 
@@ -17,5 +19,13 @@ final class SolveQuizDataStore: ObservableObject {
         self.quiz = .init()
     }
     
+    public func setQuiz(_ quizModel: SolveQuizModel) {
+        self.quiz = quizModel
+        self.solvedQuiz = quizModel
+    }
     
+    public func resetQuiz() {
+        self.currentIndex = 0
+        self.solvedQuiz = self.quiz
+    }
 }
