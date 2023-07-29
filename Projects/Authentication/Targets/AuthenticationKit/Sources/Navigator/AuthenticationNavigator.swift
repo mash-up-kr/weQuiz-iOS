@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum Screen: Hashable {
+public enum AuthenticationScreen: Hashable {
     public enum SignType {
         case signIn
         case signUp
@@ -20,11 +20,13 @@ public enum Screen: Hashable {
 }
 
 public final class AuthenticationNavigator: ObservableObject {
-    @Published public var path: [Screen] = []
+    @Published public var path: [AuthenticationScreen] = []
     
     private init() { }
     
     public static let shared: AuthenticationNavigator = .init()
+    
+    public var otherModuleHandler: (() -> Void)?
     
     public func back() {
         path = path.dropLast()

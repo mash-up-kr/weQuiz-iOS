@@ -1,29 +1,36 @@
 import SwiftUI
 
 import AuthenticationKit
+import AuthenticationUI
+
 import MainKit
 
-import AuthenticationUI
 import HomeUI
 
 public struct ContentView: View {
+    @ObservedObject var navigator: ModuleViewNavigator
+    
     private let authenticationNavigator: AuthenticationNavigator = .shared
     
-    public init() {}
+    public init(navigator: ModuleViewNavigator) {
+        self.navigator = navigator
+    }
 
     public var body: some View {
-        if isLoggedIn {
-            OnboardingView()
-                .environmentObject(authenticationNavigator)
-        } else {
-            Home()
-                .environmentObject(HomeViewModel())
+        Group {
+            if navigator.viewIdentifier == .home {
+                Home()
+                    .environmentObject(HomeViewModel())
+            } else {
+                OnboardingView()
+                    .environmentObject(authenticationNavigator)
+                    .navigationBarBackButtonHidden()
+                    .onAppear {
+                        AuthenticationKit.didFnish = {
+                            navigator.viewIdentifier = .home
+                        }
+                    }
+            }
         }
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }

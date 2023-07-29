@@ -19,7 +19,7 @@ public struct PhoneNumberInputView: View {
     @State private var phoneNumberInvalidToastModel: WQToast.Model?
     
     private var interactor: PhoneNumberInputRequestingLogic?
-    private let signType: Screen.SignType
+    private let signType: AuthenticationScreen.SignType
     
     private var title: String {
         switch signType {
@@ -33,7 +33,7 @@ public struct PhoneNumberInputView: View {
     public init(
         interactor: PhoneNumberInputRequestingLogic,
         presenter: PhoneNumberInputPresenter,
-        _ signType: Screen.SignType = .signUp
+        _ signType: AuthenticationScreen.SignType = .signUp
     ) {
         self.interactor = interactor
         self.presenter = presenter

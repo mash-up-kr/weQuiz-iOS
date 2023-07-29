@@ -38,7 +38,7 @@ public struct OnboardingView: View {
                     .foregroundColor(.designSystem(.p1))
                 }
             }
-            .navigationDestination(for: Screen.self) { type in
+            .navigationDestination(for: AuthenticationScreen.self) { type in
                 switch type {
                 case .phoneNumber(let signType):
                     phoneNumberInputBuilder(signType)
@@ -50,14 +50,14 @@ public struct OnboardingView: View {
                     userInformationInputBuilder(phoneNumber)
                         .navigationBarBackButtonHidden()
                 case .signUpFinsh(let nickname):
-                    SignUpFinishView(nickname: nickname)
+                    SignUpFinishView(navigator: navigator, nickname: nickname)
                         .navigationBarBackButtonHidden()
                 }
             }
         }
     }
     
-    private func phoneNumberInputBuilder(_ signType: Screen.SignType) -> PhoneNumberInputView {
+    private func phoneNumberInputBuilder(_ signType: AuthenticationScreen.SignType) -> PhoneNumberInputView {
         let presenter = PhoneNumberInputPresenter(navigator: navigator)
         let interactor = PhoneNumberInputInteractor(
             presenter: presenter,
@@ -72,7 +72,7 @@ public struct OnboardingView: View {
     
     private func verificationCodeInputBuilder(
         _ phoneNumber: String,
-        _ signType: Screen.SignType
+        _ signType: AuthenticationScreen.SignType
     ) -> VerificationCodeInputView {
         let presenter = VerificationCodeInputPresenter(navigator: navigator)
         let interactor = VerificationCodeInputInteractor(

@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>79100849862-gah3ihrofv3m0oj1tp55i79qrku1epv8.apps.googleusercontent.com</string>
+	<string>79100849862-id1i0c0p3dqfr1a1pptvhom6dltdme1c.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.79100849862-gah3ihrofv3m0oj1tp55i79qrku1epv8</string>
+	<string>com.googleusercontent.apps.79100849862-id1i0c0p3dqfr1a1pptvhom6dltdme1c</string>
 	<key>ANDROID_CLIENT_ID</key>
 	<string>79100849862-58vff5lirc0f3hvk7fkfa5p9jd5hfo53.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
@@ -15,22 +15,22 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>wequiz.ios.Authentication</string>
+	<string>wequiz.ios.Main</string>
 	<key>PROJECT_ID</key>
 	<string>wequiz-3910f</string>
 	<key>STORAGE_BUCKET</key>
 	<string>wequiz-3910f.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:79100849862:ios:27b358d9bba7096ad071c7</string>
+	<string>1:79100849862:ios:1bec6d020e0a81c2d071c7</string>
 </dict>
 </plist>

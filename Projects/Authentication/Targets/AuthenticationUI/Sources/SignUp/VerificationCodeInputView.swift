@@ -20,13 +20,13 @@ public struct VerificationCodeInputView: View {
     
     private var interactor: VerificationCodeInputRequestingLogic?
     private let phoneNumber: String
-    private let signType: Screen.SignType
+    private let signType: AuthenticationScreen.SignType
 
     public init(
         interactor: VerificationCodeInputRequestingLogic,
         presenter: VerificationCodeInputPresenter,
         phoneNumber: String,
-        _ signType: Screen.SignType = .signIn
+        _ signType: AuthenticationScreen.SignType = .signIn
     ) {
         self.phoneNumber = phoneNumber
         self.interactor = interactor

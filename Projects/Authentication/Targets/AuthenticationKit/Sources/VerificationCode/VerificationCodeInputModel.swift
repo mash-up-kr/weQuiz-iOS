@@ -31,13 +31,13 @@ public enum VerificationCodeInputModel {
         }
         
         public struct OnRequestVerifyCode {
-            let type: Screen.SignType
+            let type: AuthenticationScreen.SignType
             let phoneNumber: String
             let remainTime: Int
             let isValid: Bool
             let code: String
             
-            public init(type: Screen.SignType, phoneNumber: String, remainTime: Int, isValid: Bool, code: String) {
+            public init(type: AuthenticationScreen.SignType, phoneNumber: String, remainTime: Int, isValid: Bool, code: String) {
                 self.type = type
                 self.phoneNumber = phoneNumber
                 self.remainTime = remainTime
@@ -47,10 +47,10 @@ public enum VerificationCodeInputModel {
         }
         
         public struct OnTouchSignUp {
-            let type: Screen.SignType
+            let type: AuthenticationScreen.SignType
             let phoneNumber: String
             
-            public init(type: Screen.SignType, phoneNumber: String) {
+            public init(type: AuthenticationScreen.SignType, phoneNumber: String) {
                 self.type = type
                 self.phoneNumber = phoneNumber
             }

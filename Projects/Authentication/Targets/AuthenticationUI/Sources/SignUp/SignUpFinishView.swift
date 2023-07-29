@@ -8,15 +8,19 @@
 
 import SwiftUI
 
+import AuthenticationKit
 import DesignSystemKit
 
 struct SignUpFinishView: View {
     private let nickname: String
     
-    init(nickname: String) {
+    private var navigator: AuthenticationNavigator
+    
+    init(navigator: AuthenticationNavigator, nickname: String) {
+        self.navigator = navigator
         self.nickname = nickname
     }
-    
+
     var body: some View {
         VStack(alignment: .center, spacing: 53) {
             RoundedRectangle(cornerRadius: 27)
@@ -25,11 +29,11 @@ struct SignUpFinishView: View {
                 .multilineTextAlignment(.center)
                 .font(.pretendard(.bold, size: ._34))
         }
-    }
-}
-
-struct SignUpFinishView_Previews: PreviewProvider {
-    static var previews: some View {
-        SignUpFinishView(nickname: "테스트닉네임")
+        .onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                navigator.otherModuleHandler?()
+                AuthenticationKit.didFnish?()
+            }
+        }
     }
 }

@@ -4,6 +4,4 @@ import ProjectDescriptionHelpers
 // MARK: - Project
 
 // Creates our project using a helper function defined in ProjectDescriptionHelpers
-let project = Project.app(name: "Quiz",
-                          platform: .iOS,
-                          additionalTargets: ["QuizKit", "QuizUI"])
+let project = Project.quiz(name: "Quiz")
