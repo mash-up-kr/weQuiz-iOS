@@ -72,10 +72,10 @@ public struct QuizResultResponseModel: Decodable {
 
 public struct GetQuizRankResponseModel: Decodable {
     public let hasNext: Bool
-    public let cursorQuizAnswerId: Int
+    public let cursorQuizAnswerId: Int?
     public let rankings: [RankModel]
     
-    public init(hasNext: Bool, cursorQuizAnswerId: Int, rankings: [RankModel]) {
+    public init(hasNext: Bool, cursorQuizAnswerId: Int? = nil, rankings: [RankModel]) {
         self.hasNext = hasNext
         self.cursorQuizAnswerId = cursorQuizAnswerId
         self.rankings = rankings
