@@ -27,7 +27,6 @@ public class HomeViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     private let service: HomeService
-    //    private var navigator: HomeNavigator
 
     public init(service: HomeService) {
         self.service = service

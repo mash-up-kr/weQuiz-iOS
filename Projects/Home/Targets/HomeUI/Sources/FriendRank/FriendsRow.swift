@@ -12,7 +12,6 @@ import HomeKit
 
 struct FriendsRow: View {
     @Binding var friend: RankUserModel
-//    var priority: Int
     
     var body: some View {
         HStack {

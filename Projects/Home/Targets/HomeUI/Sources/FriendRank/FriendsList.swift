@@ -43,9 +43,6 @@ extension FriendsList {
     private var listView: some View {
         ScrollView {
             LazyVStack(spacing: 12) {
-//                ForEach($viewModel.friendsRank.indices) { index in
-//                    FriendsRow(friend: $viewModel.friendsRank[index], priority: index+1)
-//                }
                 ForEach($viewModel.friendsRank) { rank in
                     FriendsRow(friend: rank)
                 }
@@ -55,9 +52,3 @@ extension FriendsList {
         .preferredColorScheme(.dark)
     }
 }
-
-//struct FriendsList_Previews: PreviewProvider {
-//    static var previews: some View {
-//        FriendsList(friends: .constant(friendsRankSample.rankings))
-//    }
-//}
