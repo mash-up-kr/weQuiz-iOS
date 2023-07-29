@@ -13,28 +13,28 @@ import CoreKit
 public protocol QuizServiceLogic {
     
     // 퀴즈생성
-    func makeQuiz<T: Decodable>(
+    func makeQuiz<T>(
         _ model: T.Type,
-        _ requestable: NetworkRequestable)
-        -> AnyPublisher<T?, Error>
+        _ requestable: CoreKit.NetworkRequestable)
+        -> AnyPublisher<MakeQuizResponseModel?, Error> where T : Decodable
     
     // 문제 풀이
-    func getQuiz<T: Decodable>(
+    func getQuiz<T>(
         _ model: T.Type,
-        _ requestable: NetworkRequestable)
-        -> AnyPublisher<T?, Error>
+        _ requestable: CoreKit.NetworkRequestable)
+        -> AnyPublisher<GetQuizResponseModel?, Error> where T : Decodable
     
     // 문제 풀이 결과
-    func quizResult<T: Decodable>(
+    func quizResult<T>(
         _ model: T.Type,
-        _ requestable: NetworkRequestable)
-        -> AnyPublisher<T?, Error>
+        _ requestable: CoreKit.NetworkRequestable)
+        -> AnyPublisher<QuizResultResponseModel?, Error> where T : Decodable
     
     // 퀴즈 단건의 랭킹
-    func getQuizRank<T: Decodable>(
+    func getQuizRank<T>(
         _ model: T.Type,
-        _ requestable: NetworkRequestable)
-        -> AnyPublisher<T?, Error>
+        _ requestable: CoreKit.NetworkRequestable)
+        -> AnyPublisher<GetQuizRankResponseModel?, Error> where T : Decodable
 
 }
 public final class QuizService {
@@ -45,9 +45,9 @@ public final class QuizService {
     }
 }
 extension QuizService: QuizServiceLogic {
-    public func makeQuiz<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
+    public func makeQuiz<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<MakeQuizResponseModel?, Error> where T : Decodable {
         return Future { [weak self] promise in
-            self?.networking.request(T.self, requestable) { result in
+            self?.networking.request(BaseDataResponseModel<MakeQuizResponseModel>.self, requestable) { result in
                 switch result {
                 case .success(let success):
                     promise(.success(success))
@@ -58,9 +58,9 @@ extension QuizService: QuizServiceLogic {
         }.eraseToAnyPublisher()
     }
     
-    public func getQuiz<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
+    public func getQuiz<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<GetQuizResponseModel?, Error> where T : Decodable {
         return Future { [weak self] promise in
-            self?.networking.request(T.self, requestable) { result in
+            self?.networking.request(BaseDataResponseModel<GetQuizResponseModel>.self, requestable) { result in
                 switch result {
                 case .success(let success):
                     promise(.success(success))
@@ -71,9 +71,9 @@ extension QuizService: QuizServiceLogic {
         }.eraseToAnyPublisher()
     }
     
-    public func quizResult<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
+    public func quizResult<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<QuizResultResponseModel?, Error> where T : Decodable {
         return Future { [weak self] promise in
-            self?.networking.request(T.self, requestable) { result in
+            self?.networking.request(BaseDataResponseModel<QuizResultResponseModel>.self, requestable) { result in
                 switch result {
                 case .success(let success):
                     promise(.success(success))
@@ -84,9 +84,9 @@ extension QuizService: QuizServiceLogic {
         }.eraseToAnyPublisher()
     }
     
-    public func getQuizRank<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
+    public func getQuizRank<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<GetQuizRankResponseModel?, Error> where T : Decodable {
         return Future { [weak self] promise in
-            self?.networking.request(T.self, requestable) { result in
+            self?.networking.request(BaseDataResponseModel<GetQuizRankResponseModel>.self, requestable) { result in
                 switch result {
                 case .success(let success):
                     promise(.success(success))
