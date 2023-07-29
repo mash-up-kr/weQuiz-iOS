@@ -16,25 +16,28 @@ public struct Home: View {
     
     public var body: some View {
         NavigationStack(path: $navigator.path,  root: {
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 0) {
-                    self.topBarView
-                    self.profileView
-                    self.makeQuestionButton
-                    self.friendRankView
-                    self.myQuestionView
+            VStack {
+                self.topBarView
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        
+                        self.profileView
+                        self.makeQuestionButton
+                        self.friendRankView
+                        self.myQuestionView
+                    }
                 }
-            }
-            .navigationDestination(for: Screen.self) { type in
-                switch type {
-                case .friendRankView:
-                    friendRankBuilder()
-                case .questionDetail(let quizId):
-                    questionDetailBuilder(quizId: quizId)
-                case .questionGroupView:
-                    questionGroupBuilder()
-                case .makeQuiz:
-                    makeQuizBuilder()
+                .navigationDestination(for: Screen.self) { type in
+                    switch type {
+                    case .friendRankView:
+                        friendRankBuilder()
+                    case .questionDetail(let quizId):
+                        questionDetailBuilder(quizId: quizId)
+                    case .questionGroupView:
+                        questionGroupBuilder()
+                    case .makeQuiz:
+                        makeQuizBuilder()
+                    }
                 }
             }
         })
@@ -131,6 +134,7 @@ extension Home {
                 .onTapGesture {
                     navigator.path.append(.friendRankView)
                 }
+                .padding(.bottom, 8)
             
             ForEach($viewModel.friendsRank.prefix(3)) { friend in
                 FriendsRow(friend: friend)
@@ -153,10 +157,11 @@ extension Home {
     private var myQuestionList: some View {
         ScrollView {
             LazyVStack(spacing: 12) {
-                CustomHeader(title: "내가 낸 문제지 리스트")
+                CustomHeader(title: "내가 낸 시험지")
                     .onTapGesture {
                         navigator.path.append(.questionGroupView)
                     }
+                    .padding(.bottom, 8)
                 
                 ForEach($viewModel.questions.prefix(4)) { question in
                     ZStack {

@@ -20,11 +20,11 @@ struct AnswerPercentView: View {
 }
 
 enum answerNum: Int {
-    case first = 0
-    case second
-    case third
-    case fourth
-    case fifth
+    case first = 1
+    case second = 2
+    case third = 3
+    case fourth = 4
+    case fifth = 5
     
     var color: Color {
         switch self {

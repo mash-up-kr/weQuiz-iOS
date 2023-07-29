@@ -12,6 +12,7 @@ import HomeKit
 
 struct AnswerListRow: View {
     
+    var listType: AnswerListType
     var model: AnswerViewModel
     
     var body: some View {
@@ -21,6 +22,10 @@ struct AnswerListRow: View {
             Text(model.content)
                 .font(.pretendard(.medium, size: ._16))
             Spacer()
+            if listType == .back {
+                Text("\(model.selectivity)%")
+                    .padding(16)
+            }
         }
         .padding()
         .foregroundColor(.designSystem(.g2))
