@@ -40,7 +40,7 @@ public struct MakeQuizRequestModel: Codable {
     }
 }
 
-public struct GetQuizRequestModel: Codable {
+public struct QuizResultRequestModel: Codable {
     public let answers: [AnswerModel]
     
     public struct AnswerModel: Codable {
