@@ -11,7 +11,7 @@ import Foundation
 import CoreKit
 
 public enum AuthenticationAPIError: Error {
-    case fail
+    case fail(String)
 }
 
 enum AuthenticationAPI {

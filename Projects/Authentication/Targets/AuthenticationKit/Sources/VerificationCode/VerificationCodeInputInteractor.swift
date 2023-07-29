@@ -49,6 +49,13 @@ extension VerificationCodeInputInteractor: VerificationCodeInputRequestingLogic 
     }
     
     public func reqeust(_ request: VerificationCodeInputModel.Request.OnRequestVerifyCode) async {
+        presenter?.present(
+            VerificationCodeInputModel.Response.Naivgate(
+                destination: .userInformationInput(
+                    request.phoneNumber
+                )
+            )
+        )
         guard request.remainTime > 0 else {
             presenter?.present(VerificationCodeInputModel.Response.Toast(type: .timeout))
             return

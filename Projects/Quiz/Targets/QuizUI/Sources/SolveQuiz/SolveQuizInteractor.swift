@@ -27,7 +27,7 @@ final class SolveQuizInteractor: SolveQuizBusinessLogic {
     }
     
     func loadQuiz(request: SolveQuiz.LoadSolveQuiz.Request) {
-        self.service.getQuiz(GetQuizResponseModel.self, QuizAPI.getQuiz(request.quizId))
+        self.service.getQuiz(BaseDataResponseModel<GetQuizResponseModel>.self, QuizAPI.getQuiz(request.quizId))
             .sink(receiveCompletion: { _ in
                 //TODO: - Error 처리
             }, receiveValue: { value in
@@ -40,7 +40,7 @@ final class SolveQuizInteractor: SolveQuizBusinessLogic {
     }
     
     func requestQuizResult(request: SolveQuiz.LoadQuizResult.Request) {
-        self.service.quizResult(QuizResultResponseModel.self, QuizAPI.quizResult(request.quizId, makeRequestModel(request.quiz)))
+        self.service.quizResult(BaseDataResponseModel<QuizResultResponseModel>.self, QuizAPI.quizResult(request.quizId, makeRequestModel(request.quiz)))
             .sink(receiveCompletion: { com in
                 //TODO: - Error 처리
             }, receiveValue: { value in
