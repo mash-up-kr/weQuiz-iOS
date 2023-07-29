@@ -12,13 +12,14 @@ import HomeKit
 
 struct QuestionDetail: View {
     
+    @EnvironmentObject var viewModel: HomeViewModel
     @Environment(\.dismiss) private var dismiss
     @Binding var quizInfo: QuizInfoModel
-    @Binding var quizStatistic: [QuestionStatisticModel]
-    @Binding var quizDetail: QuestionDetailModel
+//    @Binding var quizStatistic: [QuestionStatisticModel]
+//    @Binding var quizDetail: QuestionDetailModel
     @State private var isPresentRemoveModal: Bool = false
     @State private var removeSuccessToastModal: WQToast.Model?
-    var onRemove: ((Int) -> ())?
+    var onRemove: ((Int) -> Void)?
     
     var body: some View {
         VStack {
@@ -39,6 +40,7 @@ struct QuestionDetail: View {
                         removeSuccessToastModal = .init(status: .success, text: "문제를 삭제했어요")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                             onRemove?(quizInfo.id)
+                            dismiss()
                         }
                     }
                 )
@@ -58,12 +60,13 @@ extension QuestionDetail {
             .init(
                 title: "",
                 bttons: [
-                    .init(icon: Icon.Edit.list, action: {
+                    .init(icon: Icon.Share.fillGray, action: {
                         actionSheet()
                     })
                     ,
-                    .init(icon: Icon.CircleAlert.fillMono, action: {
+                    .init(icon: Icon.TrashCan.fillGray, action: {
                         isPresentRemoveModal = true
+                        viewModel.deleteQuestion(QuestionDeleteRequestModel(quizId: quizInfo.quizId))
                     })
                 ], action: {
                     dismiss()
@@ -93,13 +96,18 @@ extension QuestionDetail {
 //            }
 //        }
 //        .listStyle(.plain)
+
+//        List {
+//            ForEach(quizInfo.questions) { question in
+//                AnswerListContainer(question: question, questionsCount: quizInfo.questions.count, questionId: question.id)
+//            }
+//        }
+//        .listStyle(.plain)
     }
 }
-
 
 //struct QuestionDetailView_Previews: PreviewProvider {
 //    static var previews: some View {
 //        QuestionDetail(quizInfo: .constant(questionDetailSample.quizInfo), quizStatistic: .constant(questionDetailSample.statistic))
 //    }
 //}
-

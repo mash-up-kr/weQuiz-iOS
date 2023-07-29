@@ -8,13 +8,43 @@ import QuizUI
 public struct Home: View {
     public init() { }
     
-    @EnvironmentObject var viewModel: HomeViewModel
+    @EnvironmentObject var navigator: HomeNavigator
+    @StateObject var viewModel: HomeViewModel = HomeViewModel(service: HomeService(Networking()))
     @State private var isEdited: Bool = false
-    @State private var isDetailViewShown: Bool = false
+    @State private var isPresentedQuestionDetail: Bool = false
     @State private var isPresentedMakeQuiz: Bool = false
-    @State private var isLoading: Bool = false
+    
     
     public var body: some View {
+        //        NavigationStack(path: $navigator.path) {
+        //            ScrollView(.vertical, showsIndicators: false) {
+        //                VStack(spacing: 0) {
+        //                    self.topBarView
+        //                    self.profileView
+        //                    self.makeQuestionButton
+        //                    self.friendRankView
+        //                    self.myQuestionView
+        //                }
+        //            }
+        //            .navigationDestination(for: Screen.self) { type in
+        //                switch type {
+        //                case .friendRankView:
+        //                case .questionDetail:
+        //                case .questionGroupView:
+        //
+        //                }
+        //            }
+        //        }
+        //        .preferredColorScheme(.dark)
+        
+        //        private func friendRankBuilder() -> FriendsList {
+        //            return FriendsList(friends: <#T##Binding<[FriendModel]>#>)
+        //        }
+        //
+        //        private func questionDetailBuilder() -> QuestionDetail {
+        //            return QuestionDetail(friends: <#T##Binding<[FriendModel]>#>)
+        //        }
+        
         NavigationStack(root: {
             ScrollView(.vertical, showsIndicators: false) {
                 VStack(spacing: 0) {
@@ -27,6 +57,11 @@ public struct Home: View {
             }
             .navigationDestination(isPresented: $isPresentedMakeQuiz) {
                 MakeQuizView()
+            }
+            .navigationDestination(isPresented: $isPresentedQuestionDetail) {
+                QuestionDetail(quizInfo: $viewModel.detailQuizInfo, onRemove: { quizId in
+                    viewModel.getQuestionGroup(QuestionGroupRequestModel(size: 100, cursor: nil)) })
+                .environmentObject(viewModel)
             }
         })
         .preferredColorScheme(.dark)
@@ -145,21 +180,17 @@ extension Home {
                 CustomHeader(title: "내가 낸 문제지 리스트", nextView: AnyView(QuestionGroupList(questions: $viewModel.questions)))
                 
                 ForEach($viewModel.questions.prefix(4)) { question in
-                    Button {
-//                        isLoading = true
+                    Button(action: {
+                        // 아래 통신을 하는 함수는 서버 모델이 제대로 떨어지면 그 때 반영해야한다.
                         viewModel.getQuestionStatistic(QuestionStatisticRequestModel(quizId: Int(question.id)))
-                        self.isDetailViewShown = true
-                    } label: {
+                        self.isPresentedQuestionDetail = true
+                    }) {
                         QuestionGroupRow(question: question)
 //                        if isLoading {
 //                            ProgressView()
 //                        }
                     }
                 }
-//                .disabled(isLoading)
-                .background(NavigationLink(destination: QuestionDetail(quizInfo: $viewModel.detailQuizInfo, quizStatistic: $viewModel.detailQuizStatistic, quizDetail: $viewModel.detailQuiz), isActive: $isDetailViewShown, label: {
-                    EmptyView()
-                }))
             }
         }
     }

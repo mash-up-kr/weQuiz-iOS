@@ -17,10 +17,9 @@ enum AnswerListType {
 }
 
 struct AnswerListContainer: View {
-    
-    var questionDetail: QuestionDetailModel
+
     var question: QuestionModel
-    var questionStatistic: QuestionStatisticModel
+//    var questionStatistic: QuestionStatisticModel
     var questionsCount: Int
     var questionId: Int
     
@@ -32,9 +31,9 @@ struct AnswerListContainer: View {
     
     var body: some View {
         ZStack {
-            AnswerList(listType: .front, question: question, questionStatistic: questionStatistic, questionsCount: questionsCount, degree: $frontDegree)
+            AnswerList(listType: .front, question: question, questionsCount: questionsCount, degree: $frontDegree)
                 .opacity(isFlipped ? 0 : 1)
-            AnswerList(listType: .back, question: question, questionStatistic: questionStatistic, questionsCount: questionsCount, degree: $backDegree)
+            AnswerList(listType: .back, question: question, questionsCount: questionsCount, degree: $backDegree)
                 .opacity(isFlipped ? 1 : 0)
         }
         .onTapGesture {
@@ -61,7 +60,7 @@ struct AnswerList: View {
     
     var listType: AnswerListType
     var question: QuestionModel
-    var questionStatistic:  QuestionStatisticModel
+//    var questionStatistic:  QuestionStatisticModel
     var questionsCount: Int
     @Binding var degree: Double
     
@@ -73,14 +72,15 @@ struct AnswerList: View {
                         .font(.pretendard(.medium, size: ._18))
                         .foregroundColor(.designSystem(.g2))
                 }
-                ForEach(question.options.indices) { index in
+
+                ForEach(question.options) { answer in
                     GeometryReader { geometry in
                         ZStack(alignment: .leading) {
                             if listType == .back {
-                                AnswerPercentView(id: index)
-                                    .frame(width: geometry.size.width * CGFloat(questionStatistic.options[index].selectivity), height: geometry.size.height)
+                                AnswerPercentView(id: answer.optionId)
+                                    .frame(width: geometry.size.width * CGFloat(answer.selectivity ?? 0.0), height: geometry.size.height)
                             }
-                            AnswerListRow(model: question.options[index])
+                            AnswerListRow(model: answer)
                                 .frame(width: geometry.size.width, height: geometry.size.height)
                         }
                         .background(Color.designSystem(.g9))

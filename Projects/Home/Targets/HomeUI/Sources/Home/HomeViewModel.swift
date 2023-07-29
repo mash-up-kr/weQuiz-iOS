@@ -16,9 +16,8 @@ public class HomeViewModel: ObservableObject {
     @Published var questions: [SummaryQuestionModel] = []
     @Published var friendsRank: [FriendModel] = []
     @Published var myInfo: MyInfoModel = MyInfoModel(id: 0, image: "", nickname: "", contents: "")
+
     @Published var detailQuizInfo: QuizInfoModel = QuizInfoModel(quizId: 0, quizTitle: "", questions: [])
-    @Published var detailQuizStatistic: [QuestionStatisticModel] = []
-    @Published var detailQuiz: QuestionDetailModel = QuestionDetailModel(quizInfo: QuizInfoModel(quizId: 0, quizTitle: "", questions: []), statistic: [])
 
     // input
     private var myInfoGroup = PassthroughSubject<MyInfoModel, Never>()
@@ -28,12 +27,10 @@ public class HomeViewModel: ObservableObject {
     private var cancellables = Set<AnyCancellable>()
     
     private let service: HomeService
-    
-    
-    public init(service: HomeService) {
-        
-        self.service = service
+    //    private var navigator: HomeNavigator
 
+    public init(service: HomeService) {
+        self.service = service
         
         myInfoGroup
             .sink {
@@ -56,8 +53,6 @@ public class HomeViewModel: ObservableObject {
         questionDetailGroup
             .sink {
                 self.detailQuizInfo = $0.quizInfo
-                self.detailQuizStatistic = $0.statistic
-                self.detailQuiz = $0
             }
             .store(in: &cancellables)
         
@@ -65,7 +60,6 @@ public class HomeViewModel: ObservableObject {
         self.getFriendRank(FriendRankRequestModel(size: 10, quizAnswerCursorId: nil))
         self.getQuestionGroup(QuestionGroupRequestModel(size: 100, cursor: nil))
     }
-
     
     func getMyInfo() {
         self.service.getMyInfo(MyInfoModel.self, HomeAPI.getMyInfo)

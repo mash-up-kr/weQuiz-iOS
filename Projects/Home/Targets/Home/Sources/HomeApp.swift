@@ -13,7 +13,6 @@ struct HomeApp: App {
     var body: some Scene {
         WindowGroup {
             Home()
-                .environmentObject(HomeViewModel(service: HomeService(Networking())))
         }
     }
 }
