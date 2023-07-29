@@ -96,7 +96,7 @@ public struct SolveQuizView: View {
         }
         .fullScreenCover(isPresented: $viewModel.routeToResultView) {
             if let quizResult = viewModel.quizResult {
-                QuizResultView(quizResult)
+                QuizResultView(quizResult).configureView()
             }
         }
     }
