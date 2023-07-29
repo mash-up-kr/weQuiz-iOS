@@ -24,6 +24,12 @@ public protocol QuizServiceLogic {
         _ requestable: NetworkRequestable)
         -> AnyPublisher<T?, Error>
     
+    // 문제 풀이 결과
+    func quizResult<T: Decodable>(
+        _ model: T.Type,
+        _ requestable: NetworkRequestable)
+        -> AnyPublisher<T?, Error>
+    
     // 퀴즈 단건의 랭킹
     func getQuizRank<T: Decodable>(
         _ model: T.Type,
@@ -53,6 +59,19 @@ extension QuizService: QuizServiceLogic {
     }
     
     public func getQuiz<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
+        return Future { [weak self] promise in
+            self?.networking.request(T.self, requestable) { result in
+                switch result {
+                case .success(let success):
+                    promise(.success(success))
+                case .failure(let error):
+                    promise(.failure(error))
+                }
+            }
+        }.eraseToAnyPublisher()
+    }
+    
+    public func quizResult<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
         return Future { [weak self] promise in
             self?.networking.request(T.self, requestable) { result in
                 switch result {
