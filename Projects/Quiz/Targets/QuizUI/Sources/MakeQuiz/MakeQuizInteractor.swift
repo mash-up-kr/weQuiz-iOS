@@ -25,7 +25,7 @@ final class MakeQuizInteractor: MakeQuizBusinessLogic {
     }
     
     func requestMakeQuiz(request: MakeQuiz.RequestMakeQuiz.Request) {
-        self.service.makeQuiz(MakeQuizResponseModel.self, QuizAPI.makeQuiz(makeRequestModel(request)))
+        self.service.makeQuiz(BaseDataResponseModel<MakeQuizResponseModel>.self, QuizAPI.makeQuiz(makeRequestModel(request)))
             .sink(receiveCompletion: { _ in
                 // TODO: Error 처리
             }, receiveValue: { value in

@@ -26,7 +26,7 @@ final class QuizResultInteractor: QuizResultBusinessLogic {
     }
     
     func requestRanking(request: QuizResult.LoadRanking.Request) {
-        self.service.getQuizRank(GetQuizRankResponseModel.self, QuizAPI.getQuizRank(request.quizId, GetQuizRankRequestModel(size: 10)))
+        self.service.getQuizRank(BaseDataResponseModel<GetQuizRankResponseModel>.self, QuizAPI.getQuizRank(request.quizId, GetQuizRankRequestModel(size: 10)))
             .sink(receiveCompletion: { com in
                 // TODO: Error 처리
             }, receiveValue: { value in
