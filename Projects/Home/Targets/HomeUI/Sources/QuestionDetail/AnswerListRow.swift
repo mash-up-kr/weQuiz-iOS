@@ -8,18 +8,23 @@
 
 import SwiftUI
 import DesignSystemKit
+import HomeKit
 
 struct AnswerListRow: View {
     
-    var model: AnswerModel
+    var listType: AnswerListType
+    var model: AnswerViewModel
     
     var body: some View {
         
         HStack {
-            AlphabetCircleView(answerNumber: model.id)
+            AlphabetCircleView(answerNumber: model.rank)
             Text(model.content)
                 .font(.pretendard(.medium, size: ._16))
             Spacer()
+            if listType == .back {
+                Text("\(Int(model.selectivity * 100))%")
+            }
         }
         .padding()
         .foregroundColor(.designSystem(.g2))

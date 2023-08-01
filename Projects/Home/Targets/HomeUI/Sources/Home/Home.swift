@@ -1,25 +1,67 @@
 import SwiftUI
 import DesignSystemKit
+import HomeKit
+import CoreKit
+import QuizUI
+
 
 public struct Home: View {
     public init() { }
     
-    @EnvironmentObject var viewModel: HomeViewModel
-    @State var isEdited: Bool = false
+    @EnvironmentObject var navigator: HomeNavigator
+    @StateObject var viewModel: HomeViewModel = HomeViewModel(service: HomeService(Networking()))
+    @State private var isEdited: Bool = false
+    @State private var isPresentedQuestionDetail: Bool = false
+    @State private var isPresentedMakeQuiz: Bool = false
     
     public var body: some View {
-        NavigationView {
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(spacing: 0) {
-                    self.topBarView
-                    self.profileView
-                    self.questionButton
-                    self.friendRankView
-                    self.myQuestionView
+        NavigationStack(path: $navigator.path,  root: {
+            VStack {
+                self.topBarView
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: 0) {
+                        self.profileView
+                        self.makeQuestionButton
+                        self.friendRankView
+                        self.myQuestionView
+                    }
+                }
+                .onAppear() {
+                    viewModel.getQuestionGroup(QuestionGroupRequestModel(size: 15, cursor: nil))
+                }
+                .navigationDestination(for: Screen.self) { type in
+                    switch type {
+                    case .friendRankView:
+                        friendRankBuilder()
+                    case .questionDetail(let quizId):
+                        questionDetailBuilder(quizId: quizId)
+                    case .questionGroupView:
+                        questionGroupBuilder()
+                    case .makeQuiz:
+                        makeQuizBuilder()
+                    }
                 }
             }
-        }
+        })
         .preferredColorScheme(.dark)
+    }
+    
+    
+    private func friendRankBuilder() -> some View {
+        FriendsList(navigator: navigator, viewModel: FriendRankViewModel(service: HomeService(Networking())))
+    }
+    
+    private func questionGroupBuilder() -> some View {
+        QuestionGroupList(naivgator: navigator, viewModel: QuestionGroupViewModel(service: HomeService(Networking()), questions: viewModel.questions))
+    }
+    
+    private func questionDetailBuilder(quizId: Int) -> some View {
+        QuestionDetail(viewModel: QuestionDetailViewModel(quizId: quizId, service: HomeService(Networking())), navigator: navigator)
+    }
+    
+    private func makeQuizBuilder() -> some View {
+        MakeQuizView().configureView()
+            .navigationBarBackButtonHidden()
     }
 }
 
@@ -30,15 +72,17 @@ extension Home {
     }
     
     private var profileView: some View {
-        let image = viewModel.myInfo.image
+        let image = viewModel.myInfo.image != nil ? viewModel.myInfo.image : "profileImage"
         let nickname = viewModel.myInfo.nickname
-        let contents = viewModel.myInfo.contents
+        let contents = viewModel.myInfo.description
         
         return HStack {
-            Image(systemName: image)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 85, height: 85)
+            if let image = image {
+                Image(image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 85, height: 85)
+            }
             
             VStack(alignment: .leading) {
                 Text(nickname)
@@ -64,13 +108,13 @@ extension Home {
         .padding([.top, .bottom], 11)
     }
     
-    private var questionButton: some View {
+    private var makeQuestionButton: some View {
         WQButton(
             style: .single(
                 .init(
                     title: "문제만들기 💬",
                     action: {
-                        print("버튼이 눌렸습니다")
+                        navigator.path.append(.makeQuiz)
                     }
                 )
             )
@@ -89,10 +133,14 @@ extension Home {
     
     private var friendRankList: some View {
         VStack(spacing: 12) {
-            CustomHeader(title: "친구 랭킹", nextView: AnyView(FriendsList(friends: $viewModel.friendsRank)))
+            CustomHeader(title: "친구 랭킹")
+                .onTapGesture {
+                    navigator.path.append(.friendRankView)
+                }
+                .padding(.bottom, 8)
             
-            ForEach(viewModel.friendsRank.indices.prefix(3)) { index in
-                FriendsRow(friend: $viewModel.friendsRank[index], priority: index+1)
+            ForEach($viewModel.friendsRank.prefix(3)) { friend in
+                FriendsRow(friend: friend)
             }
         }
     }
@@ -112,14 +160,18 @@ extension Home {
     private var myQuestionList: some View {
         ScrollView {
             LazyVStack(spacing: 12) {
-                CustomHeader(title: "내가 낸 문제지 리스트", nextView: AnyView(QuestionGroupList(questions: $viewModel.questions)))
-                    
-                // 여기서 QuestionDetailView로 넘어가기 전에 통신을 통해서 DetailView 데이터를 받아와서 그려줘야 한다.
+                CustomHeader(title: "내가 낸 시험지")
+                    .onTapGesture {
+                        navigator.path.append(.questionGroupView)
+                    }
+                    .padding(.bottom, 8)
+                
                 ForEach($viewModel.questions.prefix(4)) { question in
-                    NavigationLink(destination: QuestionDetail(questionDetail: .constant(questionDetailSample), onRemove: { index in
-                        viewModel.questions.removeAll { $0.id == index }
-                    })) {
+                    ZStack {
                         QuestionGroupRow(question: question)
+                    }
+                    .onTapGesture {
+                        navigator.path.append(.questionDetail(quizId: question.id))
                     }
                 }
             }
@@ -153,10 +205,9 @@ extension Home {
 
 struct CustomHeader: View {
     var title: String
-    var nextView: AnyView
     
     var body: some View {
-        NavigationLink(destination: nextView) {
+        HStack {
             Text(title)
                 .foregroundColor(.designSystem(.g2))
                 .font(.pretendard(.bold, size: ._20))
@@ -169,6 +220,6 @@ struct CustomHeader: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        Home().environmentObject(HomeViewModel())
+        Home().environmentObject(HomeViewModel(service: HomeService(Networking())))
     }
 }

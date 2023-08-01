@@ -8,10 +8,10 @@
 
 import SwiftUI
 import DesignSystemKit
+import HomeKit
 
 struct FriendsRow: View {
-    @Binding var friend: FriendModel
-    var priority: Int
+    @Binding var friend: RankUserModel
     
     var body: some View {
         HStack {
@@ -38,7 +38,7 @@ extension FriendsRow {
     }
     
     private var descriptionView: some View {
-        Text(self.friend.userInfoDto.name)
+        Text(self.friend.name)
             .padding(.leading, 8)
             .font(.pretendard(.regular, size: ._16))
             .foregroundColor(.designSystem(.g1))
@@ -46,7 +46,7 @@ extension FriendsRow {
     
     private var uniqueNumView: some View {
         ZStack {
-            Text("#" + "\(self.friend.quizAnswerId)")
+            Text("#" + "\(self.friend.id)")
                 .padding(.all, 4)
                 .font(.pretendard(.regular, size: ._10))
                 .foregroundColor(.designSystem(.g1))
@@ -69,13 +69,13 @@ extension FriendsRow {
                 .padding(.vertical, 16)
                 .padding(.leading, 16)
             
-            Text(self.friend.userInfoDto.name)
+            Text(self.friend.name)
                 .padding(.horizontal, 8)
                 .font(.pretendard(.regular, size: ._16))
                 .foregroundColor(.designSystem(.g1))
             
             ZStack {
-                Text("#" + "\(self.friend.quizAnswerId)")
+                Text("#" + "\(self.friend.id)")
                     .padding(.all, 4)
                     .font(.pretendard(.regular, size: ._10))
                     .foregroundColor(.designSystem(.g1))
@@ -96,7 +96,7 @@ extension FriendsRow {
     }
     
     private var image: some View {
-        switch priority {
+        switch friend.rank {
         case 1: return Image("GoldGrade")
         case 2: return Image("SilverGrade")
         case 3: return Image("BronzeGrade")
@@ -104,4 +104,3 @@ extension FriendsRow {
         }
     }
 }
-

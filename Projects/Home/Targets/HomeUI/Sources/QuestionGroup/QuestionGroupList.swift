@@ -8,36 +8,41 @@
 
 import SwiftUI
 import DesignSystemKit
+import HomeKit
+import CoreKit
 
 struct QuestionGroupList: View {
-    @Environment(\.dismiss) private var dismiss
-    @Binding var questions: [SummaryQuestionModel]
+    @ObservedObject var viewModel: QuestionGroupViewModel
     @State private var isEdited = false
+    
+    private let naivgator: HomeNavigator
+    
+    public init(naivgator: HomeNavigator, viewModel: QuestionGroupViewModel) {
+        self.naivgator = naivgator
+        self.viewModel = viewModel
+    }
     
     var body: some View {
         VStack {
             self.topBarView
             self.listBarView
             self.listView
-                
         }
         .navigationBarHidden(true)
     }
-}
-
-extension QuestionGroupList {
+    
     private var topBarView: some View {
         WQTopBar(style: .navigation(
             .init(
                 title: "문제 리스트",
                 action: {
-                    dismiss()
+                    naivgator.back()
                 })))
     }
     
     private var listBarView: some View {
         HStack {
-            Text("전체\(questions.count)")
+            Text("전체\(viewModel.questions.count)")
                 .foregroundColor(.designSystem(.g2))
                 .font(.pretendard(.medium, size: ._14))
                 .padding([.horizontal, .top], 20)
@@ -57,15 +62,12 @@ extension QuestionGroupList {
     
     private var listView: some View {
         List {
-            ForEach($questions) { question in
+            ForEach($viewModel.questions) { question in
                 ZStack {
                     QuestionGroupRow(question: question)
-                    NavigationLink(destination: QuestionDetail(questionDetail: .constant(questionDetailSample), onRemove: { index in
-                        questions.removeAll { $0.id == index }
-                    })) {
-                        EmptyView()
-                    }
-                    .opacity(0)
+                }
+                .onTapGesture {
+                    naivgator.path.append(.questionDetail(quizId: question.id))
                 }
                 .listRowBackground(Color.clear)
                 .padding(.horizontal, 20)
@@ -79,12 +81,9 @@ extension QuestionGroupList {
     }
     
     private func removeItem(at offsets: IndexSet) {
-        questions.remove(atOffsets: offsets)
-    }
-}
-
-struct QuestionGroupList_Previews: PreviewProvider {
-    static var previews: some View {
-        QuestionGroupList(questions: .constant(questionSample.quiz))
+        if let firstIndex = offsets.first {
+            viewModel.deleteQuestion(QuestionDeleteRequestModel(quizId: viewModel.questions[firstIndex].id))
+            viewModel.questions.remove(atOffsets: offsets)
+        }
     }
 }

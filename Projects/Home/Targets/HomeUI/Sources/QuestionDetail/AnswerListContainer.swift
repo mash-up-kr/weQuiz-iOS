@@ -7,8 +7,9 @@
 //
 
 import SwiftUI
-import DesignSystemKit
 
+import DesignSystemKit
+import HomeKit
 
 enum AnswerListType {
     case front
@@ -17,8 +18,9 @@ enum AnswerListType {
 
 struct AnswerListContainer: View {
     
-    var question: QuestionModel
+    var question: QuestionViewModel
     var questionsCount: Int
+    var questionId: Int
     
     @State var backDegree = 180.0
     @State var frontDegree = 0.0
@@ -34,9 +36,9 @@ struct AnswerListContainer: View {
                 .opacity(isFlipped ? 1 : 0)
         }
         .onTapGesture {
-                flipCard()
-            }
+            flipCard()
         }
+    }
 }
 
 extension AnswerListContainer {
@@ -56,36 +58,45 @@ extension AnswerListContainer {
 struct AnswerList: View {
     
     var listType: AnswerListType
-    var question: QuestionModel
+    var question: QuestionViewModel
     var questionsCount: Int
     @Binding var degree: Double
+    @State var isAnimating: Bool = false
     
     var body: some View {
         ScrollView {
-            LazyVStack(alignment: .leading) {
+            LazyVStack(alignment: .leading, spacing: 12) {
                 HStack {
-                    Text("\(question.id). \(question.title)")
+                    Text("\(question.rank). \(question.questionTitle)")
                         .font(.pretendard(.medium, size: ._18))
                         .foregroundColor(.designSystem(.g2))
                 }
-                ForEach(question.answers) { answer in
+                .padding(.top, 20)
+                .padding(.bottom, 12)
+                
+                ForEach(question.options) { answer in
                     GeometryReader { geometry in
                         ZStack(alignment: .leading) {
                             if listType == .back {
-                                AnswerPercentView(id: answer.id)
-                                    .frame(width: geometry.size.width * CGFloat(answer.order), height: geometry.size.height)
+                                AnswerPercentView(id: answer.rank)
+                                    .frame(width: geometry.size.width * CGFloat(answer.selectivity), height: geometry.size.height)
+                                    .animation(.easeInOut(duration: 1), value: isAnimating)
+                                    .onAppear(perform: {
+                                        isAnimating = true
+                                    })
                             }
-                            AnswerListRow(model: answer)
+                            AnswerListRow(listType: listType, model: answer)
                                 .frame(width: geometry.size.width, height: geometry.size.height)
                         }
                         .background(Color.designSystem(.g9))
                         .cornerRadius(16)
-                        .padding(.bottom, 12)
                     }
                     .frame(height: 56)
                 }
+                
                 HStack {
-                    Text("\(question.id)/\(question.answerCounts)")
+                    Text("\(question.rank)/\(questionsCount)")
+                        .font(.pretendard(.medium, size: ._14))
                     Spacer()
                     Button(action: {
                         print("버튼을 눌러보세요")
@@ -94,13 +105,16 @@ struct AnswerList: View {
                             Text("눌러서 결과보기")
                                 .font(.pretendard(.medium, size: ._14))
                                 .foregroundColor(.designSystem(.g2))
-                            Image(Icon.Chevron.rightMedium)
+                            Image(Icon.Chevron.rightSmall)
+                                .frame(width: 24, height: 24)
                         }
                     }
                     .disabled(true)
                 }
+                .padding(.top, 40)
+                .padding(.bottom, 16)
             }
-            .padding()
+            .padding(.horizontal, 16)
             .background(Color.designSystem(.g8))
             .cornerRadius(16)
             .rotation3DEffect(Angle(degrees: degree), axis: (x: 0, y: 1, z: 0))

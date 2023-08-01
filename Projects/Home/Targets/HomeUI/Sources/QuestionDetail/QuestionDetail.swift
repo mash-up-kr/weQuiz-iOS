@@ -8,14 +8,20 @@
 
 import SwiftUI
 import DesignSystemKit
+import HomeKit
 
 struct QuestionDetail: View {
     
-    @Environment(\.dismiss) private var dismiss
-    @Binding var questionDetail: QuestionDetailModel
+    @ObservedObject var viewModel: QuestionDetailViewModel
     @State private var isPresentRemoveModal: Bool = false
     @State private var removeSuccessToastModal: WQToast.Model?
-    var onRemove: ((UUID) -> ())?
+    
+    private let navigator: HomeNavigator
+    
+    public init(viewModel: QuestionDetailViewModel, navigator: HomeNavigator) {
+        self.viewModel = viewModel
+        self.navigator = navigator
+    }
     
     var body: some View {
         VStack {
@@ -35,7 +41,8 @@ struct QuestionDetail: View {
                         isPresentRemoveModal = false
                         removeSuccessToastModal = .init(status: .success, text: "문제를 삭제했어요")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                            onRemove?(questionDetail.id)
+                            viewModel.deleteQuestion(QuestionDeleteRequestModel(quizId: viewModel.detailQuizInfo.id))
+                            navigator.back()
                         }
                     }
                 )
@@ -48,19 +55,20 @@ struct QuestionDetail: View {
 
 extension QuestionDetail {
     private var topBarView: some View {
-        WQTopBar(style: .navigationWithButtons(
+        
+        return WQTopBar(style: .navigationWithButtons(
             .init(
                 title: "",
                 bttons: [
-                    .init(icon: Icon.Edit.list, action: {
+                    .init(icon: Icon.Share.fillGray, action: {
                         actionSheet()
                     })
                     ,
-                    .init(icon: Icon.CircleAlert.fillMono, action: {
+                    .init(icon: Icon.TrashCan.fillGray, action: {
                         isPresentRemoveModal = true
                     })
                 ], action: {
-                    dismiss()
+                    navigator.back()
                 }
             )
         ))
@@ -74,18 +82,10 @@ extension QuestionDetail {
     
     private var questionList: some View {
         List {
-            ForEach(questionDetail.questions) { question in
-                AnswerListContainer(question: question, questionsCount: questionDetail.questions.count)
+            ForEach(viewModel.detailQuizInfo.questions) { question in
+                AnswerListContainer(question: question, questionsCount: viewModel.detailQuizInfo.questions.count, questionId: question.id)
             }
         }
         .listStyle(.plain)
     }
 }
-
-
-struct QuestionDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        QuestionDetail(questionDetail: .constant(questionDetailSample))
-    }
-}
-
