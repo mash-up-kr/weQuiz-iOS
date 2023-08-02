@@ -15,27 +15,27 @@ public protocol HomeServiceLogic {
     func getMyInfo<T: Decodable>(
         _ model: T.Type,
         _ requestable: NetworkRequestable)
-        -> AnyPublisher<T?, Error>
+        -> AnyPublisher<MyInfoResponseModel?, Error>
     
     func getFriendRank<T: Decodable>(
         _ model: T.Type,
         _ requestable: NetworkRequestable)
-        -> AnyPublisher<T?, Error>
+        -> AnyPublisher<FriendRankResponseModel?, Error>
     
-    func getQuestionGroup<T: Decodable>(
+    func getQuizGroup<T: Decodable>(
         _ model: T.Type,
         _ requestable: NetworkRequestable)
-        -> AnyPublisher<T?, Error>
+        -> AnyPublisher<QuizGroupResponseModel?, Error>
     
-    func getQuestionDetail<T: Decodable>(
+    func getQuizDetail<T: Decodable>(
         _ model: T.Type,
         _ requestable: NetworkRequestable)
-        -> AnyPublisher<T?, Error>
+        -> AnyPublisher<QuizDetailResponseModel?, Error>
     
-    func deleteQuestion<T: Decodable>(
+    func deleteQuiz<T: Decodable>(
         _ model: T.Type,
         _ requestable: NetworkRequestable)
-        -> AnyPublisher<T?, Error>
+        -> AnyPublisher<QuizDeleteResponseModel?, Error>
 }
 
 public final class HomeService {
@@ -47,9 +47,9 @@ public final class HomeService {
 }
 
 extension HomeService: HomeServiceLogic {
-    public func getMyInfo<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
+    public func getMyInfo<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<MyInfoResponseModel?, Error> where T : Decodable {
         return Future { [weak self] promise in
-            self?.networking.request(BaseDataResponseModel<T>.self, requestable) { result in
+            self?.networking.request(BaseDataResponseModel<MyInfoResponseModel>.self, requestable) { result in
                 switch result {
                 case .success(let success):
                     promise(.success(success))
@@ -60,9 +60,9 @@ extension HomeService: HomeServiceLogic {
         }.eraseToAnyPublisher()
     }
 
-    public func getFriendRank<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
+    public func getFriendRank<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<FriendRankResponseModel?, Error> where T : Decodable {
         return Future { [weak self] promise in
-            self?.networking.request(BaseDataResponseModel<T>.self, requestable) { result in
+            self?.networking.request(BaseDataResponseModel<FriendRankResponseModel>.self, requestable) { result in
                 switch result {
                 case .success(let success):
                     promise(.success(success))
@@ -73,9 +73,9 @@ extension HomeService: HomeServiceLogic {
         }.eraseToAnyPublisher()
     }
 
-    public func getQuestionGroup<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
+    public func getQuizGroup<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<QuizGroupResponseModel?, Error> where T : Decodable {
         return Future { [weak self] promise in
-            self?.networking.request(BaseDataResponseModel<T>.self, requestable) { result in
+            self?.networking.request(BaseDataResponseModel<QuizGroupResponseModel>.self, requestable) { result in
                 switch result {
                 case .success(let success):
                     promise(.success(success))
@@ -86,9 +86,9 @@ extension HomeService: HomeServiceLogic {
         }.eraseToAnyPublisher()
     }
 
-    public func getQuestionDetail<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
+    public func getQuizDetail<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<QuizDetailResponseModel?, Error> where T : Decodable {
         return Future { [weak self] promise in
-            self?.networking.request(BaseDataResponseModel<T>.self, requestable) { result in
+            self?.networking.request(BaseDataResponseModel<QuizDetailResponseModel>.self, requestable) { result in
                 switch result {
                 case .success(let success):
                     promise(.success(success))
@@ -99,9 +99,9 @@ extension HomeService: HomeServiceLogic {
         }.eraseToAnyPublisher()
     }
 
-    public func deleteQuestion<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<T?, Error> where T : Decodable {
+    public func deleteQuiz<T>(_ model: T.Type, _ requestable: CoreKit.NetworkRequestable) -> AnyPublisher<QuizDeleteResponseModel?, Error> where T : Decodable {
         return Future { [weak self] promise in
-            self?.networking.request(BaseDataResponseModel<T>.self, requestable) { result in
+            self?.networking.request(BaseDataResponseModel<QuizDeleteResponseModel>.self, requestable) { result in
                 switch result {
                 case .success(let success):
                     promise(.success(success))

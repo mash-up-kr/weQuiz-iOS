@@ -1,5 +1,5 @@
 //
-//  QuestionDeleteRequestModel.swift
+//  QuestionStatisticRequestModel.swift
 //  HomeKit
 //
 //  Created by 최원석 on 2023/07/25.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct QuestionDeleteRequestModel: Codable {
+public struct QuizDetailRequestModel: Codable {
     public var quizId: Int
     
     public init(quizId: Int) {

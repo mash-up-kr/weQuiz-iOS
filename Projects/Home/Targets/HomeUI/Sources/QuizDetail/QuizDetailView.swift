@@ -10,15 +10,22 @@ import SwiftUI
 import DesignSystemKit
 import HomeKit
 
-struct QuestionDetail: View {
+protocol QuizDetailDisplayLogic {
+    func displayQuizDetail(viewModel: QuizDetailResult.LoadQuizDetail.ViewModel)
+    func deleteQuiz(viewModel: QuizDetailResult.DeleteQuiz.ViewModel)
+}
+
+struct QuizDetailView: View {
     
-    @ObservedObject var viewModel: QuestionDetailViewModel
+    var interactor: QuizDetailBusinessLogic?
+    @ObservedObject var viewModel: QuizDetailDataStore
+    
     @State private var isPresentRemoveModal: Bool = false
     @State private var removeSuccessToastModal: WQToast.Model?
     
     private let navigator: HomeNavigator
     
-    public init(viewModel: QuestionDetailViewModel, navigator: HomeNavigator) {
+    public init(viewModel: QuizDetailDataStore, navigator: HomeNavigator) {
         self.viewModel = viewModel
         self.navigator = navigator
     }
@@ -28,7 +35,6 @@ struct QuestionDetail: View {
             self.topBarView
             self.questionList
         }
-        .navigationBarHidden(true)
         .modal(
             .init(
                 message: "선택한 문제를 삭제할까요?",
@@ -40,9 +46,9 @@ struct QuestionDetail: View {
                     rightAction: {
                         isPresentRemoveModal = false
                         removeSuccessToastModal = .init(status: .success, text: "문제를 삭제했어요")
+
                         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-                            viewModel.deleteQuestion(QuestionDeleteRequestModel(quizId: viewModel.detailQuizInfo.id))
-                            navigator.back()
+                            interactor?.deleteQuiz(request: QuizDetailResult.DeleteQuiz.Request(deleteRequest: QuizDeleteRequestModel(quizId: viewModel.quizInfo.id)))
                         }
                     }
                 )
@@ -53,7 +59,7 @@ struct QuestionDetail: View {
     }
 }
 
-extension QuestionDetail {
+extension QuizDetailView {
     private var topBarView: some View {
         
         return WQTopBar(style: .navigationWithButtons(
@@ -82,10 +88,20 @@ extension QuestionDetail {
     
     private var questionList: some View {
         List {
-            ForEach(viewModel.detailQuizInfo.questions) { question in
-                AnswerListContainer(question: question, questionsCount: viewModel.detailQuizInfo.questions.count, questionId: question.id)
+            ForEach(viewModel.quizInfo.questions) { question in
+                AnswerListContainer(question: question, questionsCount: viewModel.quizInfo.questions.count, questionId: question.id)
             }
         }
         .listStyle(.plain)
+    }
+}
+
+extension QuizDetailView: QuizDetailDisplayLogic {
+    func displayQuizDetail(viewModel: QuizDetailResult.LoadQuizDetail.ViewModel) {
+        self.viewModel.quizInfo = viewModel.quizDetail
+    }
+    
+    func deleteQuiz(viewModel: QuizDetailResult.DeleteQuiz.ViewModel) {
+        navigator.back()
     }
 }

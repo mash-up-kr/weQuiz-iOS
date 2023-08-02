@@ -10,8 +10,8 @@ import SwiftUI
 import DesignSystemKit
 import HomeKit
 
-struct QuestionGroupRow: View {
-    @Binding var question: SummaryQuestionModel
+struct QuizGroupRow: View {
+    @Binding var quiz: QuizSummaryModel
     
     var body: some View {
         HStack {
@@ -25,9 +25,9 @@ struct QuestionGroupRow: View {
     }
 }
 
-extension QuestionGroupRow {
+extension QuizGroupRow {
     private var questionsDescription: some View {
-        Text(question.title)
+        Text(quiz.title)
             .foregroundColor(.designSystem(.g1))
             .font(.pretendard(.medium, size: ._16))
             .padding(.leading, 16)

@@ -10,8 +10,8 @@ import SwiftUI
 import DesignSystemKit
 import HomeKit
 
-struct FriendsRow: View {
-    @Binding var friend: RankUserModel
+struct FriendRankRow: View {
+    @Binding var friend: RankModel
     
     var body: some View {
         HStack {
@@ -27,7 +27,7 @@ struct FriendsRow: View {
     }
 }
 
-extension FriendsRow {
+extension FriendRankRow {
     
     @ViewBuilder
     private var priorityImageView: some View {

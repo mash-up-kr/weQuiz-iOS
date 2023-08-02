@@ -11,13 +11,21 @@ import DesignSystemKit
 import HomeKit
 import CoreKit
 
-struct QuestionGroupList: View {
-    @ObservedObject var viewModel: QuestionGroupViewModel
+protocol QuizGroupDisplayLogic {
+    func displayQuizGroup(viewModel: QuizGroupResult.LoadQuizGroup.ViewModel)
+    func deleteQuiz(viewModel: QuizGroupResult.DeleteQuiz.ViewModel)
+}
+
+struct QuizGroupView: View {
+    
+    var interactor: QuizGroupBusinessLogic?
+    
+    @ObservedObject var viewModel: QuizGroupDataStore
     @State private var isEdited = false
     
     private let naivgator: HomeNavigator
     
-    public init(naivgator: HomeNavigator, viewModel: QuestionGroupViewModel) {
+    public init(naivgator: HomeNavigator, viewModel: QuizGroupDataStore) {
         self.naivgator = naivgator
         self.viewModel = viewModel
     }
@@ -28,7 +36,9 @@ struct QuestionGroupList: View {
             self.listBarView
             self.listView
         }
-        .navigationBarHidden(true)
+        .task {
+            interactor?.getQuizGroup(request: QuizGroupResult.LoadQuizGroup.Request(quizGroupRequest: QuizGroupRequestModel(size: 15, cursor: nil)))
+        }
     }
     
     private var topBarView: some View {
@@ -42,7 +52,7 @@ struct QuestionGroupList: View {
     
     private var listBarView: some View {
         HStack {
-            Text("전체\(viewModel.questions.count)")
+            Text("전체\(viewModel.quizs.count)")
                 .foregroundColor(.designSystem(.g2))
                 .font(.pretendard(.medium, size: ._14))
                 .padding([.horizontal, .top], 20)
@@ -62,12 +72,12 @@ struct QuestionGroupList: View {
     
     private var listView: some View {
         List {
-            ForEach($viewModel.questions) { question in
+            ForEach($viewModel.quizs) { quiz in
                 ZStack {
-                    QuestionGroupRow(question: question)
+                    QuizGroupRow(quiz: quiz)
                 }
                 .onTapGesture {
-                    naivgator.path.append(.questionDetail(quizId: question.id))
+                    naivgator.path.append(.questionDetail(quizId: quiz.id))
                 }
                 .listRowBackground(Color.clear)
                 .padding(.horizontal, 20)
@@ -82,8 +92,17 @@ struct QuestionGroupList: View {
     
     private func removeItem(at offsets: IndexSet) {
         if let firstIndex = offsets.first {
-            viewModel.deleteQuestion(QuestionDeleteRequestModel(quizId: viewModel.questions[firstIndex].id))
-            viewModel.questions.remove(atOffsets: offsets)
+            interactor?.deleteQuiz(request: QuizGroupResult.DeleteQuiz.Request(deleteRequest: QuizDeleteRequestModel(quizId: viewModel.quizs[firstIndex].id)))
         }
+    }
+}
+
+extension QuizGroupView: QuizGroupDisplayLogic {
+    func displayQuizGroup(viewModel: QuizGroupResult.LoadQuizGroup.ViewModel) {
+        self.viewModel.quizs = viewModel.quizs
+    }
+    
+    func deleteQuiz(viewModel: QuizGroupResult.DeleteQuiz.ViewModel) {
+        print("delete 완료시 이뤄지는 이벤트 명시")
     }
 }

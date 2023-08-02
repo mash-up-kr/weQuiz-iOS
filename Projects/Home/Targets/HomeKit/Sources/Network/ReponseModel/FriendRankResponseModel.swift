@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct FriendRankGroupModel {
+public struct FriendRankResponseModel {
     public var hasNext: Bool
     public var cursorUserId: Int?
     public var cursorScore: Int?
@@ -45,8 +45,8 @@ public struct UserInfoModel {
     }
 }
 
-extension FriendRankGroupModel: Decodable { }
-extension FriendRankGroupModel: Equatable { }
+extension FriendRankResponseModel: Decodable { }
+extension FriendRankResponseModel: Equatable { }
 
 extension FriendModel: Decodable { }
 extension FriendModel: Equatable { }

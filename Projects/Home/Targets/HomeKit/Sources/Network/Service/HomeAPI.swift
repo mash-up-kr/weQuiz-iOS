@@ -13,78 +13,78 @@ import CoreKit
 import HomeKit
 
 
-enum HomeAPI {
+public enum HomeAPI {
     case getMyInfo
     case getFriendRank(FriendRankRequestModel)
-    case getQuestionGroup(QuestionGroupRequestModel)
-    case getQuestionStatistic(QuestionStatisticRequestModel)
-    case deleteQuestion(QuestionDeleteRequestModel)
+    case getQuizGroup(QuizGroupRequestModel)
+    case getQuizDetail(QuizDetailRequestModel)
+    case deleteQuiz(QuizDeleteRequestModel)
 }
 
 extension HomeAPI: NetworkRequestable {
-    var path: String {
+    public var path: String {
         switch self {
         case .getMyInfo:
             return "/api/v1/user"
         case .getFriendRank:
             return "/api/v1/ranking/my-quiz"
-        case .getQuestionGroup(_):
+        case .getQuizGroup(_):
             return "/api/v1/quiz"
-        case .getQuestionStatistic(let model):
+        case .getQuizDetail(let model):
             return "/api/v1/statistic/quiz/\(model.quizId)"
-        case .deleteQuestion(let model):
+        case .deleteQuiz(let model):
             return "/api/v1/quiz/\(model.quizId)"
         }
     }
     
-    var headers: NetworkHeader? {
+    public var headers: NetworkHeader? {
         .init([
             "x-wequiz-token": "AIE-54W-amwtn2V03BQXn5ibwu3my68KXVAL4b7wQMa7gIDLV_QGwcQji_5lQ30sV20L5igMhn4Daig6w4JhTPOF_rQ_c-CF5rojgpVw8EVKnNgJF2ePgAt4bRJ86Mvml51yWvWl2wcTX30StvIeSomDhlhUx2jcMw"
         ])
         
     }
     
-    var method: NetworkMethod {
+    public var method: NetworkMethod {
         switch self {
         case .getMyInfo:
             return .get
         case .getFriendRank:
             return .get
-        case .getQuestionGroup(_):
+        case .getQuizGroup(_):
             return .get
-        case .getQuestionStatistic(_):
+        case .getQuizDetail(_):
             return .get
-        case .deleteQuestion(_):
+        case .deleteQuiz(_):
             return .delete
         }
     }
     
-    var parameters: Encodable? {
+    public var parameters: Encodable? {
         switch self {
         case .getMyInfo:
             return nil
         case .getFriendRank(let model):
             return model
-        case .getQuestionGroup(let model):
+        case .getQuizGroup(let model):
             return model
-        case .getQuestionStatistic(let model):
+        case .getQuizDetail(let model):
             return model
-        case .deleteQuestion(let model):
+        case .deleteQuiz(let model):
             return model
         }
     }
     
-    var encoding: NetworkParameterEncoding {
+    public var encoding: NetworkParameterEncoding {
         switch self {
         case .getMyInfo:
             return .urlEncoding
         case .getFriendRank(_):
             return .urlEncoding
-        case .getQuestionGroup(_):
+        case .getQuizGroup(_):
             return .urlEncoding
-        case .getQuestionStatistic(_):
+        case .getQuizDetail(_):
             return .urlEncoding
-        case .deleteQuestion(_):
+        case .deleteQuiz(_):
             return .urlEncoding
         }
     }
