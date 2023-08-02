@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_circle-alert.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
