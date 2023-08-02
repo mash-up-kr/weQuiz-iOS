@@ -67,7 +67,7 @@ public struct QuizCompletionView: View {
     }
     
     private func quizLink(id: Int) {
-        makeDynamicLink(id) {
+        makeDynamicLink(type: .solve(id: id)) {
             guard let url = $0 else { return }
             activityItem = [url]
             isSharePresented = true

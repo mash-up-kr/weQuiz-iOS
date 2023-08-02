@@ -21,6 +21,7 @@ public struct QuizResultView: View {
 
     @Binding var isPresented: Bool
     @State private var isSharePresented = false
+    @State private var activityItem: [Any] = []
     
     public init(isPresented: Binding<Bool>, quizId: Int,_ quizResult: QuizResultModel) {
         self._isPresented = isPresented
@@ -71,15 +72,15 @@ public struct QuizResultView: View {
                             isPresented = false
                         },
                         rightAction: {
-                            isSharePresented = true
+                            guard let quizId = model.quizId else { return }
+                            resultLink(id: quizId)
                         }
                     )))
                     .background(
                         // TODO: - url 문제 id로 수정
                         ActivityView(
                             isPresented: $isSharePresented,
-                            activityItems: ["찐친고사 결과를 확인해보세요!",
-                                            URL(string: "https://youtu.be/jOTfBlKSQYY")!]
+                            activityItems: activityItem
                         )
                     )
                 }
@@ -93,13 +94,14 @@ public struct QuizResultView: View {
         }
     }
 }
+
 extension QuizResultView: QuizResultDisplayLogic {
     func displayRanking(viewModel: QuizResult.LoadRanking.ViewModel) {
         self.model.result?.ranking = viewModel.rank
     }
 }
-extension QuizResultView {
 
+extension QuizResultView {
     private func socreView(_ score: Int) -> some View {
         HStack(alignment: .center, spacing: 6) {
             // TODO: - size 68로 수정
@@ -165,5 +167,13 @@ extension QuizResultView {
         }
         .frame(height: 56)
         .background(Color.designSystem(.g9))
+    }
+    
+    private func resultLink(id: Int) {
+        makeDynamicLink(type: .result(id: id)) {
+            guard let url = $0 else { return }
+            activityItem = [url]
+            isSharePresented = true
+        }
     }
 }
