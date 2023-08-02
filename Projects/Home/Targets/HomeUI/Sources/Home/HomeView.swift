@@ -29,6 +29,7 @@ public struct HomeView: View {
                         self.friendRankView
                         self.myQuestionView
                     }
+                    
                 }
                 .task {
                     interactor?.getQuizGroup(request: HomeResult.LoadQuizGroup.Request(quizGroupRequest: QuizGroupRequestModel(size: 15, cursor: nil)))
@@ -46,6 +47,12 @@ public struct HomeView: View {
                     }
                 }
             }
+            .overlay(
+                myQuestionBlankView
+                    .padding([.leading, .trailing], 20)
+                    .padding(.top, 26)
+                , alignment: .center
+            )
         })
         .preferredColorScheme(.dark)
     }
@@ -156,15 +163,24 @@ extension HomeView {
         }
     }
     
+    @ViewBuilder
     private var myQuestionBlankView: some View {
         let image = "doc.plaintext"
         let contents = "아직 생성된 문제가 없어요"
         
-        return VStack {
-            Image(systemName: image)
-            Text(contents)
-                .foregroundColor(.designSystem(.g2))
-                .font(.pretendard(.regular, size: ._14))
+        if viewModel.friendsRank.isEmpty && viewModel.quizs.isEmpty {
+            VStack {
+                Image(systemName: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 40, height: 40)
+                    .padding(.bottom, 12)
+                Text(contents)
+                    .foregroundColor(.designSystem(.g2))
+                    .font(.pretendard(.regular, size: ._14))
+            }
+        } else {
+            EmptyView()
         }
     }
     
@@ -207,9 +223,7 @@ extension HomeView {
                 .padding([.leading, .trailing], 20)
                 .padding(.top, 26)
         } else {
-            myQuestionBlankView
-                .padding([.leading, .trailing], 20)
-                .padding(.top, 26)
+            EmptyView()
         }
     }
 }
