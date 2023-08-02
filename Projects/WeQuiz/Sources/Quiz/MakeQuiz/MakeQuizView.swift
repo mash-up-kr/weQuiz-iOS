@@ -37,74 +37,41 @@ public struct MakeQuizView: View {
                 .background(
                     Color.designSystem(.g9)
                 )
-                
-                GeometryReader {_ in
-                    VStack {
-                        VStack {
-                            TextField("", text: $viewModel.quiz.title, prompt: Text("제목없는 시험지").foregroundColor(Color.designSystem(.g4)))
-                                .frame(height: 34)
-                                .onReceive(Just(viewModel.quiz.title)) { _ in
-                                    viewModel.limitQuizName()
-                                }
-                                .font(.pretendard(.medium, size: ._24))
-                                .foregroundColor(Color.designSystem(.g4))
-                                .padding(EdgeInsets(top: 24, leading: 20, bottom: 0, trailing: 20))
-                            
-                            List {
-                                Section(content: {
-                                    ForEach($viewModel.quiz.questions, id: \.id) { item in
-                                        QuestionView(model: item, onRemove: { index in
-                                            removedIndex = (popupPresented: true, index: index)
-                                        }, onExpand: { index in
-                                            viewModel.toggleExpand(index)
-                                        })
-                                    }
-                                    .onMove(perform: moveListItem)
 
-                                }, footer: {
-                                    
-                                    Button(action: {
-                                        if self.viewModel.quiz.questions.count >= 10 { return }
-                                        self.viewModel.quiz.questions.append(MakeQuestionModel())
-                                    }) {
-                                        HStack(alignment: .center, spacing: 7, content: {
-                                            Image(Icon.Add.circle)
-                                                .frame(width: 16.5, height: 16.5)
-                                            
-                                            Text("질문 추가")
-                                                .font(.pretendard(.bold, size: ._16))
-                                                .foregroundColor(Color.designSystem(.g1))
-                                                
-                                        })
-                                        .frame(maxWidth: .infinity)
-                                        .frame(height: 56)
-                                        .background(Color.designSystem(.g8))
-                                        .cornerRadius(16)
-                                        .padding(.top, 16)
-                                        
-                                    }
-                                    .background(
-                                        Color.designSystem(.g9)
-                                    )
-                                    .listRowInsets(EdgeInsets())
-                                    
+                VStack {
+                    titleTextField()
+                    
+                    ScrollViewReader { proxy in
+                        ScrollView {
+                            ForEach($viewModel.quiz.questions, id: \.id) { item in
+                                QuestionView(model: item, onRemove: { index in
+                                    removedIndex = (popupPresented: true, index: index)
+                                }, onExpand: { index in
+                                    viewModel.toggleExpand(index)
+                                    proxy.scrollTo(item.id, anchor: .center)
                                 })
+                                .padding(.bottom, 12)
+                                .id(item.id)
                             }
-                            .listStyle(.plain)
-                            .padding(EdgeInsets(top: 30, leading: 20, bottom: 0, trailing: 20))
+                            .onMove(perform: moveListItem)
+                            
+                            addAnswerView()
+                                .padding(.horizontal, 20)
+                            
                         }
-                        
-                        Spacer()
-
-                        WQButton(
-                          style: .single(
-                              .init(title: "시험지 완성하기",
-                                  action: {
-                                      interactor?.requestMakeQuiz(request: .init(quiz: viewModel.quiz))
-                                  }))
-                        )
-                        .frame(height: 52)
+                        .padding(.top, 30)
                     }
+
+                    Spacer()
+
+                    WQButton(
+                      style: .single(
+                          .init(title: "시험지 완성하기",
+                              action: {
+                                  interactor?.requestMakeQuiz(request: .init(quiz: viewModel.quiz))
+                              }))
+                    )
+                    .frame(height: 52)
                 }
                 .frame(maxWidth: .infinity)
                 .ignoresSafeArea(.keyboard, edges: .bottom)
@@ -134,6 +101,43 @@ public struct MakeQuizView: View {
                 }
             }
         }
+    }
+    
+    private func titleTextField() -> some View {
+        TextField("", text: $viewModel.quiz.title, prompt: Text("제목없는 시험지").foregroundColor(Color.designSystem(.g4)))
+            .frame(height: 34)
+            .onReceive(Just(viewModel.quiz.title)) { _ in
+                viewModel.limitQuizName()
+            }
+            .font(.pretendard(.medium, size: ._24))
+            .foregroundColor(Color.designSystem(.g4))
+            .padding(EdgeInsets(top: 24, leading: 20, bottom: 0, trailing: 20))
+    }
+    
+    private func addAnswerView() -> some View {
+        Button(action: {
+            if self.viewModel.quiz.questions.count >= 10 { return }
+            self.viewModel.quiz.questions.append(MakeQuestionModel())
+        }) {
+            HStack(alignment: .center, spacing: 7, content: {
+                Image(Icon.Add.circle)
+                    .frame(width: 16.5, height: 16.5)
+                
+                Text("질문 추가")
+                    .font(.pretendard(.bold, size: ._16))
+                    .foregroundColor(Color.designSystem(.g1))
+                    
+            })
+            .frame(maxWidth: .infinity)
+            .frame(height: 56)
+            .background(Color.designSystem(.g8))
+            .cornerRadius(16)
+            .padding(.bottom, 20)
+            
+        }
+        .background(
+            Color.designSystem(.g9)
+        )
     }
     
     private func moveListItem(from source: IndexSet, to destination: Int) {
