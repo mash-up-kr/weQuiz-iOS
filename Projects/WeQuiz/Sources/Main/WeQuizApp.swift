@@ -78,10 +78,12 @@ struct WeQuizApp: App {
     
     var body: some Scene {
         WindowGroup {
-//            ContentView()
-            HomeView()
-                .configureView()
-                .environmentObject(HomeNavigator.shared)
+            ContentView()
+                .onOpenURL { url in
+                    if let quizId = DynamicLinks.id(from: url) {
+                        // TODO: Quiz 풀기 혹은 Quiz 결과 화면 Push
+                    }
+                }
         }
     }
 }

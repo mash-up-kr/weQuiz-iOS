@@ -31,7 +31,7 @@ struct SignUpFinishView: View {
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                print("홈으로 이동")
+                
             }
         }
     }

@@ -13,14 +13,14 @@ struct ContentView: View {
     private let homeNavigator: HomeNavigator = .shared
     var body: some View {
         Group {
-            if let token = AuthManager.shared.token {
+            if let _ = AuthManager.shared.token {
                 HomeView()
+                    .configureView()
                     .environmentObject(homeNavigator)
             } else {
                 OnboardingView()
                     .environmentObject(authenticationNavigator)
             }
-            
         }
     }
 }

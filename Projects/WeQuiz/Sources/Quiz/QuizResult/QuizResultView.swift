@@ -170,7 +170,7 @@ extension QuizResultView {
     }
     
     private func resultLink(id: Int) {
-        makeDynamicLink(type: .result(id: id)) {
+        DynamicLinks.makeDynamicLink(type: .result(id: id)) {
             guard let url = $0 else { return }
             activityItem = [url]
             isSharePresented = true
