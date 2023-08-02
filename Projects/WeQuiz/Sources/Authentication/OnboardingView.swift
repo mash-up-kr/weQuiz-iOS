@@ -1,5 +1,7 @@
 import SwiftUI
 
+import DesignSystemKit
+
 public struct OnboardingView: View {
     @EnvironmentObject var navigator: AuthenticationNavigator
     

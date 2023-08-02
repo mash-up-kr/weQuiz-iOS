@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+import DesignSystemKit
+
 public struct UserInformationInputView: View {
     @ObservedObject private var presenter: UserInformationInputPresenter
     

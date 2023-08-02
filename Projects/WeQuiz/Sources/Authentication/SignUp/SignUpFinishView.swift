@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+import DesignSystemKit
+
 struct SignUpFinishView: View {
     private let nickname: String
     
@@ -28,8 +30,7 @@ struct SignUpFinishView: View {
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                navigator.otherModuleHandler?()
-                AuthenticationKit.didFnish?()
+                print("홈으로 이동")
             }
         }
     }

@@ -8,6 +8,8 @@
 
 import SwiftUI
 
+import DesignSystemKit
+
 public struct VerificationCodeInputView: View {
     @ObservedObject var presenter: VerificationCodeInputPresenter
     

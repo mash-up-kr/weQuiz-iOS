@@ -15,7 +15,8 @@ extension Project {
                 name: name,
                 platform: .iOS,
                 dependencies: [
-                    .project(target: "DesignSystemKit", path: .relativeToRoot("Projects/DesignSystem"))
+                    .project(target: "DesignSystemKit", path: .relativeToRoot("Projects/DesignSystem")),
+                    .external(name: "FirebaseAuth")
                 ]
             )
         )

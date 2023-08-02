@@ -26,8 +26,6 @@ public final class AuthenticationNavigator: ObservableObject {
     
     public static let shared: AuthenticationNavigator = .init()
     
-    public var otherModuleHandler: (() -> Void)?
-    
     public func back() {
         path = path.dropLast()
     }
