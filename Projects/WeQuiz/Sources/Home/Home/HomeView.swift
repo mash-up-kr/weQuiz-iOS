@@ -75,10 +75,9 @@ public struct HomeView: View {
     }
     
     private func makeQuizBuilder() -> some View {
-        Text("퀴즈만들기")
-//        MakeQuizView()
-//            .configureView()
-//            .navigationBarBackButtonHidden()
+        MakeQuizView()
+            .configureView()
+            .navigationBarBackButtonHidden()
     }
 }
 
