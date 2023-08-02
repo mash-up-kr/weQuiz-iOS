@@ -11,12 +11,20 @@ extension Project {
         return Project(
             name: name,
             organizationName: "wequiz.io",
+            packages: [
+                .remote(url: "https://github.com/Alamofire/Alamofire.git", requirement: .exact("5.6.1")),
+                .remote(url: "https://github.com/firebase/firebase-ios-sdk", requirement: .exact("10.12.0"))
+            ],
             targets: makeAppTargets(
                 name: name,
                 platform: .iOS,
                 dependencies: [
                     .project(target: "DesignSystemKit", path: .relativeToRoot("Projects/DesignSystem")),
-                    .external(name: "FirebaseAuth")
+                    .package(product: "Alamofire"),
+                    .package(product: "FirebaseAuth"),
+                    .package(product: "FirebaseDynamicLinks"),
+                    .package(product: "FirebaseAnalytics"),
+                    .package(product: "FirebaseCrashlytics")
                 ]
             )
         )
@@ -34,7 +42,11 @@ extension Project {
             bundleId: "wequiz.ios.\(name)",
             infoPlist: .file(path: "SupportingFiles/\(name)-Info.plist"),
             sources: ["Sources/**"],
-            resources: ["Resources/**"],
+            resources: [
+                "Resources/**",
+                "SupportingFiles/GoogleService-Info.plist"
+            ],
+            entitlements: "\(name).entitlements",
             dependencies: dependencies
         )
         return [mainTarget, ]
