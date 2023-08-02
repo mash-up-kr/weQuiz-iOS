@@ -34,15 +34,15 @@ public struct QuizCompletionView: View {
                   style: .single(
                       .init(title: "친구들에게 시험지 공유하기",
                           action: {
-                              self.isSharePresented = true
+                              quizLink(id: quizId)
                           }))
                 )
                 .frame(height: 52)
                 .background(
                     ActivityView(
                         isPresented: $isSharePresented,
-                        activityItems: ["친구가 만든 찐친고사에 도전해보세요!", URL(string: "https://www.youtube.com/")!])
-                    // TODO: - url 문제 id로 수정
+                        activityItems: activityItem
+                    )
                 )
             }
             
@@ -64,6 +64,14 @@ public struct QuizCompletionView: View {
             Color.designSystem(.g9)
         )
         .navigationBarHidden(true)
+    }
+    
+    private func quizLink(id: Int) {
+        makeDynamicLink(id) {
+            guard let url = $0 else { return }
+            activityItem = [url]
+            isSharePresented = true
+        }
     }
 }
 
