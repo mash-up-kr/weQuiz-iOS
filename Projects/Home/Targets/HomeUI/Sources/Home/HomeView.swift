@@ -4,15 +4,19 @@ import HomeKit
 import CoreKit
 import QuizUI
 
+protocol HomeDisplayLogic {
+    func displayMyInfo(viewModel: HomeResult.LoadMyInfo.ViewModel)
+    func displayFriendRank(viewModel: HomeResult.LoadRanking.ViewModel)
+    func displayQuizGroup(viewModel: HomeResult.LoadQuizGroup.ViewModel)
+}
 
-public struct Home: View {
+public struct HomeView: View {
     public init() { }
     
+    var interactor: HomeBusinessLogic?
+    
+    @ObservedObject var viewModel: HomeDataStore = HomeDataStore(myInfo: MyInfoResponseModel(id: 0, image: "", nickname: "", contents: ""), quizs: [], friendsRank: [])
     @EnvironmentObject var navigator: HomeNavigator
-    @StateObject var viewModel: HomeViewModel = HomeViewModel(service: HomeService(Networking()))
-    @State private var isEdited: Bool = false
-    @State private var isPresentedQuestionDetail: Bool = false
-    @State private var isPresentedMakeQuiz: Bool = false
     
     public var body: some View {
         NavigationStack(path: $navigator.path,  root: {
@@ -25,9 +29,10 @@ public struct Home: View {
                         self.friendRankView
                         self.myQuestionView
                     }
+                    
                 }
-                .onAppear() {
-                    viewModel.getQuestionGroup(QuestionGroupRequestModel(size: 15, cursor: nil))
+                .task {
+                    interactor?.getQuizGroup(request: HomeResult.LoadQuizGroup.Request(quizGroupRequest: QuizGroupRequestModel(size: 15, cursor: nil)))
                 }
                 .navigationDestination(for: Screen.self) { type in
                     switch type {
@@ -42,30 +47,43 @@ public struct Home: View {
                     }
                 }
             }
+            .overlay(
+                myQuestionBlankView
+                    .padding([.leading, .trailing], 20)
+                    .padding(.top, 26)
+                , alignment: .center
+            )
         })
         .preferredColorScheme(.dark)
     }
     
     
     private func friendRankBuilder() -> some View {
-        FriendsList(navigator: navigator, viewModel: FriendRankViewModel(service: HomeService(Networking())))
+        FriendRankView(navigator: navigator, viewModel: FriendRankDataStore(result: viewModel.friendsRank))
+            .configureView()
+            .navigationBarBackButtonHidden()
     }
     
     private func questionGroupBuilder() -> some View {
-        QuestionGroupList(naivgator: navigator, viewModel: QuestionGroupViewModel(service: HomeService(Networking()), questions: viewModel.questions))
+        QuizGroupView(naivgator: navigator, viewModel: QuizGroupDataStore(quizs: viewModel.quizs))
+            .configureView()
+            .navigationBarBackButtonHidden()
     }
     
     private func questionDetailBuilder(quizId: Int) -> some View {
-        QuestionDetail(viewModel: QuestionDetailViewModel(quizId: quizId, service: HomeService(Networking())), navigator: navigator)
+        QuizDetailView(viewModel: QuizDetailDataStore(quizInfo: QuizDetailViewModel(quizId: 0, quizTitle: "", questions: [])), navigator: navigator)
+            .configureView(quizId: quizId)
+            .navigationBarBackButtonHidden()
     }
     
     private func makeQuizBuilder() -> some View {
-        MakeQuizView().configureView()
+        MakeQuizView()
+            .configureView()
             .navigationBarBackButtonHidden()
     }
 }
 
-extension Home {
+extension HomeView {
     private var topBarView: some View {
         WQTopBar(style: .title(.init(title: "LOGO")))
             .padding(.leading, 8)
@@ -140,20 +158,29 @@ extension Home {
                 .padding(.bottom, 8)
             
             ForEach($viewModel.friendsRank.prefix(3)) { friend in
-                FriendsRow(friend: friend)
+                FriendRankRow(friend: friend)
             }
         }
     }
     
+    @ViewBuilder
     private var myQuestionBlankView: some View {
         let image = "doc.plaintext"
         let contents = "아직 생성된 문제가 없어요"
         
-        return VStack {
-            Image(systemName: image)
-            Text(contents)
-                .foregroundColor(.designSystem(.g2))
-                .font(.pretendard(.regular, size: ._14))
+        if viewModel.friendsRank.isEmpty && viewModel.quizs.isEmpty {
+            VStack {
+                Image(systemName: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 40, height: 40)
+                    .padding(.bottom, 12)
+                Text(contents)
+                    .foregroundColor(.designSystem(.g2))
+                    .font(.pretendard(.regular, size: ._14))
+            }
+        } else {
+            EmptyView()
         }
     }
     
@@ -166,12 +193,12 @@ extension Home {
                     }
                     .padding(.bottom, 8)
                 
-                ForEach($viewModel.questions.prefix(4)) { question in
+                ForEach($viewModel.quizs.prefix(4)) { quiz in
                     ZStack {
-                        QuestionGroupRow(question: question)
+                        QuizGroupRow(quiz: quiz)
                     }
                     .onTapGesture {
-                        navigator.path.append(.questionDetail(quizId: question.id))
+                        navigator.path.append(.questionDetail(quizId: quiz.id))
                     }
                 }
             }
@@ -191,14 +218,12 @@ extension Home {
     
     @ViewBuilder
     private var myQuestionView: some View {
-        if !$viewModel.questions.isEmpty {
+        if !$viewModel.quizs.isEmpty {
             myQuestionList
                 .padding([.leading, .trailing], 20)
                 .padding(.top, 26)
         } else {
-            myQuestionBlankView
-                .padding([.leading, .trailing], 20)
-                .padding(.top, 26)
+            EmptyView()
         }
     }
 }
@@ -218,8 +243,22 @@ struct CustomHeader: View {
     }
 }
 
+extension HomeView: HomeDisplayLogic {
+    func displayMyInfo(viewModel: HomeResult.LoadMyInfo.ViewModel) {
+        self.viewModel.myInfo = viewModel.myInfo
+    }
+    
+    func displayFriendRank(viewModel: HomeResult.LoadRanking.ViewModel) {
+        self.viewModel.friendsRank = viewModel.rank
+    }
+    
+    func displayQuizGroup(viewModel: HomeResult.LoadQuizGroup.ViewModel) {
+        self.viewModel.quizs = viewModel.quizs
+    }
+}
+
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        Home().environmentObject(HomeViewModel(service: HomeService(Networking())))
+        HomeView().environmentObject(HomeNavigator.shared)
     }
 }

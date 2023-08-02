@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct MyInfoModel {
+public struct MyInfoResponseModel {
     public var id: Int
     public var image: String?
     public var nickname: String
@@ -29,7 +29,7 @@ public struct MyInfoModel {
     }
 }
 
-extension MyInfoModel: Decodable { }
-extension MyInfoModel: Identifiable { }
+extension MyInfoResponseModel: Decodable { }
+extension MyInfoResponseModel: Identifiable { }
 
-public var myInfoSamlple: MyInfoModel = MyInfoModel(id: 0, image: "circle", nickname: "교대역 강다니엘", contents: "오늘밤 주인공은 나야나!")
+public var myInfoSamlple: MyInfoResponseModel = MyInfoResponseModel(id: 0, image: "circle", nickname: "교대역 강다니엘", contents: "오늘밤 주인공은 나야나!")

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct QuestionGroupRequestModel: Codable {
+public struct QuizGroupRequestModel: Codable {
     public var size: Int
     public var cursor: Int?
     

@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct QuestionDeleteModel {
+public struct QuizDeleteResponseModel {
     public var isDeleted: Bool
     
     public init(isDeleted: Bool) {
@@ -16,4 +16,4 @@ public struct QuestionDeleteModel {
     }
 }
 
-extension QuestionDeleteModel: Decodable { }
+extension QuizDeleteResponseModel: Decodable { }

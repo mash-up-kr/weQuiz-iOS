@@ -14,7 +14,8 @@ struct HomeApp: App {
     
     var body: some Scene {
         WindowGroup {
-            Home()
+            HomeView()
+                .configureView()
                 .environmentObject(navigator)
         }
     }

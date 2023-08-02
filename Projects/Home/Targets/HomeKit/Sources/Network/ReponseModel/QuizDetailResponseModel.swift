@@ -8,39 +8,39 @@
 
 import SwiftUI
 
-public struct QuizInfoModel: Decodable, Identifiable {
+public struct QuizDetailResponseModel: Decodable, Identifiable {
     public var quizId: Int
     public var quizTitle: String
-    public var questions: [QuestionModel]
+    public var questions: [QuestionResponseModel]
     
     public var id: Int {
         return quizId
     }
     
-    public init(quizId: Int, quizTitle: String, questions: [QuestionModel]) {
+    public init(quizId: Int, quizTitle: String, questions: [QuestionResponseModel]) {
         self.quizId = quizId
         self.quizTitle = quizTitle
         self.questions = questions
     }
 }
 
-public struct QuestionModel: Decodable, Identifiable {
+public struct QuestionResponseModel: Decodable, Identifiable {
     public var questionId: Int
     public var questionTitle: String
-    public var options: [AnswerModel]
+    public var options: [AnswerResponseModel]
     
     public var id: Int {
         return questionId
     }
     
-    public init(questionId: Int, questionTitle: String, options: [AnswerModel]) {
+    public init(questionId: Int, questionTitle: String, options: [AnswerResponseModel]) {
         self.questionId = questionId
         self.questionTitle = questionTitle
         self.options = options
     }
 }
 
-public struct AnswerModel: Decodable, Identifiable {
+public struct AnswerResponseModel: Decodable, Identifiable {
     public var optionId: Int
     public var content: String
     public var isCorrect: Bool
