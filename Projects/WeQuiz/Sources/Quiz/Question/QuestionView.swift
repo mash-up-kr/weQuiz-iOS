@@ -32,11 +32,14 @@ public struct QuestionView: View {
                 if model.isExpand {
                     VStack {
                         answerInputs()
-                        AddAnswerButtonView(answerNumber: $model.answers.count)
-                            .frame(height: 56)
-                            .onTapGesture {
-                                addAnswer()
-                            }
+                        
+                        if self.model.answers.count < 5 {
+                            AddAnswerButtonView(answerNumber: $model.answers.count)
+                                .frame(height: 56)
+                                .onTapGesture {
+                                    addAnswer()
+                                }
+                        }
 
                         MultipleSelectionView(isSelected: $model.duplicatedOption)
                             .onChange(of: model.duplicatedOption) { newValue in
@@ -106,7 +109,10 @@ public struct QuestionView: View {
     
     private func addAnswer() {
         if self.model.answers.count >= 5 { return }
-        self.expandedHeight += 72
+        if self.model.answers.count < 4 {
+            self.expandedHeight += 72
+        }
+        
         self.model.answers.append(MakeAnswerModel.init())
     }
     

@@ -47,15 +47,12 @@ public struct QuizCompletionView: View {
             }
             
             VStack {
-                // TODO: - 이미지 수정
-                Image(Icon.Siren.mono)
+                Image("img_success")
                     .resizable()
                     .aspectRatio(1.0, contentMode: .fit)
-                    .background(Color.designSystem(.g1))
-                    .cornerRadius(27)
-                    
                 
-                Text("시험지를 완성했어요!")
+                Text("WeQuiz\n시험지를 완성했어요!")
+                    .multilineTextAlignment(.center)
                     .font(.pretendard(.bold, size: ._24))
                     .foregroundColor(Color.designSystem(.g1))
             }
