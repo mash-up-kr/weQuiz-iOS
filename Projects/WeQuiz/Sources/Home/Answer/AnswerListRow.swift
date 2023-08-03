@@ -14,17 +14,19 @@ struct AnswerListRow: View {
     
     var listType: AnswerListType
     var model: AnswerViewModel
-    @State var percentViewSize: CGSize = CGSize(width: 0, height: 0)
-    @State var alphabetCircleSize: CGSize = CGSize(width: 0, height: 0)
-    @State var contentTextSize: CGSize = CGSize(width: 0, height: 0)
-    @State var spacerSize: CGSize = CGSize(width: 0, height: 0)
-    @State var percentTextSize: CGSize = CGSize(width: 0, height: 0)
-    
+    @ObservedObject var viewModel: AnswerListRowDataStore = AnswerListRowDataStore()
+    @State var percentViewSize = CGSize(width: 0, height: 0)
+    @State var alphabetCircleSize = CGSize(width: 0, height: 0)
+    @State var contentTextSize = CGSize(width: 0, height: 0)
+    @State var spacerSize = CGSize(width: 0, height: 0)
+    @State var percentTextSize = CGSize(width: 0, height: 0)
+        
     var body: some View {
         let answerNum = model.rank - 1
-        let alphabetCircleTextColor = textColor(lhs: alphabetCircleSize.width, rhs: percentTextSize.width)
-        let contentTextColor = textColor(lhs: (alphabetCircleSize.width + contentTextSize.width), rhs: percentTextSize.width)
-        let percentTextColor = textColor(lhs: (alphabetCircleSize.width + contentTextSize.width + spacerSize.width + percentTextSize.width), rhs: percentTextSize.width)
+        var alphabetCircleTextColor = textColor(lhs: alphabetCircleSize.width, rhs: percentViewSize.width)
+        var contentTextColor = textColor(lhs: alphabetCircleSize.width + contentTextSize.width, rhs: percentViewSize.width)
+        var percentTextColor = textColor(lhs: alphabetCircleSize.width + contentTextSize.width + spacerSize.width + percentTextSize.width, rhs: percentViewSize.width)
+        
         
         if listType == .back {
             GeometryReader { geometry in
@@ -35,7 +37,7 @@ struct AnswerListRow: View {
                             GeometryReader { proxy in
                                 Color.clear
                                     .onAppear {
-                                        self.percentViewSize = proxy.size
+                                        percentViewSize = proxy.size
                                     }
                             }
                         )
@@ -68,7 +70,7 @@ struct AnswerListRow: View {
                                 GeometryReader { proxy in
                                     Color.clear
                                         .onAppear {
-                                            percentTextSize = proxy.size
+                                            spacerSize = proxy.size
                                         }
                                 }
                             )
@@ -107,7 +109,7 @@ struct AnswerListRow: View {
 }
 
 extension AnswerListRow {
-    func textColor(lhs: Double, rhs: Double) -> Color {
+    func textColor(lhs: CGFloat, rhs: CGFloat) -> Color {
         return lhs <= rhs ? Color.designSystem(.g9) : Color.designSystem(.g2)
     }
 }
