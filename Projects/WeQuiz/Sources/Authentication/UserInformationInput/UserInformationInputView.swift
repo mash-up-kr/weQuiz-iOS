@@ -96,6 +96,7 @@ public struct UserInformationInputView: View {
         @Binding private var isNicknameValid: Bool
         @Binding private var introduction: String
         @Binding private var isIntroductionValid: Bool
+        @FocusState var isFocus: Bool
         
         init(
             nickname: Binding<String>,
@@ -130,6 +131,10 @@ public struct UserInformationInputView: View {
                                 input <= 8
                             })
                     ))
+                    .focused($isFocus)
+                    .onAppear {
+                        isFocus = true
+                    }
                 }
                 VStack(alignment: .leading, spacing: 12) {
                     HStack(spacing: 4) {
