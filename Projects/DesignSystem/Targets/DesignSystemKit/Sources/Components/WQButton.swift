@@ -179,12 +179,7 @@ public extension WQButton.Style {
                 trailing: 20
             )
         case .fullRadiusSingle:
-            return .init(
-                top: 8,
-                leading: 8,
-                bottom: 8,
-                trailing: 8
-            )
+            return .init(.zero)
         }
     }
 }
