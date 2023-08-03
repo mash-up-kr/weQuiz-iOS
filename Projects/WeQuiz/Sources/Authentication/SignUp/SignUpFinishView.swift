@@ -21,12 +21,13 @@ struct SignUpFinishView: View {
     }
 
     var body: some View {
-        VStack(alignment: .center, spacing: 53) {
-            RoundedRectangle(cornerRadius: 27)
-                .frame(width: 150, height: 150)
+        VStack(alignment: .center, spacing: 24) {
+            Image("authentication_finish")
             Text("반가워요\n\(nickname)")
                 .multilineTextAlignment(.center)
                 .font(.pretendard(.bold, size: ._34))
+            Spacer()
+                .frame(height: 50)
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
