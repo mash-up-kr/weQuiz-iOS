@@ -153,7 +153,7 @@ extension HomeView {
                 .onTapGesture {
                     navigator.path.append(.friendRankView)
                 }
-                .padding(.bottom, 8)
+                .padding(.bottom, 12)
             
             ForEach($viewModel.friendsRank.prefix(3)) { friend in
                 FriendRankRow(friend: friend)
@@ -189,7 +189,7 @@ extension HomeView {
                     .onTapGesture {
                         navigator.path.append(.questionGroupView)
                     }
-                    .padding(.bottom, 8)
+                    .padding(.bottom, 12)
                 
                 ForEach($viewModel.quizs.prefix(4)) { quiz in
                     ZStack {
