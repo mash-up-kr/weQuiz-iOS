@@ -31,10 +31,11 @@ extension UserInformationInputInteractor: UserInformationInputRequestingLogic {
     }
     
     public func request(_ request: UserInformationInputModel.Request.OnRequestSignUp) {
-        guard let token = authManager.verificationID else {
-            presenter.present(UserInformationInputModel.Response.Toast(type: .signUpFailed))
+        guard let token = authManager.userId else {
+            presenter.present(UserInformationInputModel.Response.Toast(type: .signUpFailed(reason: "유효하지 않은 휴대폰 인증정보입니다")))
             return
         }
+        
         let model: JoinRequestModel = .init(
             token: token,
             phone: request.phone,
@@ -48,8 +49,13 @@ extension UserInformationInputInteractor: UserInformationInputRequestingLogic {
                 AuthManager.shared.storeToken {
                     self?.presenter.present(.init(destination: .finish(request.nickname)))
                 }
-            case .failure:
-                self?.presenter.present(UserInformationInputModel.Response.Toast(type: .signUpFailed))
+            case .failure(let error):
+                guard case let .fail(reason) = error else {
+                    self?.presenter.present(UserInformationInputModel.Response.Toast(type: .unknown))
+                    return
+                }
+
+                self?.presenter.present(UserInformationInputModel.Response.Toast(type: .signUpFailed(reason: reason)))
             }
         }
     }

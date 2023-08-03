@@ -37,9 +37,10 @@ public enum UserInformationInputModel {
         }
         
         public struct Toast {
-            public enum `Type` {
-                case signUpFailed
+            public enum `Type`: Equatable {
+                case signUpFailed(reason: String)
                 case unknown
+                case none
             }
             public let type: `Type`
         }

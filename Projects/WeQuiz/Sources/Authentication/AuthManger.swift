@@ -19,9 +19,12 @@ public class AuthManager: ObservableObject {
     
     public static let shared: AuthManager = .init()
     
-    private init() { }
+    private init() {
+        Auth.auth().settings?.isAppVerificationDisabledForTesting = true
+    }
     
-    private(set) var verificationID: String?
+    private(set) var userId: String?
+    private var verificationID: String?
 }
 
 public extension AuthManager {
@@ -48,16 +51,16 @@ public extension AuthManager {
             }
     }
     
-    func registerPhoneNumber(with code: String, completion: @escaping (Result<Bool, SignInError>) -> Void) {
-        guard let token = verificationID else {
+    func registerPhoneNumber(with code: String, completion: @escaping (Result<(Bool, String?), SignInError>) -> Void) {
+        guard let verificationID = verificationID else {
             completion(.failure(.unknown))
             return
         }
         let credential = PhoneAuthProvider.provider().credential(
-          withVerificationID: token,
+          withVerificationID: verificationID,
           verificationCode: code
         )
-        Auth.auth().signIn(with: credential) { result, error in
+        Auth.auth().signIn(with: credential) { [weak self] result, error in
             if let error = error as? NSError {
                 let authErrorCode = AuthErrorCode(_nsError: error).code
                 switch authErrorCode {
@@ -77,13 +80,16 @@ public extension AuthManager {
                 return
             }
             
-            completion(.success(true))
+            self?.userId = result?.user.uid
+            
+            completion(.success((true, result?.user.uid)))
         }
     }
     
     func storeToken(_ completion: @escaping () -> Void) {
-        UserDefaults.standard.set(verificationID, forKey: "token")
+        UserDefaults.standard.set(userId, forKey: "token")
         verificationID = nil
+        userId = nil
         completion()
     }
 }

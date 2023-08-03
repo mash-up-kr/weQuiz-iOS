@@ -33,6 +33,7 @@ extension PhoneNumberInputInteractor: PhoneNumberInputRequestingLogic {
     public func request(_ request: PhoneNumberInputModel.Request.OnTouchGetVerificationCode) {
         authManager.verifyPhoneNumber(request.input, completion: { isSucceed in
             guard isSucceed else {
+                // TooManyRequest 처리 해야할듯
                 self.presenter.present(PhoneNumberInputModel.Response.Toast(type: .unknown))
                 return
             }

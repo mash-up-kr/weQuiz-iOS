@@ -82,8 +82,9 @@ public struct UserInformationInputView: View {
         }
         .onChange(of: presenter.viewModel.toastModel) { model in
             switch model {
-            case .signUpFailed:
-                userInformationInputToastModel = .init(status: .warning, text: "회원가입에 실패하였습니다. 개발자에게 문의해주세요")
+            case .none: break
+            case .signUpFailed(let reason):
+                userInformationInputToastModel = .init(status: .warning, text: reason)
             case .unknown:
                 userInformationInputToastModel = .init(status: .warning, text: "잠시 후 다시 시도해 주세요")
             }

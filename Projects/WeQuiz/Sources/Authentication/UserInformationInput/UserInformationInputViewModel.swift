@@ -9,7 +9,7 @@
 import Foundation
 
 public struct UserInformationInputViewModel {
-    public var toastModel: UserInformationInputModel.Response.Toast.`Type` = .unknown
+    public var toastModel: UserInformationInputModel.Response.Toast.`Type` = .none
     
     public static let `default`: UserInformationInputViewModel = .init()
 }
