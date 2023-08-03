@@ -43,7 +43,7 @@ public struct UserInformationInputView: View {
                 )
             ))
             VStack(alignment: .leading, spacing: .zero) {
-                Text("{서비스명}에서 사용 할\n닉네임을 입력해 주세요")
+                Text("WeQuiz에서 사용 할\n닉네임을 입력해 주세요")
                     .font(.pretendard(.bold, size: ._24))
                     .foregroundColor(.white)
                 Spacer()
@@ -136,7 +136,7 @@ public struct UserInformationInputView: View {
                         Text("자기소개")
                             .font(.pretendard(.medium, size: ._12))
                             .foregroundColor(.designSystem(.g2))
-                        Text("(필수)")
+                        Text("(선택)")
                             .font(.pretendard(.regular, size: ._12))
                             .foregroundColor(.designSystem(.g4))
                     }
