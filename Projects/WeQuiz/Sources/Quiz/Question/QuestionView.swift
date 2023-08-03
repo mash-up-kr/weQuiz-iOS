@@ -13,7 +13,7 @@ import DesignSystemKit
 public struct QuestionView: View {
     
     @Binding private var model: MakeQuestionModel
-    @State private var expandedHeight: CGFloat = 250
+    @State private var expandedHeight: CGFloat = 326
     
     private var onRemove: ((UUID) -> ())?
     private var onExpand: ((UUID) -> ())?
@@ -26,47 +26,48 @@ public struct QuestionView: View {
     
     public var body: some View {
         ZStack(alignment: .topTrailing) {
-            VStack {
+            VStack(spacing: 0) {
                 questionTextField()
-                VStack {
-                    answerInputs()
-                    AddAnswerButtonView(answerNumber: $model.answers.count)
-                        .frame(height: 72)
-                        .onTapGesture {
-                            addAnswer()
-                        }
-                    
-                    MultipleSelectionView(isSelected: $model.duplicatedOption)
-                        .onChange(of: model.duplicatedOption) { newValue in
-                            if newValue == false {
-                                deselectAllList()
+                
+                if model.isExpand {
+                    VStack {
+                        answerInputs()
+                        AddAnswerButtonView(answerNumber: $model.answers.count)
+                            .frame(height: 56)
+                            .onTapGesture {
+                                addAnswer()
                             }
-                        }
-                    
+
+                        MultipleSelectionView(isSelected: $model.duplicatedOption)
+                            .onChange(of: model.duplicatedOption) { newValue in
+                                if newValue == false {
+                                    deselectAllList()
+                                }
+                            }
+
+                    }
+                    .padding(.horizontal, 20)
                 }
-                .hidden(!model.isExpand)
-                .modifier(AnimatingCellHeight(height: model.isExpand ? expandedHeight : 0))
-                .padding(.horizontal, 20)
                 
                 Spacer()
                 
             }
+            .frame(height: model.isExpand ? expandedHeight : 66)
             .background(
                 Color.designSystem(.g8)
             )
             .cornerRadius(16)
+            .padding(.horizontal, 20)
+            .padding(.top, 4)
             
-            if model.isExpand == true {
-                Image(Icon.Close.fillWhite)
-                    .onTapGesture {
-                        onRemove?(model.id)
-                    }
-            }
+            Image(Icon.Close.fillWhite)
+                .onTapGesture {
+                    onRemove?(model.id)
+                }
+                .padding(.trailing, 14)
+                .hidden(!model.isExpand)
         }
-        .listRowSeparator(.hidden)
-        .listRowInsets(EdgeInsets())
-        .listRowBackground(Color.clear)
-        .padding([.top, .bottom], 8)
+        
     }
     
     private func questionTextField() -> some View {
@@ -75,10 +76,10 @@ public struct QuestionView: View {
                 .foregroundColor(.designSystem(.g4))
             )
             .font(.pretendard(.medium, size: ._18))
-            .frame(minHeight: 26)
+            .frame(height: 66)
             .frame(maxWidth: .infinity, alignment: .leading)
             .foregroundColor(.designSystem(.g4))
-            .padding([.top, .horizontal], 20)
+            .padding(.horizontal, 20)
             .onTapGesture {
                 withAnimation(.linear(duration: 0.3)) {
                     model.isExpand.toggle()
@@ -99,13 +100,14 @@ public struct QuestionView: View {
                     model.answers[index].isCorrect = true
                 }
             })
+            .padding(.bottom, 10)
         }
     }
     
     private func addAnswer() {
         if self.model.answers.count >= 5 { return }
+        self.expandedHeight += 72
         self.model.answers.append(MakeAnswerModel.init())
-        self.expandedHeight += 65
     }
     
     private func deselectAllList() {
