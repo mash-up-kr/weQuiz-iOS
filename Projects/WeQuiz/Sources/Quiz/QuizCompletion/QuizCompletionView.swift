@@ -12,19 +12,20 @@ import DesignSystemKit
 
 public struct QuizCompletionView: View {
     
-    @Environment(\.presentationMode) var presentation
     @State var isSharePresented = false
     private var quizId: Int
+    private var navigator: HomeNavigator
     
-    public init(quizId: Int) {
+    public init(quizId: Int, navigator: HomeNavigator) {
         self.quizId = quizId
+        self.navigator = navigator
     }
     
     public var body: some View {
         ZStack {
             VStack {
                 WQTopBar(style: .navigationWithButtons(.init(title: "문제 만들기", bttons: [], action: {
-                    self.presentation.wrappedValue.dismiss()
+                    navigator.path = []
                 })))
                 
                 Spacer()
@@ -71,6 +72,6 @@ public struct QuizCompletionView: View {
 
 struct QuizCompletionView_Previews: PreviewProvider {
     static var previews: some View {
-        QuizCompletionView(quizId: 1)
+        QuizCompletionView(quizId: 1, navigator: HomeNavigator.shared)
     }
 }

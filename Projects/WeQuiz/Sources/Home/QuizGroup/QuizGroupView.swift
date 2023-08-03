@@ -22,10 +22,10 @@ struct QuizGroupView: View {
     @ObservedObject var viewModel: QuizGroupDataStore
     @State private var isEdited = false
     
-    private let naivgator: HomeNavigator
+    private let navigator: HomeNavigator
     
     public init(naivgator: HomeNavigator, viewModel: QuizGroupDataStore) {
-        self.naivgator = naivgator
+        self.navigator = naivgator
         self.viewModel = viewModel
     }
     
@@ -45,7 +45,7 @@ struct QuizGroupView: View {
             .init(
                 title: "문제 리스트",
                 action: {
-                    naivgator.back()
+                    navigator.back()
                 })))
     }
     
@@ -76,7 +76,7 @@ struct QuizGroupView: View {
                     QuizGroupRow(quiz: quiz)
                 }
                 .onTapGesture {
-                    naivgator.path.append(.questionDetail(quizId: quiz.id))
+                    navigator.path.append(.quizDetail(quizId: quiz.id))
                 }
                 .listRowBackground(Color.clear)
                 .padding(.horizontal, 20)

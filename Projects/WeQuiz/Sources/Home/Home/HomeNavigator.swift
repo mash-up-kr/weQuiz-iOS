@@ -10,9 +10,10 @@ import Foundation
 
 public enum Screen: Hashable {
     case friendRankView
-    case questionGroupView
-    case questionDetail(quizId: Int)
+    case quizGroupView
+    case quizDetail(quizId: Int)
     case makeQuiz
+    case quizCompletion(quizId: Int)
 }
 
 

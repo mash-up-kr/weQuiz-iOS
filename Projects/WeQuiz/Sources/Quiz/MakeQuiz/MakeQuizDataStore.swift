@@ -11,7 +11,6 @@ import Foundation
 final class MakeQuizDataStore: ObservableObject {
     @Published var quiz: MakeQuizModel
     @Published var routeToCompletionView = false
-    @Published var quizId: Int?
     
     private let quizNameLimit = 38
     

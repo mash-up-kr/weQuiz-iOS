@@ -9,98 +9,94 @@ protocol MakeQuizDisplayLogic {
 
 public struct MakeQuizView: View {
     
+    private let navigator: HomeNavigator
     var interactor: MakeQuizBusinessLogic?
     
     @ObservedObject var viewModel = MakeQuizDataStore()
     
-    public init() {}
+    public init(navigator: HomeNavigator) {
+        self.navigator = navigator
+    }
     
     @Environment(\.editMode) private var editMode
     @State private var removeItemPopupPresented = false
     @State private var removedIndex: (popupPresented: Bool, index: UUID?) = (false, nil)
     @State private var removeSuccessToastModal: WQToast.Model?
     
-
+    
     public var body: some View {
-        NavigationStack {
-            VStack {
-                WQTopBar(style: .navigationWithListEdit(
-                    .init(
-                        title: "문제 만들기",
-                        editAction: {
-                            self.editMode?.wrappedValue == .active ?
-                            (self.editMode?.wrappedValue = .inactive) : (self.editMode?.wrappedValue = .active)
-                        }, action: {
-                            print("back")
-                        })
-                ))
-                .background(
-                    Color.designSystem(.g9)
-                )
-
-                VStack {
-                    titleTextField()
-                    
-                    ScrollViewReader { proxy in
-                        ScrollView {
-                            ForEach($viewModel.quiz.questions, id: \.id) { item in
-                                QuestionView(model: item, onRemove: { index in
-                                    removedIndex = (popupPresented: true, index: index)
-                                }, onExpand: { index in
-                                    viewModel.toggleExpand(index)
-                                    proxy.scrollTo(item.id, anchor: .center)
-                                })
-                                .padding(.bottom, 12)
-                                .id(item.id)
-                            }
-                            .onMove(perform: moveListItem)
-                            
-                            addAnswerView()
-                                .padding(.horizontal, 20)
-                            
-                        }
-                        .padding(.top, 30)
-                    }
-
-                    Spacer()
-
-                    WQButton(
-                      style: .single(
-                          .init(title: "시험지 완성하기",
-                              action: {
-                                  interactor?.requestMakeQuiz(request: .init(quiz: viewModel.quiz))
-                              }))
-                    )
-                    .frame(height: 52)
-                }
-                .frame(maxWidth: .infinity)
-                .ignoresSafeArea(.keyboard, edges: .bottom)
-                
-            }
-            .modal(.init(
-                        message: "문제를 삭제할까요?",
-                        doubleButtonStyleModel: .init(
-                            titles: ("아니요", "삭제"),
-                            leftAction: {
-                                removedIndex.popupPresented = false
-                            },
-                            rightAction: {
-                                removeListItem()
-                            }
-                        )
-                    ),
-                   isPresented: $removedIndex.popupPresented
-                )
-            .toast(model: $removeSuccessToastModal)
+        VStack {
+            WQTopBar(style: .navigationWithListEdit(
+                .init(
+                    title: "문제 만들기",
+                    editAction: {
+                        self.editMode?.wrappedValue == .active ?
+                        (self.editMode?.wrappedValue = .inactive) : (self.editMode?.wrappedValue = .active)
+                    }, action: {
+                        navigator.back()
+                    })
+            ))
             .background(
                 Color.designSystem(.g9)
             )
-            .navigationDestination(isPresented: $viewModel.routeToCompletionView) {
-                if let quizId = viewModel.quizId {
-                    QuizCompletionView(quizId: quizId)
+            
+            VStack {
+                titleTextField()
+                
+                ScrollViewReader { proxy in
+                    ScrollView {
+                        ForEach($viewModel.quiz.questions, id: \.id) { item in
+                            QuestionView(model: item, onRemove: { index in
+                                removedIndex = (popupPresented: true, index: index)
+                            }, onExpand: { index in
+                                viewModel.toggleExpand(index)
+                                proxy.scrollTo(item.id, anchor: .center)
+                            })
+                            .padding(.bottom, 12)
+                            .id(item.id)
+                        }
+                        .onMove(perform: moveListItem)
+                        
+                        addAnswerView()
+                            .padding(.horizontal, 20)
+                        
+                    }
+                    .padding(.top, 30)
                 }
+                
+                Spacer()
+                
+                WQButton(
+                    style: .single(
+                        .init(title: "시험지 완성하기",
+                              action: {
+                                  interactor?.requestMakeQuiz(request: .init(quiz: viewModel.quiz))
+                              }))
+                )
+                .frame(height: 52)
             }
+            .frame(maxWidth: .infinity)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
+            
         }
+        .modal(.init(
+            message: "문제를 삭제할까요?",
+            doubleButtonStyleModel: .init(
+                titles: ("아니요", "삭제"),
+                leftAction: {
+                    removedIndex.popupPresented = false
+                },
+                rightAction: {
+                    removeListItem()
+                }
+            )
+        ),
+               isPresented: $removedIndex.popupPresented
+        )
+        .toast(model: $removeSuccessToastModal)
+        .background(
+            Color.designSystem(.g9)
+        )
     }
     
     private func titleTextField() -> some View {
@@ -126,7 +122,7 @@ public struct MakeQuizView: View {
                 Text("질문 추가")
                     .font(.pretendard(.bold, size: ._16))
                     .foregroundColor(Color.designSystem(.g1))
-                    
+                
             })
             .frame(maxWidth: .infinity)
             .frame(height: 56)
@@ -152,13 +148,12 @@ public struct MakeQuizView: View {
 }
 extension MakeQuizView: MakeQuizDisplayLogic {
     func displayCompletionView(viewModel: MakeQuiz.RequestMakeQuiz.ViewModel) {
-        self.viewModel.routeToCompletionView = true
-        self.viewModel.quizId = viewModel.quizId
+        navigator.path.append(.quizCompletion(quizId: viewModel.quizId))
     }
 }
 
 struct MakeQuizView_Previews: PreviewProvider {
     static var previews: some View {
-        MakeQuizView()
+        MakeQuizView(navigator: HomeNavigator.shared)
     }
 }
