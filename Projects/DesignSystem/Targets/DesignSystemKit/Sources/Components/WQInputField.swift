@@ -138,6 +138,12 @@ public struct WQInputField: View {
             .foregroundColor(.designSystem(.g2))
             .fixedSize(horizontal: false, vertical: true)
             .tint(.designSystem(.p1))
+            .clearButton(
+                .init(
+                    textFieldInput: model.$input,
+                    image: Image(Icon.Close.fillWhite)
+                )
+            )
             underLine
             HStack {
                 Spacer()
