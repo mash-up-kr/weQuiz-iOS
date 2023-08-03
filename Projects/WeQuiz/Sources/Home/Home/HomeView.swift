@@ -36,12 +36,14 @@ public struct HomeView: View {
                     switch type {
                     case .friendRankView:
                         friendRankBuilder()
-                    case .questionDetail(let quizId):
+                    case .quizDetail(let quizId):
                         questionDetailBuilder(quizId: quizId)
-                    case .questionGroupView:
+                    case .quizGroupView:
                         questionGroupBuilder()
                     case .makeQuiz:
                         makeQuizBuilder()
+                    case .quizCompletion(let quizId):
+                        quizCompletionBuilder(quizId: quizId)
                     }
                 }
             }
@@ -75,8 +77,13 @@ public struct HomeView: View {
     }
     
     private func makeQuizBuilder() -> some View {
-        MakeQuizView()
+        MakeQuizView(navigator: navigator)
             .configureView()
+            .navigationBarBackButtonHidden()
+    }
+    
+    private func quizCompletionBuilder(quizId: Int) -> some View {
+        QuizCompletionView(quizId: quizId, navigator: navigator)
             .navigationBarBackButtonHidden()
     }
 }
@@ -187,7 +194,7 @@ extension HomeView {
             LazyVStack(spacing: 12) {
                 CustomHeader(title: "내가 낸 시험지")
                     .onTapGesture {
-                        navigator.path.append(.questionGroupView)
+                        navigator.path.append(.quizGroupView)
                     }
                     .padding(.bottom, 8)
                 
@@ -196,7 +203,7 @@ extension HomeView {
                         QuizGroupRow(quiz: quiz)
                     }
                     .onTapGesture {
-                        navigator.path.append(.questionDetail(quizId: quiz.id))
+                        navigator.path.append(.quizDetail(quizId: quiz.id))
                     }
                 }
             }
