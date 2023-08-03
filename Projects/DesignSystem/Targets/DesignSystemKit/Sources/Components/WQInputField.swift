@@ -131,6 +131,7 @@ public struct WQInputField: View {
                 input: model.$input,
                 isValid: model.$isValid,
                 placeholder: model.placeholder,
+                limit: model.limit,
                 condition: model.condition
             )
             .font(.medium, ._20)

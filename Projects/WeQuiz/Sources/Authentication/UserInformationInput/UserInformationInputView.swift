@@ -127,7 +127,7 @@ public struct UserInformationInputView: View {
                             placeholder: "닉네임 입력",
                             limit: 8,
                             condition: { input in
-                                input < 8
+                                input <= 8
                             })
                     ))
                 }
