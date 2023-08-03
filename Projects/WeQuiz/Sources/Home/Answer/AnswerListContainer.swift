@@ -76,19 +76,12 @@ struct AnswerList: View {
                 ForEach(question.options) { answer in
                     GeometryReader { geometry in
                         ZStack(alignment: .leading) {
-                            if listType == .back {
-                                AnswerPercentView(id: answer.rank)
-                                    .frame(width: geometry.size.width * CGFloat(answer.selectivity), height: geometry.size.height)
-                                    .animation(.easeInOut(duration: 1), value: isAnimating)
-                                    .onAppear(perform: {
-                                        isAnimating = true
-                                    })
-                            }
                             AnswerListRow(listType: listType, model: answer)
                                 .frame(width: geometry.size.width, height: geometry.size.height)
                         }
                         .background(Color.designSystem(.g9))
                         .cornerRadius(16)
+                        .frame(height: 56)
                     }
                     .frame(height: 56)
                 }

@@ -29,7 +29,7 @@ public struct AnswerView: View {
                 Image(Icon.Checkmark.falseFill24)
                     .hidden(!$answer.isCorrect.wrappedValue)
                 
-                AlphabetCircleView(answerNumber: index)
+                AlphabetCircleView(answerNumber: index, textColor: Color.designSystem(.g4))
                     .hidden($answer.isCorrect.wrappedValue)
             }
             .onTapGesture {

@@ -92,6 +92,7 @@ extension QuizDetailView {
             ForEach(viewModel.quizInfo.questions) { question in
                 AnswerListContainer(question: question, questionsCount: viewModel.quizInfo.questions.count, questionId: question.id)
             }
+            .listRowSeparator(.hidden)
             .listRowBackground(Color.designSystem(.g9))
         }
         .background(Color.designSystem(.g9))
