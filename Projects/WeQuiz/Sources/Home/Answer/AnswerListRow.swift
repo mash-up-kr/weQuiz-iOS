@@ -16,9 +16,10 @@ struct AnswerListRow: View {
     var model: AnswerViewModel
     
     var body: some View {
+        let answerNum = model.rank - 1
         
-        HStack {
-            AlphabetCircleView(answerNumber: model.rank)
+        return HStack {
+            AlphabetCircleView(answerNumber: answerNum)
             Text(model.content)
                 .font(.pretendard(.medium, size: ._16))
             Spacer()
