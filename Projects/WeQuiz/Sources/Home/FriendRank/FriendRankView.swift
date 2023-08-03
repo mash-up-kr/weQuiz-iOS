@@ -32,9 +32,13 @@ struct FriendRankView: View {
     }
     
     var body: some View {
-        self.topBarView
-        self.listView
-            .navigationBarHidden(true)
+        VStack {
+            self.topBarView
+            self.listView
+        }
+        .background(
+            Color.designSystem(.g9)
+        )
     }
 }
 

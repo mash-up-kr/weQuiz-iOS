@@ -45,6 +45,9 @@ public struct HomeView: View {
                     }
                 }
             }
+            .background(
+                Color.designSystem(.g9)
+            )
             .overlay(
                 myQuestionBlankView
                     .padding([.leading, .trailing], 20)
@@ -52,7 +55,6 @@ public struct HomeView: View {
                 , alignment: .center
             )
         })
-        .preferredColorScheme(.dark)
     }
     
     

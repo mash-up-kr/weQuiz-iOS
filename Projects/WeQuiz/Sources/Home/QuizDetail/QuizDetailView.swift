@@ -35,6 +35,7 @@ struct QuizDetailView: View {
             self.topBarView
             self.questionList
         }
+        .background(Color.designSystem(.g9))
         .modal(
             .init(
                 message: "선택한 문제를 삭제할까요?",
@@ -91,7 +92,9 @@ extension QuizDetailView {
             ForEach(viewModel.quizInfo.questions) { question in
                 AnswerListContainer(question: question, questionsCount: viewModel.quizInfo.questions.count, questionId: question.id)
             }
+            .listRowBackground(Color.designSystem(.g9))
         }
+        .background(Color.designSystem(.g9))
         .listStyle(.plain)
     }
 }

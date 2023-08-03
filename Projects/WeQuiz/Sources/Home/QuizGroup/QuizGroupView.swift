@@ -35,6 +35,9 @@ struct QuizGroupView: View {
             self.listBarView
             self.listView
         }
+        .background(
+            Color.designSystem(.g9)
+        )
         .task {
             interactor?.getQuizGroup(request: QuizGroupResult.LoadQuizGroup.Request(quizGroupRequest: QuizGroupRequestModel(size: 15, cursor: nil)))
         }
