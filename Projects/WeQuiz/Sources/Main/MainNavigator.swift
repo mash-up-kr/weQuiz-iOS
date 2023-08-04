@@ -36,12 +36,28 @@ final class MainNavigator: ObservableObject {
 
 extension MainNavigator {
     func showSolveQuiz(_ id: Int) {
-        showQuiz = true
-        showQuizModel = .solve(id: id)
+        if showQuiz {
+            showQuiz = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                self?.showQuiz = true
+                self?.showQuizModel = .solve(id: id)
+            }
+        } else {
+            showQuiz = true
+            showQuizModel = .solve(id: id)
+        }
     }
     
     func showQuizResult(_ id: Int, solverId: String) {
-        showQuiz = true
-        showQuizModel = .result(id: id, solver: solverId)
+        if showQuiz {
+            showQuiz = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
+                self?.showQuiz = true
+                self?.showQuizModel = .result(id: id, solver: solverId)
+            }
+        } else {
+            showQuiz = true
+            showQuizModel = .result(id: id, solver: solverId)
+        }
     }
 }

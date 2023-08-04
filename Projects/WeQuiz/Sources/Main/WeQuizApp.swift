@@ -72,6 +72,9 @@ struct WeQuizApp: App {
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
     private let mainNavigator: MainNavigator = .shared
+    private let authenticationNavigator: AuthenticationNavigator = .shared
+    private let homeNavigator: HomeNavigator = .shared
+    private let solveQuizNavigator: SolveQuizNavigator = .shared
     
     init() {
         DesignSystemKit.registerFont()
@@ -81,8 +84,12 @@ struct WeQuizApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(mainNavigator)
+                .environmentObject(authenticationNavigator)
+                .environmentObject(homeNavigator)
+                .environmentObject(solveQuizNavigator)
                 .onOpenURL { url in
                     if let destination = DynamicLinks.id(from: url) {
+                        solveQuizNavigator.path = []
                         switch destination {
                         case .solve(let id):
                             mainNavigator.showSolveQuiz(id)

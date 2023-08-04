@@ -10,10 +10,9 @@ import SwiftUI
 
 struct ContentView: View {
     @EnvironmentObject var mainNavigator: MainNavigator
-    
-    private let authenticationNavigator: AuthenticationNavigator = .shared
-    private let homeNavigator: HomeNavigator = .shared
-    private let solveQuizNavigator: SolveQuizNavigator = .shared
+    @EnvironmentObject var authenticationNavigator: AuthenticationNavigator
+    @EnvironmentObject var homeNavigator: HomeNavigator
+    @EnvironmentObject var solveQuizNavigator: SolveQuizNavigator
     
     var body: some View {
         Group {
