@@ -19,9 +19,7 @@ public class AuthManager: ObservableObject {
     
     public static let shared: AuthManager = .init()
     
-    private init() {
-        Auth.auth().settings?.isAppVerificationDisabledForTesting = true
-    }
+    private init() {}
     
     private(set) var userId: String?
     private var verificationID: String?
