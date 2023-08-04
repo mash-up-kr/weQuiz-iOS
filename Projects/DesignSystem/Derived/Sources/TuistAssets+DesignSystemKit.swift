@@ -38,7 +38,6 @@ public enum DesignSystemKitAsset {
   public static let dimed = DesignSystemKitColors(name: "dimed")
   public static let alert = DesignSystemKitColors(name: "alert")
   public static let disabled = DesignSystemKitColors(name: "disabled")
-  public static let main = DesignSystemKitColors(name: "main")
   public static let addCircle = DesignSystemKitImages(name: "add_circle")
   public static let arrowUp = DesignSystemKitImages(name: "arrow_up")
   public static let checkmarkFalseFill20 = DesignSystemKitImages(name: "checkmark_false_fill_20")

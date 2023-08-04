@@ -47,6 +47,9 @@ public struct HomeView: View {
                     }
                 }
             }
+            .background(
+                Color.designSystem(.g9)
+            )
             .overlay(
                 myQuestionBlankView
                     .padding([.leading, .trailing], 20)
@@ -54,7 +57,6 @@ public struct HomeView: View {
                 , alignment: .center
             )
         })
-        .preferredColorScheme(.dark)
     }
     
     
@@ -160,7 +162,7 @@ extension HomeView {
                 .onTapGesture {
                     navigator.path.append(.friendRankView)
                 }
-                .padding(.bottom, 8)
+                .padding(.bottom, 12)
             
             ForEach($viewModel.friendsRank.prefix(3)) { friend in
                 FriendRankRow(friend: friend)
@@ -196,7 +198,7 @@ extension HomeView {
                     .onTapGesture {
                         navigator.path.append(.quizGroupView)
                     }
-                    .padding(.bottom, 8)
+                    .padding(.bottom, 12)
                 
                 ForEach($viewModel.quizs.prefix(4)) { quiz in
                     ZStack {
