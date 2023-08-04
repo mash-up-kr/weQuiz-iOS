@@ -71,6 +71,7 @@ struct WeQuizApp: App {
     }
     
     @UIApplicationDelegateAdaptor(AppDelegate.self) var delegate
+    private let mainNavigator: MainNavigator = .shared
     
     init() {
         DesignSystemKit.registerFont()
@@ -79,6 +80,7 @@ struct WeQuizApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(mainNavigator)
                 .onOpenURL { url in
                     if let quizId = DynamicLinks.id(from: url) {
                         // TODO: Quiz 풀기 혹은 Quiz 결과 화면 Push

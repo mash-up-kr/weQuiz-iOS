@@ -11,10 +11,11 @@ import SwiftUI
 import DesignSystemKit
 
 public struct QuizCompletionView: View {
-    
     @State var isSharePresented = false
-    private var quizId: Int
+    @State var activityItems: [Any] = []
+
     private var navigator: HomeNavigator
+    private var quizId: Int    
     
     public init(quizId: Int, navigator: HomeNavigator) {
         self.quizId = quizId
@@ -41,7 +42,7 @@ public struct QuizCompletionView: View {
                 .background(
                     ActivityView(
                         isPresented: $isSharePresented,
-                        activityItems: activityItem
+                        activityItems: activityItems
                     )
                 )
             }
@@ -69,7 +70,7 @@ public struct QuizCompletionView: View {
     private func quizLink(id: Int) {
         DynamicLinks.makeDynamicLink(type: .solve(id: id)) {
             guard let url = $0 else { return }
-            activityItem = [url]
+            activityItems = [url]
             isSharePresented = true
         }
     }

@@ -11,6 +11,8 @@ import SwiftUI
 import DesignSystemKit
 
 struct SignUpFinishView: View {
+    @EnvironmentObject var mainNavigator: MainNavigator
+    
     private let nickname: String
     
     private var navigator: AuthenticationNavigator
@@ -31,7 +33,7 @@ struct SignUpFinishView: View {
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                
+                mainNavigator.root = .home
             }
         }
     }

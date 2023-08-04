@@ -9,15 +9,19 @@
 import SwiftUI
 
 struct ContentView: View {
+    @EnvironmentObject var mainNavigator: MainNavigator
+    
     private let authenticationNavigator: AuthenticationNavigator = .shared
     private let homeNavigator: HomeNavigator = .shared
+    
     var body: some View {
         Group {
-            if let _ = AuthManager.shared.token {
+            switch mainNavigator.root {
+            case .home:
                 HomeView()
                     .configureView()
                     .environmentObject(homeNavigator)
-            } else {
+            case .authentication:
                 OnboardingView()
                     .environmentObject(authenticationNavigator)
             }
