@@ -19,7 +19,6 @@ public struct SolveQuizIntroView: View {
     
     init(quizId: Int) {
         self.quizId = quizId
-        self.viewModel.loadQuiz(id: quizId)
     }
     
     public var body: some View {
@@ -57,6 +56,9 @@ public struct SolveQuizIntroView: View {
             .background(
                 Image("quiz_solve_background")
             )
+            .task {
+                viewModel.loadQuiz(id: quizId)
+            }
             .navigationDestination(for: SolveQuizScreen.self) { screen in
                 switch screen {
                 case .input(let id):

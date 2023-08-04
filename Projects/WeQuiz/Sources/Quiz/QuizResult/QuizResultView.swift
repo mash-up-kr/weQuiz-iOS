@@ -15,6 +15,7 @@ protocol QuizResultDisplayLogic {
 }
 
 public struct QuizResultView: View {
+    @EnvironmentObject var mainNavigator: MainNavigator
     var interactor: QuizResultBusinessLogic?
     
     @ObservedObject var model = QuizResultDataStore()
@@ -30,7 +31,7 @@ public struct QuizResultView: View {
     }
     
     public var body: some View {
-        ZStack {
+        ZStack(alignment: .topTrailing) {
             ScrollView(.vertical) {
                 VStack {
                     VStack(alignment: .center, spacing: 20) {
@@ -161,8 +162,7 @@ extension QuizResultView {
                 .frame(width: 24, height: 24)
                 .padding(.trailing, 20)
                 .onTapGesture {
-                    // TODO: - 홈으로 돌아가기
-                    print("홈으로 돌아가기")
+                    mainNavigator.showQuiz = false
                 }
         }
         .frame(height: 56)
