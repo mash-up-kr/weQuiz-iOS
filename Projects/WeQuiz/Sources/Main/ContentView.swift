@@ -13,6 +13,7 @@ struct ContentView: View {
     
     private let authenticationNavigator: AuthenticationNavigator = .shared
     private let homeNavigator: HomeNavigator = .shared
+    private let solveQuizNavigator: SolveQuizNavigator = .shared
     
     var body: some View {
         Group {
@@ -31,7 +32,9 @@ struct ContentView: View {
                 if let showQuizModel = mainNavigator.showQuizModel {
                     switch showQuizModel {
                     case .solve(let id):
-                        SolveQuizView(quizId: id).configureView()
+                        SolveQuizIntroView(quizId: id)
+                            .environmentObject(mainNavigator)
+                            .environmentObject(solveQuizNavigator)
                     case let .result(id, solverId):
                         EmptyView()
                     }

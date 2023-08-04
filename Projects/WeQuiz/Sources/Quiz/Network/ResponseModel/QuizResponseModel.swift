@@ -21,6 +21,12 @@ public struct GetQuizResponseModel: Codable {
     public let title: String
     public let questions: [QuiestionModel]
     
+    public static let `default`: GetQuizResponseModel = .init(
+        id: .zero,
+        title: "",
+        questions: []
+    )
+    
     public init(id: Int, title: String, questions: [QuiestionModel]) {
         self.id = id
         self.title = title
@@ -66,8 +72,6 @@ public struct QuizResultResponseModel: Decodable {
         self.quizResolver = quizResolver
         self.totalScore = totalScore
     }
-    
-    
 }
 
 public struct GetQuizRankResponseModel: Decodable {
