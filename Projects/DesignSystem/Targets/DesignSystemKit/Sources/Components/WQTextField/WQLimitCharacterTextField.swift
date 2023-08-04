@@ -15,6 +15,7 @@ struct WQLimitCharacterTextField: UIViewRepresentable {
     @Binding private var isValid: Bool
     
     private let placeholder: String
+    private let limit: Int
     private let condition: ((Int) -> Bool)
     var font: UIFont?
     var textColor: UIColor?
@@ -23,11 +24,13 @@ struct WQLimitCharacterTextField: UIViewRepresentable {
         input: Binding<String>,
         isValid: Binding<Bool>,
         placeholder: String,
+        limit: Int,
         condition: @escaping ((Int) -> Bool)
     ) {
         self._input = input
         self._isValid = isValid
         self.placeholder = placeholder
+        self.limit = limit
         self.condition = condition
     }
     
@@ -60,6 +63,7 @@ struct WQLimitCharacterTextField: UIViewRepresentable {
         .init(
             input: $input,
             isValid: $isValid,
+            limit: limit,
             condition: condition
         )
     }
@@ -67,22 +71,25 @@ struct WQLimitCharacterTextField: UIViewRepresentable {
     class WQLimitCharacterTextFieldCoordinator: NSObject, UITextFieldDelegate {
         private var input: Binding<String>
         private var isValid: Binding<Bool>
+        private let limit: Int
         private let condition: ((Int) -> Bool)
         
         public init(
             input: Binding<String>,
             isValid: Binding<Bool>,
+            limit: Int,
             condition: @escaping ((Int) -> Bool)
         ) {
             self.input = input
             self.isValid = isValid
+            self.limit = limit
             self.condition = condition
         }
         
         @objc
         public func didChangeText(_ textField: UITextField) {
             input.wrappedValue = textField.text ?? ""
-            isValid.wrappedValue = condition(textField.text?.count ?? .zero)
+            isValid.wrappedValue = condition(textField.text?.count ?? .zero) && (textField.text?.count ?? .zero >= 1)
         }
         
         func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -90,7 +97,7 @@ struct WQLimitCharacterTextField: UIViewRepresentable {
             
             let textCount = textField.text?.count ?? .zero
             
-            guard condition(textCount) else { return false }
+            guard textCount < limit else { return false }
             return true
         }
     }
@@ -116,6 +123,7 @@ struct WQLimitCharacterTextField_Previews: PreviewProvider {
             input: .constant(""),
             isValid: .constant(false),
             placeholder: "placeholder",
+            limit: 10,
             condition: {
                 $0 < 10
             }

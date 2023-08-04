@@ -131,12 +131,19 @@ public struct WQInputField: View {
                 input: model.$input,
                 isValid: model.$isValid,
                 placeholder: model.placeholder,
+                limit: model.limit,
                 condition: model.condition
             )
             .font(.medium, ._20)
             .foregroundColor(.designSystem(.g2))
             .fixedSize(horizontal: false, vertical: true)
             .tint(.designSystem(.p1))
+            .clearButton(
+                .init(
+                    textFieldInput: model.$input,
+                    image: Image(Icon.Close.fillWhite)
+                )
+            )
             underLine
             HStack {
                 Spacer()

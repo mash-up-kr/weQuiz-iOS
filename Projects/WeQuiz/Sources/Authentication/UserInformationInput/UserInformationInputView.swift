@@ -43,7 +43,7 @@ public struct UserInformationInputView: View {
                 )
             ))
             VStack(alignment: .leading, spacing: .zero) {
-                Text("{서비스명}에서 사용 할\n닉네임을 입력해 주세요")
+                Text("WeQuiz에서 사용 할\n닉네임을 입력해 주세요")
                     .font(.pretendard(.bold, size: ._24))
                     .foregroundColor(.white)
                 Spacer()
@@ -82,8 +82,9 @@ public struct UserInformationInputView: View {
         }
         .onChange(of: presenter.viewModel.toastModel) { model in
             switch model {
-            case .signUpFailed:
-                userInformationInputToastModel = .init(status: .warning, text: "회원가입에 실패하였습니다. 개발자에게 문의해주세요")
+            case .none: break
+            case .signUpFailed(let reason):
+                userInformationInputToastModel = .init(status: .warning, text: reason)
             case .unknown:
                 userInformationInputToastModel = .init(status: .warning, text: "잠시 후 다시 시도해 주세요")
             }
@@ -96,6 +97,7 @@ public struct UserInformationInputView: View {
         @Binding private var isNicknameValid: Bool
         @Binding private var introduction: String
         @Binding private var isIntroductionValid: Bool
+        @FocusState var isFocus: Bool
         
         init(
             nickname: Binding<String>,
@@ -127,16 +129,20 @@ public struct UserInformationInputView: View {
                             placeholder: "닉네임 입력",
                             limit: 8,
                             condition: { input in
-                                input < 8
+                                input <= 8
                             })
                     ))
+                    .focused($isFocus)
+                    .onAppear {
+                        isFocus = true
+                    }
                 }
                 VStack(alignment: .leading, spacing: 12) {
                     HStack(spacing: 4) {
                         Text("자기소개")
                             .font(.pretendard(.medium, size: ._12))
                             .foregroundColor(.designSystem(.g2))
-                        Text("(필수)")
+                        Text("(선택)")
                             .font(.pretendard(.regular, size: ._12))
                             .foregroundColor(.designSystem(.g4))
                     }
@@ -150,6 +156,12 @@ public struct UserInformationInputView: View {
                                 input < 30
                             })
                     ))
+                }
+            }
+            .onChange(of: nickname) { input in
+                // ClearButton 터치 시 isVaild 변경되지 않아 임시 처리
+                if input.isEmpty {
+                    isNicknameValid = false
                 }
             }
         }

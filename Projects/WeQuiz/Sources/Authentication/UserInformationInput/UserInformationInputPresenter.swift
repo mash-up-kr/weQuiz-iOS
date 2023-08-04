@@ -30,7 +30,9 @@ extension UserInformationInputPresenter: UserInformationInputPresentingLogic {
         }
     }
     
-    public func present(_ response: UserInformationInputModel.Response.Toast) {}
+    public func present(_ response: UserInformationInputModel.Response.Toast) {
+        viewModel.toastModel = response.type
+    }
 }
 
 public protocol UserInformationInputPresentingLogic {

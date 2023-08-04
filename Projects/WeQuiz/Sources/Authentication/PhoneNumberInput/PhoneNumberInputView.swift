@@ -14,7 +14,8 @@ public struct PhoneNumberInputView: View {
     @ObservedObject var presenter: PhoneNumberInputPresenter
     
     @State private var phoneNumberInput: String = ""
-    @State private var isPhoneNubmerValid: Bool = false
+    @State private var isPhoneNumberValid: Bool = false
+    @FocusState private var isPhoneNumberInputFocused: Bool
     @State private var phoneNumberInvalidToastModel: WQToast.Model?
     
     private var interactor: PhoneNumberInputRequestingLogic?
@@ -48,56 +49,36 @@ public struct PhoneNumberInputView: View {
                         interactor?.request(PhoneNumberInputModel.Request.OnTouchNavigationBack())
                     })
             ))
-            VStack(alignment: .leading, spacing: .zero) {
-                Text(title)
-                    .font(.pretendard(.bold, size: ._24))
-                    .foregroundColor(.white)
-                Spacer()
-                    .frame(height: 36)
-                VStack(alignment: .leading, spacing: 12) {
-                    Text("휴대폰번호")
-                        .font(.pretendard(.medium, size: ._12))
-                        .foregroundColor(.designSystem(.g2))
-                    // TODO: ClearButton 터치 시 isVaild 변경되지 않는 이슈 있음
-                    WQInputField(style: .phoneNumber(
-                        .init(
-                            input: $phoneNumberInput,
-                            isValid: $isPhoneNubmerValid,
-                            placeholder: "휴대폰 번호 입력"
-                        )
-                    ))
-                }
-            }
-            .padding(
-                .init(
-                    top: 20,
-                    leading: 20,
-                    bottom: .zero,
-                    trailing: 20
-                )
+            phoneNumberInput(
+                title,
+                $phoneNumberInput,
+                $isPhoneNumberValid
             )
+            .focused($isPhoneNumberInputFocused)
             Spacer()
-            WQButton(
-                style: .fullRadiusSingle(
-                    .init(
-                        title: "인증번호 받기",
-                        isEnable: .constant(!$phoneNumberInput.wrappedValue.isEmpty && $isPhoneNubmerValid.wrappedValue),
-                        action: {
-                            interactor?.request(
-                                PhoneNumberInputModel.Request.OnTouchGetVerificationCode(
-                                    signType: signType,
-                                    input: phoneNumberInput
+            if isPhoneNumberInputFocused {
+                WQButton(
+                    style: .fullRadiusSingle(
+                        .init(
+                            title: "인증번호 받기",
+                            isEnable: .constant(!$phoneNumberInput.wrappedValue.isEmpty && $isPhoneNumberValid.wrappedValue),
+                            action: {
+                                interactor?.request(
+                                    PhoneNumberInputModel.Request.OnTouchGetVerificationCode(
+                                        signType: signType,
+                                        input: phoneNumberInput
+                                    )
                                 )
-                            )
-                        }
+                            }
+                        )
                     )
                 )
-            )
+            }
         }
         .onChange(of: phoneNumberInput) { input in
             // ClearButton 터치 시 isVaild 변경되지 않아 임시 처리
             if input.isEmpty {
-                isPhoneNubmerValid = false
+                isPhoneNumberValid = false
             }
         }
         .onChange(of: presenter.viewModel.toastModel) { model in
@@ -109,6 +90,40 @@ public struct PhoneNumberInputView: View {
             }
         }
         .toast(model: $phoneNumberInvalidToastModel)
+    }
+
+    func phoneNumberInput(
+        _ title: String,
+        _ input: Binding<String>,
+        _ isValid: Binding<Bool>
+    ) -> some View {
+        VStack(alignment: .leading, spacing: .zero) {
+            Text(title)
+                .font(.pretendard(.bold, size: ._24))
+                .foregroundColor(.white)
+            Spacer()
+                .frame(height: 36)
+            VStack(alignment: .leading, spacing: 12) {
+                Text("휴대폰번호")
+                    .font(.pretendard(.medium, size: ._12))
+                    .foregroundColor(.designSystem(.g2))
+                WQInputField(style: .phoneNumber(
+                    .init(
+                        input: input,
+                        isValid: isValid,
+                        placeholder: "휴대폰 번호 입력"
+                    )
+                ))
+            }
+        }
+        .padding(
+            .init(
+                top: 20,
+                leading: 20,
+                bottom: .zero,
+                trailing: 20
+            )
+        )
     }
 }
 

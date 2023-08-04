@@ -48,14 +48,7 @@ extension VerificationCodeInputInteractor: VerificationCodeInputRequestingLogic 
         }
     }
     
-    public func reqeust(_ request: VerificationCodeInputModel.Request.OnRequestVerifyCode) async {
-        presenter?.present(
-            VerificationCodeInputModel.Response.Naivgate(
-                destination: .userInformationInput(
-                    request.phoneNumber
-                )
-            )
-        )
+    public func reqeust(_ request: VerificationCodeInputModel.Request.OnRequestVerifyCode) {
         guard request.remainTime > 0 else {
             presenter?.present(VerificationCodeInputModel.Response.Toast(type: .timeout))
             return
@@ -65,24 +58,18 @@ extension VerificationCodeInputInteractor: VerificationCodeInputRequestingLogic 
             presenter?.present(VerificationCodeInputModel.Response.Toast(type: .unknown))
             return
         }
-
-        let userInformation = await authenticationService.user(authManager.verificationID ?? "")
         
-        guard request.type == .signUp, userInformation != nil else {
-            presenter?.present(VerificationCodeInputModel.Response.Modal(type: .notSignedUpUser))
-            return
-        }
         authManager.registerPhoneNumber(with: request.code) { [weak self] result in
             switch result {
-            case .success(let isSucceed):
-                if isSucceed {
-                    self?.presenter?.present(
-                        VerificationCodeInputModel.Response.Naivgate(
-                            destination: .userInformationInput(
-                                request.phoneNumber
-                            )
-                        )
-                    )
+            case let .success(response):
+                guard response.0, let userId = response.1 else { return }
+                switch request.type {
+                case .signIn:
+                    Task {
+                        await self?.signIn(userId)
+                    }
+                case .signUp:
+                    self?.signUp(request.phoneNumber)
                 }
             case .failure(let reason):
                 switch reason {
@@ -102,6 +89,34 @@ extension VerificationCodeInputInteractor: VerificationCodeInputRequestingLogic 
             VerificationCodeInputModel.Response.Naivgate(
                 destination: .userInformationInput(
                     request.phoneNumber
+                )
+            )
+        )
+    }
+}
+
+extension VerificationCodeInputInteractor {
+    private func signIn(_ userId: String) async {
+        if await authenticationService.user(userId) == nil {
+            // 회원정보가 없으면 회원가입 모달 노출
+            presenter?.present(VerificationCodeInputModel.Response.Modal(type: .notSignedUpUser))
+        } else {
+            // 회원정보가 있다면 토큰 저장하고 홈으로
+            authManager.storeToken { [weak self] in
+                self?.presenter?.present(
+                    VerificationCodeInputModel.Response.Naivgate(
+                        destination: .home
+                    )
+                )
+            }
+        }
+    }
+    
+    private func signUp(_ phoneNumber: String) {
+        presenter?.present(
+            VerificationCodeInputModel.Response.Naivgate(
+                destination: .userInformationInput(
+                    phoneNumber
                 )
             )
         )
