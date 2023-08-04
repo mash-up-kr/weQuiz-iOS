@@ -15,6 +15,7 @@ extension Project {
                 .remote(url: "https://github.com/Alamofire/Alamofire.git", requirement: .exact("5.6.1")),
                 .remote(url: "https://github.com/firebase/firebase-ios-sdk", requirement: .exact("10.12.0"))
             ],
+            settings: .project,
             targets: makeAppTargets(
                 name: name,
                 platform: .iOS,
@@ -47,7 +48,8 @@ extension Project {
                 "SupportingFiles/GoogleService-Info.plist"
             ],
             entitlements: "\(name).entitlements",
-            dependencies: dependencies
+            dependencies: dependencies,
+            settings: .app
         )
         return [mainTarget, ]
     }
