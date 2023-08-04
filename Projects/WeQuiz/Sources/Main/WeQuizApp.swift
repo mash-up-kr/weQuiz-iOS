@@ -82,8 +82,13 @@ struct WeQuizApp: App {
             ContentView()
                 .environmentObject(mainNavigator)
                 .onOpenURL { url in
-                    if let quizId = DynamicLinks.id(from: url) {
-                        // TODO: Quiz 풀기 혹은 Quiz 결과 화면 Push
+                    if let destination = DynamicLinks.id(from: url) {
+                        switch destination {
+                        case .solve(let id):
+                            mainNavigator.showSolveQuiz(id)
+                        case let .result(id, solverId):
+                            mainNavigator.showQuizResult(id, solverId: solverId)
+                        }
                     }
                 }
         }

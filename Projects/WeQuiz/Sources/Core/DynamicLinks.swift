@@ -19,8 +19,8 @@ enum DynamicLinks {
         var deepLinkString: String {
             let base = "https://wequiz.page.link"
             switch self {
-            case .solve(let id): return "\(base)/solve/quizId=\(id)"
-            case .result(let id): return "\(base)/result/quizId=\(id)"
+            case .solve(let id): return "\(base)/solve?quizId=\(id)"
+            case .result(let id): return "\(base)/result?quizId=\(id)"
             }
         }
         
@@ -31,11 +31,17 @@ enum DynamicLinks {
             }
         }
     }
-
-    /// DynamicLink를 통해 앱 진입시 랜딩 페이지
-    enum DynamicLinkDestination: String {
+    
+    /// DynamicLink의 앱 화면 진입  Path
+    enum DynamicLinkPath: String {
         case solve
         case result
+    }
+    
+    /// DynamicLink를 통해 앱 진입시 랜딩 페이지
+    enum DynamicLinkDestination {
+        case solve(id: Int)
+        case result(id: Int, solverId: String)
     }
 
     static func makeDynamicLink(type: DynamicLinkType, completion: @escaping (URL?) -> Void) {
@@ -64,17 +70,47 @@ enum DynamicLinks {
         })
     }
     
-    static func id(from dynamicLink: URL?) -> Int? {
+    static func id(from url: URL?) -> DynamicLinkDestination? {
         guard
-            let dynamicLink = dynamicLink,
-            let destination = DynamicLinkDestination(rawValue: dynamicLink.lastPathComponent),
+            let url = url, let dynamicLink = extractLinkFromURL(url),
+            let path = DynamicLinkPath(rawValue: dynamicLink.lastPathComponent),
             let components = URLComponents(url: dynamicLink, resolvingAgainstBaseURL: true),
-            let value = components.queryItems?.first?.value
-        else { return nil }
+            let values = components.queryItems
+        else {
+            return nil
+        }
         
-        print(destination)
-        print(value)
-        
-        return Int(value)
+        switch path {
+        case .solve:
+            guard
+                let idString = values.first?.value,
+                let id = Int(idString)
+            else {
+                return nil
+            }
+            return .solve(id: id)
+        case .result:
+            guard
+                let idString = values.first?.value,
+                let id = Int(idString),
+                let solverId = values.last?.value
+            else {
+                return nil
+            }
+            return .result(id: Int(id), solverId: solverId)
+        }
+    }
+}
+
+extension DynamicLinks {
+    private static func extractLinkFromURL(_ url: URL) -> URL? {
+        if let components = URLComponents(url: url, resolvingAgainstBaseURL: true) {
+            for queryItem in components.queryItems ?? [] {
+                if queryItem.name == "link", let linkValue = queryItem.value {
+                    return URL(string: linkValue)
+                }
+            }
+        }
+        return nil
     }
 }

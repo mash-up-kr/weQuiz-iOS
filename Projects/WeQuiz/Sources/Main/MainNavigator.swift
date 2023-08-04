@@ -14,7 +14,14 @@ final class MainNavigator: ObservableObject {
         case authentication
     }
     
+    enum PresentQuiz {
+        case solve(id: Int)
+        case result(id: Int, solver: String)
+    }
+    
     @Published var root: MainRootScreen
+    @Published var showQuiz: Bool = false
+    var showQuizModel: PresentQuiz?
     
     static let shared: MainNavigator = .init()
     
@@ -24,5 +31,17 @@ final class MainNavigator: ObservableObject {
         } else {
             self.root = .authentication
         }
+    }
+}
+
+extension MainNavigator {
+    func showSolveQuiz(_ id: Int) {
+        showQuiz = true
+        showQuizModel = .solve(id: id)
+    }
+    
+    func showQuizResult(_ id: Int, solverId: String) {
+        showQuiz = true
+        showQuizModel = .result(id: id, solver: solverId)
     }
 }

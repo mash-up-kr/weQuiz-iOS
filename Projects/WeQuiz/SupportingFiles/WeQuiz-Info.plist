@@ -26,6 +26,14 @@
 				<string>app-1-79100849862-ios-deb7be88ed99bbe6d071c7</string>
 			</array>
 		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>wequiz.ios.WeQuiz</string>
+			</array>
+		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>

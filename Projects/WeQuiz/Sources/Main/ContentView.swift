@@ -26,6 +26,17 @@ struct ContentView: View {
                     .environmentObject(authenticationNavigator)
             }
         }
+        .fullScreenCover(
+            isPresented: $mainNavigator.showQuiz) {
+                if let showQuizModel = mainNavigator.showQuizModel {
+                    switch showQuizModel {
+                    case .solve(let id):
+                        SolveQuizView(quizId: id).configureView()
+                    case let .result(id, solverId):
+                        EmptyView()
+                    }
+                }
+            }
     }
 }
 
