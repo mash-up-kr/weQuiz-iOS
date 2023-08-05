@@ -61,7 +61,7 @@ public enum VerificationCodeInputModel {
         public struct Naivgate {
             public enum Destination {
                 case back
-                case home
+                case home(String)
                 case userInformationInput(String)
             }
             public let destination: Destination

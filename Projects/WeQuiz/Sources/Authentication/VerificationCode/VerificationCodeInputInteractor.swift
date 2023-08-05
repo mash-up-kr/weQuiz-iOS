@@ -97,18 +97,18 @@ extension VerificationCodeInputInteractor: VerificationCodeInputRequestingLogic 
 
 extension VerificationCodeInputInteractor {
     private func signIn(_ userId: String) async {
-        if await authenticationService.user(userId) == nil {
-            // 회원정보가 없으면 회원가입 모달 노출
-            presenter?.present(VerificationCodeInputModel.Response.Modal(type: .notSignedUpUser))
-        } else {
+        if let userInfromation = await authenticationService.user(userId) {
             // 회원정보가 있다면 토큰 저장하고 홈으로
             authManager.storeToken { [weak self] in
                 self?.presenter?.present(
                     VerificationCodeInputModel.Response.Naivgate(
-                        destination: .home
+                        destination: .home(userInfromation.nickname)
                     )
                 )
             }
+        } else {
+            // 회원정보가 없으면 회원가입 모달 노출
+            presenter?.present(VerificationCodeInputModel.Response.Modal(type: .notSignedUpUser))
         }
     }
     

@@ -13,8 +13,7 @@ public struct OnboardingView: View {
         NavigationStack(path: $navigator.path) {
             VStack {
                 Spacer()
-                Text("LOGO")
-                    .font(.title)
+                WeQuizAsset.Assets.authenticationOnboardingLogo.swiftUIImage
                 Spacer()
                 WQButton(
                     style: .single(
@@ -37,6 +36,9 @@ public struct OnboardingView: View {
                     .foregroundColor(.designSystem(.p1))
                 }
             }
+            .background(
+                WeQuizAsset.Assets.authenticationOnboardingBackground.swiftUIImage
+            )
             .navigationDestination(for: AuthenticationScreen.self) { type in
                 switch type {
                 case .phoneNumber(let signType):

@@ -32,9 +32,8 @@ extension VerificationCodeInputPresenter: VerificationCodeInputPresentingLogic {
             navigator.back()
         case .userInformationInput(let phoneNumber):
             navigator.path.append(.userInformationInput(phoneNumber))
-        case .home:
-            // TODO: 홈으로 이동시키기
-            navigator.path = []
+        case .home(let nickname):
+            navigator.path.append(.signUpFinsh(nickname))
         }
     }
     
