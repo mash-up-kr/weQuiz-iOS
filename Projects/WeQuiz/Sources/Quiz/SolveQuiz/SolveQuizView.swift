@@ -16,7 +16,9 @@ protocol SolveQuizDisplayLogic {
 public struct SolveQuizView: View {
     @EnvironmentObject var solveQuizNavigator: SolveQuizNavigator
     @ObservedObject var viewModel: SolveQuizDataStore
-    @State var selectedCount: Int = 0
+    @State private var selectedCount: Int = 0
+    @State private var _showReportModal: Bool = false
+    @State private var _reportedToastModel: WQToast.Model?
     
     let quizId: Int
     var interactor: SolveQuizBusinessLogic?
@@ -30,20 +32,27 @@ public struct SolveQuizView: View {
         ZStack {
             if viewModel.solvedQuiz.questions.count > 0 {
                 VStack {
-                    WQTopBar(style: .navigationWithButtons(
-                        .init(title: "",
-                              bttons: [
-                                .init(icon: Icon.Siren.mono, action: {
-                            print("신고하기 버튼 클릭")
-                        })], action: {
-                            self.selectedCount = 0
-                            
-                            if viewModel.goToPreviousQuestion() == false {
-                                solveQuizNavigator.back()
+                    WQTopBar(
+                        style: .navigationWithButtons(.init(
+                            title: "",
+                            bttons: [
+                                .init(
+                                    icon: Icon.Siren.mono,
+                                    action: {
+                                        _showReportModal = true
+                                    }
+                                )
+                            ],
+                            action: {
+                                self.selectedCount = 0
+                                
+                                if viewModel.goToPreviousQuestion() == false {
+                                    solveQuizNavigator.back()
+                                }
                             }
-                        })
-                    ))
-
+                        ))
+                    )
+                    
                     WQGradientProgressBar(
                         standard: viewModel.solvedQuiz.questions.count,
                         current: .constant(viewModel.currentIndex + 1)
@@ -108,6 +117,23 @@ public struct SolveQuizView: View {
                 QuizResultView(quizId: quizId, quizResult).configureView()
             }
         }
+        .toast(model: $_reportedToastModel)
+        .modal(
+            .init(
+                message: "문제를 신고할까요?",
+                doubleButtonStyleModel: WQButton.Style.DobuleButtonStyleModel(
+                    titles: ("아니요", rightTitle: "신고"),
+                    leftAction: {
+                        _showReportModal = false
+                    },
+                    rightAction: {
+                        _showReportModal = false
+                        _reportedToastModel = .init(status: .success, text: "문제 신고가 완료되었습니다")
+                    }
+                )
+            ),
+            isPresented: $_showReportModal
+        )
         .navigationBarBackButtonHidden()
     }
 
