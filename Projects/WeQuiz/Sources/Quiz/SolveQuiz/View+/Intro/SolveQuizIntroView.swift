@@ -33,12 +33,12 @@ public struct SolveQuizIntroView: View {
                     }
                 VStack {
                     VStack(spacing: .zero) {
-                        quizNumber(10)
+                        quizNumber()
+                        Spacer()
+                            .frame(height: 32)
                         title("출제자")
                         Spacer()
-                        name()
-                        Spacer()
-                            .frame(height: 30)
+                            .frame(height: 32)
                         thumbnail()
                         Spacer()
                     }
@@ -54,7 +54,7 @@ public struct SolveQuizIntroView: View {
                 }
             }
             .background(
-                Image("quiz_solve_background")
+                WeQuizAsset.Assets.quizSolveBackground.swiftUIImage
             )
             .task {
                 viewModel.loadQuiz(id: quizId)
@@ -70,17 +70,17 @@ public struct SolveQuizIntroView: View {
         }
     }
     
-    private func quizNumber(_ number: Int) -> some View {
+    private func quizNumber() -> some View {
         ZStack(alignment: .leading) {
             Color.clear
                 .frame(height: 32)
             HStack {
-                Text("제 \(number)회")
+                Text("제 \(viewModel.quizModel.quiz.id)회")
                     .font(.pretendard(.bold, size: ._14))
-                    .foregroundColor(.designSystem(.g4))
+                    .foregroundColor(.designSystem(.g3))
                     .padding(.horizontal, 16)
                     .padding(.vertical, 6)
-                    .background(Color.designSystem(.g6))
+                    .background(Color.designSystem(.g7))
                     .cornerRadius(16)
             }
         }
@@ -101,11 +101,6 @@ public struct SolveQuizIntroView: View {
                     .foregroundColor(.designSystem(.g4))
             }
         }
-    }
-    
-    private func name() -> some View {
-        Color.designSystem(.g3)
-            .frame(height: 36)
     }
     
     private func thumbnail() -> some View {

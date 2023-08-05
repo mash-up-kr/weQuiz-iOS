@@ -23,7 +23,7 @@ public struct GetQuizResponseModel: Codable {
     
     public static let `default`: GetQuizResponseModel = .init(
         id: .zero,
-        title: "",
+        title: "-",
         questions: []
     )
     
