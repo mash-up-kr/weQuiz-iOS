@@ -111,4 +111,17 @@ extension QuizService: QuizServiceLogic {
             }
         }.eraseToAnyPublisher()
     }
+    
+    public func getTemporaryToken(nickname: String) async -> TemporaryTokenResponseModel? {
+        switch await networking.request(
+            BaseDataResponseModel<TemporaryTokenResponseModel>.self,
+            QuizAPI.anonymous(.init(nickname: nickname))
+        ) {
+        case .success(let model):
+            return model
+        case .failure(let error):
+            print(error.message)
+            return nil
+        }
+    }
 }

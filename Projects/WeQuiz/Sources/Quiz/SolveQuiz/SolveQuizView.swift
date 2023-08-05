@@ -22,10 +22,16 @@ public struct SolveQuizView: View {
     
     let quizId: Int
     var interactor: SolveQuizBusinessLogic?
+    private let solver: SolveQuizUser
     
-    init(quizId: Int, _ viewModel: SolveQuizDataStore) {
+    init(
+        quizId: Int,
+        _ viewModel: SolveQuizDataStore,
+        solver: SolveQuizUser
+    ) {
         self.quizId = quizId
         self.viewModel = viewModel
+        self.solver = solver
     }
 
     public var body: some View {
@@ -143,7 +149,17 @@ public struct SolveQuizView: View {
                 viewModel.currentIndex += 1
                 selectedCount = 0
             } else {
-                interactor?.requestQuizResult(request: .init(quizId: self.quizId, quiz: viewModel.solvedQuiz))
+                switch solver {
+                case .user:
+                    interactor?.requestQuizResult(
+                        request: .init(quizId: self.quizId, quiz: viewModel.solvedQuiz)
+                    )
+                case .nonUser(let token):
+                    interactor?.requestQuizResultForAnonymous(
+                        request: .init(quizId: self.quizId, quiz: viewModel.solvedQuiz),
+                        temporaryToken: token
+                    )
+                }
             }
         }
     }

@@ -105,3 +105,7 @@ public struct User: Decodable {
         self.name = name
     }
 }
+
+public struct TemporaryTokenResponseModel: Decodable {
+    public let token: String
+}

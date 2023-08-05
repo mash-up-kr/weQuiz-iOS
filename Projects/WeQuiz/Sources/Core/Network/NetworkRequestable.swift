@@ -48,6 +48,17 @@ public struct NetworkHeader {
     var httpHeaders: HTTPHeaders {
         .init(header)
     }
+    
+    static var `default`: NetworkHeader? {
+        if let token = AuthManager.shared.token {
+            return .init([
+                "Content-Type": "application/json",
+                "x-wequiz-token": token
+            ])
+        } else {
+            return nil
+        }
+    }
 }
 
 public protocol NetworkRequestable {
@@ -98,14 +109,7 @@ public extension NetworkRequestable {
     }
     
     var headers: NetworkHeader? {
-        if let token = AuthManager.shared.token {
-            return .init([
-                "Content-Type": "application/json",
-                "x-wequiz-token": token
-            ])
-        } else {
-            return nil
-        }
+        NetworkHeader.default
     }
     
     var encoding: NetworkParameterEncoding {

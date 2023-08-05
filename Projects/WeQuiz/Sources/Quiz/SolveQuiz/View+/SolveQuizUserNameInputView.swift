@@ -14,9 +14,11 @@ public struct SolveQuizUserNameInputView: View {
     @EnvironmentObject var solveQuizNavigator: SolveQuizNavigator
     @State private var userNameInput: String = ""
     @State private var isUserNameValid: Bool = false
+    @State private var userIdentifyFailToastModel: WQToast.Model?
 
     private let quizId: Int
     private let solveQuizModel: SolveQuizModel
+    private let quizService: QuizService = .init(Networking())
     
     init(quizId: Int, solveQuizModel: SolveQuizModel) {
         self.quizId = quizId
@@ -48,14 +50,24 @@ public struct SolveQuizUserNameInputView: View {
                         title: "완료",
                         isEnable: $isUserNameValid,
                         action: {
-                            solveQuizNavigator.path.append(
-                                .solve(quizId, solveQuizModel)
-                            )
+                            Task {
+                                guard let solver = await solveQuizUsesrIndentify(userNameInput) else {
+                                    showIdentifyFailToast()
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                                        solveQuizNavigator.popToroot()
+                                    }
+                                    return
+                                }
+                                solveQuizNavigator.path.append(
+                                    .solve(quizId, solveQuizModel, solver)
+                                )
+                            }
                         }
                     )
                 ))
             }
         }
+        .toast(model: $userIdentifyFailToastModel)
         .navigationBarBackButtonHidden()
     }
     
@@ -103,5 +115,22 @@ public struct SolveQuizUserNameInputView: View {
             .onTapGesture {
                 print("툴팁 터치")
             }
+    }
+}
+
+extension SolveQuizUserNameInputView {
+    private func showIdentifyFailToast() {
+        userIdentifyFailToastModel = .init(status: .warning, text: "일시적 오류입니다.\n잠시 후 다시 시도해주세요")
+    }
+    
+    private func solveQuizUsesrIndentify(_ nickname: String) async -> SolveQuizUser? {
+        if let _ = AuthManager.shared.token {
+            return .user
+        } else {
+            if let temporaryToken = await quizService.getTemporaryToken(nickname: nickname)?.token {
+                return .nonUser(temporaryToken)
+            }
+        }
+        return nil
     }
 }

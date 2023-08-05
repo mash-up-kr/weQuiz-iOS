@@ -62,10 +62,10 @@ public struct SolveQuizIntroView: View {
             }
             .navigationDestination(for: SolveQuizScreen.self) { screen in
                 switch screen {
-                case .input(let id, let model):
+                case let .input(id, model):
                     SolveQuizUserNameInputView(quizId: id, solveQuizModel: model)
-                case .solve(let id, let model):
-                    SolveQuizView(quizId: id, .init(model)).configureView()
+                case let .solve(id, model, solver):
+                    SolveQuizView(quizId: id, .init(model), solver: solver).configureView()
                 }
             }
         }
