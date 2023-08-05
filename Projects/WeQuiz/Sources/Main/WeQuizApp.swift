@@ -78,10 +78,7 @@ struct WeQuizApp: App {
     
     var body: some Scene {
         WindowGroup {
-//            ContentView()
-            HomeView()
-                .configureView()
-                .environmentObject(HomeNavigator.shared)
+            ContentView()
         }
     }
 }
