@@ -23,4 +23,8 @@ public final class SolveQuizNavigator: ObservableObject {
     public func back() {
         path = path.dropLast()
     }
+    
+    func popToroot() {
+        path = []
+    }
 }

@@ -32,15 +32,15 @@ extension SolveQuizPresenter: SolveQuizPresentationLogic {
     private func setResultImage(_ score: Int) -> String {
         switch score {
         case 90...100:
-            return "quizResult_1"
+            return WeQuizAsset.Assets.quizResult05.name
         case 70..<90:
-            return "quizResult_2"
+            return WeQuizAsset.Assets.quizResult04.name
         case 50..<70:
-            return "quizResult_3"
+            return WeQuizAsset.Assets.quizResult03.name
         case 30..<50:
-            return "quizResult_4"
+            return WeQuizAsset.Assets.quizResult02.name
         default:
-            return "quizResult_5"
+            return WeQuizAsset.Assets.quizResult01.name
         }
     }
     

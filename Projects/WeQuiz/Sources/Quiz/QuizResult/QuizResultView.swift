@@ -16,16 +16,15 @@ protocol QuizResultDisplayLogic {
 
 public struct QuizResultView: View {
     @EnvironmentObject var mainNavigator: MainNavigator
+    @EnvironmentObject var solveQuizNavigator: SolveQuizNavigator
     var interactor: QuizResultBusinessLogic?
     
-    @ObservedObject var model = QuizResultDataStore()
-
-    @Binding var isPresented: Bool
+    @ObservedObject var model: QuizResultDataStore
     @State private var isSharePresented = false
     @State private var activityItem: [Any] = []
     
-    public init(isPresented: Binding<Bool>, quizId: Int,_ quizResult: QuizResultModel) {
-        self._isPresented = isPresented
+    public init(quizId: Int,_ quizResult: QuizResultModel) {
+        self.model = QuizResultDataStore()
         self.model.quizId = quizId
         self.model.result = quizResult
     }
@@ -39,7 +38,6 @@ public struct QuizResultView: View {
                             socreView(result.myScore)
                             descriptionView(me: result.myNickname, friend: result.friendNickname, description: result.scoreDescription)
                         }
-                        
                     }
 
                     Image(model.result?.resultImage ?? "quizResult_5")
@@ -70,7 +68,7 @@ public struct QuizResultView: View {
                     WQButton(style: .double(WQButton.Style.DobuleButtonStyleModel(
                         titles: (leftTitle: "다시 풀기", rightTitle: "결과 공유하기"),
                         leftAction: {
-                            isPresented = false
+                            solveQuizNavigator.popToroot()
                         },
                         rightAction: {
                             guard let quizId = model.quizId else { return }
@@ -78,7 +76,6 @@ public struct QuizResultView: View {
                         }
                     )))
                     .background(
-                        // TODO: - url 문제 id로 수정
                         ActivityView(
                             isPresented: $isSharePresented,
                             activityItems: activityItem
@@ -162,7 +159,8 @@ extension QuizResultView {
                 .frame(width: 24, height: 24)
                 .padding(.trailing, 20)
                 .onTapGesture {
-                    mainNavigator.showQuiz = false
+                    solveQuizNavigator.popToroot()
+                    mainNavigator.dismissQuiz()
                 }
         }
         .frame(height: 56)

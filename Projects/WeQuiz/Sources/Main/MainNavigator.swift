@@ -60,4 +60,8 @@ extension MainNavigator {
             showQuizModel = .result(id: id, solver: solverId)
         }
     }
+    
+    func dismissQuiz() {
+        showQuiz = false
+    }
 }

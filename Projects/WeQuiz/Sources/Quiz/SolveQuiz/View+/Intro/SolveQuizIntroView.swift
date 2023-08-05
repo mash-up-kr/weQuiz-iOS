@@ -29,7 +29,7 @@ public struct SolveQuizIntroView: View {
                     .padding(.top, 16)
                     .padding(.trailing, 20)
                     .onTapGesture {
-                        mainNavigator.showQuiz = false
+                        mainNavigator.dismissQuiz()
                     }
                 VStack {
                     VStack(spacing: .zero) {

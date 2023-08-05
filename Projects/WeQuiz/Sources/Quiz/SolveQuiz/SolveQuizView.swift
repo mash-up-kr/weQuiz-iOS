@@ -105,7 +105,7 @@ public struct SolveQuizView: View {
             }
         ) {
             if let quizResult = viewModel.quizResult {
-                QuizResultView(isPresented: $viewModel.routeToResultView, quizId: quizId, quizResult).configureView()
+                QuizResultView(quizId: quizId, quizResult).configureView()
             }
         }
         .navigationBarBackButtonHidden()
