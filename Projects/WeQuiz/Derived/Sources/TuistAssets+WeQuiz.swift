@@ -22,6 +22,8 @@
 public enum WeQuizAsset {
   public enum Assets {
     public static let accentColor = WeQuizColors(name: "AccentColor")
+    public static let authenticationOnboardingBackground = WeQuizImages(name: "authentication_onboarding_background")
+    public static let authenticationOnboardingLogo = WeQuizImages(name: "authentication_onboarding_logo")
     public static let authenticationFinish = WeQuizImages(name: "authentication_finish")
     public static let bronzeGrade = WeQuizImages(name: "BronzeGrade")
     public static let goldGrade = WeQuizImages(name: "GoldGrade")
