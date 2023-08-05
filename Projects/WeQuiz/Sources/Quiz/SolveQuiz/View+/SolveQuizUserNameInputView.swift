@@ -16,9 +16,11 @@ public struct SolveQuizUserNameInputView: View {
     @State private var isUserNameValid: Bool = false
 
     private let quizId: Int
+    private let solveQuizModel: SolveQuizModel
     
-    init(quizId: Int) {
+    init(quizId: Int, solveQuizModel: SolveQuizModel) {
         self.quizId = quizId
+        self.solveQuizModel = solveQuizModel
     }
     
     public var body: some View {
@@ -46,7 +48,9 @@ public struct SolveQuizUserNameInputView: View {
                         title: "완료",
                         isEnable: $isUserNameValid,
                         action: {
-                            solveQuizNavigator.path.append(.solve(quizId))
+                            solveQuizNavigator.path.append(
+                                .solve(quizId, solveQuizModel)
+                            )
                         }
                     )
                 ))

@@ -10,12 +10,10 @@ import Combine
 import Foundation
 
 protocol SolveQuizBusinessLogic {
-    func loadQuiz(request: SolveQuiz.LoadSolveQuiz.Request)
     func requestQuizResult(request: SolveQuiz.LoadQuizResult.Request)
 }
 
 final class SolveQuizInteractor: SolveQuizBusinessLogic {
-    
     private var cancellables = Set<AnyCancellable>()
     private let service: QuizService
     
@@ -23,19 +21,6 @@ final class SolveQuizInteractor: SolveQuizBusinessLogic {
     
     public init(service: QuizService) {
         self.service = service
-    }
-    
-    func loadQuiz(request: SolveQuiz.LoadSolveQuiz.Request) {
-        self.service.getQuiz(BaseDataResponseModel<GetQuizResponseModel>.self, QuizAPI.getQuiz(request.quizId))
-            .sink(receiveCompletion: { _ in
-                //TODO: - Error 처리
-            }, receiveValue: { value in
-                guard let value else { return }
-                let response = SolveQuiz.LoadSolveQuiz.Response(quiz: value)
-                self.presenter?.present(response: response)
-                
-            })
-            .store(in: &cancellables)
     }
     
     func requestQuizResult(request: SolveQuiz.LoadQuizResult.Request) {
@@ -48,7 +33,9 @@ final class SolveQuizInteractor: SolveQuizBusinessLogic {
             })
             .store(in: &cancellables)
     }
-    
+}
+
+extension SolveQuizInteractor {
     private func makeRequestModel(_ request: SolveQuizModel) ->  QuizResultRequestModel {
         var requestModel = QuizResultRequestModel(answers: [])
         for question in request.questions {

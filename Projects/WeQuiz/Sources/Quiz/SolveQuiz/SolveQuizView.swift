@@ -10,20 +10,20 @@ import SwiftUI
 import DesignSystemKit
 
 protocol SolveQuizDisplayLogic {
-    func displayQuiz(viewModel: SolveQuiz.LoadSolveQuiz.ViewModel)
     func displayQuizResult(viewModel: SolveQuiz.LoadQuizResult.ViewModel)
 }
 
 public struct SolveQuizView: View {
+    @EnvironmentObject var solveQuizNavigator: SolveQuizNavigator
+    @ObservedObject var viewModel: SolveQuizDataStore
+    @State var selectedCount: Int = 0
+    
+    let quizId: Int
     var interactor: SolveQuizBusinessLogic?
     
-    @ObservedObject var viewModel = SolveQuizDataStore()
-    
-    @State var selectedCount: Int = 0
-    public let quizId: Int
-    
-    public init(quizId: Int) {
+    init(quizId: Int, _ viewModel: SolveQuizDataStore) {
         self.quizId = quizId
+        self.viewModel = viewModel
     }
 
     public var body: some View {
@@ -37,7 +37,10 @@ public struct SolveQuizView: View {
                             print("신고하기 버튼 클릭")
                         })], action: {
                             self.selectedCount = 0
-                            viewModel.goToPreviousQuestion()
+                            
+                            if viewModel.goToPreviousQuestion() == false {
+                                solveQuizNavigator.back()
+                            }
                         })
                     ))
 
@@ -64,7 +67,6 @@ public struct SolveQuizView: View {
                         Spacer()
                     }
 
-                    
                     Text(viewModel.solvedQuiz.questions[viewModel.currentIndex].title)
                         .font(.pretendard(.medium, size: ._24))
                         .foregroundColor(Color.designSystem(.g1))
@@ -80,6 +82,9 @@ public struct SolveQuizView: View {
 
                     ForEach($viewModel.solvedQuiz.questions[viewModel.currentIndex].answers, id: \.id) { answer in
                         SolveQuizAnswerView(answer)
+                            .onTapGesture {
+                                answer.isSelected.wrappedValue.toggle()
+                            }
                             .onChange(of: answer.isSelected.wrappedValue, perform: { isSelected in
                                 selectedCount = (isSelected == true) ? selectedCount + 1 : selectedCount - 1
                                 if selectedCount == viewModel.solvedQuiz.questions[viewModel.currentIndex].answerCount {
@@ -91,16 +96,14 @@ public struct SolveQuizView: View {
                 }
                 .padding(.horizontal, 20)
             }
-            
         }
-        .task {
-            interactor?.loadQuiz(request: .init(quizId: quizId))
-        }
-        .fullScreenCover(isPresented: $viewModel.routeToResultView, onDismiss: {
-            
-            viewModel.resetQuiz()
-            self.selectedCount = 0
-        }) {
+        .fullScreenCover(
+            isPresented: $viewModel.routeToResultView,
+            onDismiss: {
+                viewModel.resetQuiz()
+                self.selectedCount = 0
+            }
+        ) {
             if let quizResult = viewModel.quizResult {
                 QuizResultView(isPresented: $viewModel.routeToResultView, quizId: quizId, quizResult).configureView()
             }
@@ -141,18 +144,8 @@ public struct SolveQuizView: View {
 }
 
 extension SolveQuizView: SolveQuizDisplayLogic {
-    func displayQuiz(viewModel: SolveQuiz.LoadSolveQuiz.ViewModel) {
-        self.viewModel.setQuiz(viewModel.quiz)
-    }
-    
     func displayQuizResult(viewModel: SolveQuiz.LoadQuizResult.ViewModel) {
         self.viewModel.quizResult = viewModel.result
         self.viewModel.routeToResultView = true
-    }
-}
-
-struct SolveQuizView_Previews: PreviewProvider {
-    static var previews: some View {
-        return SolveQuizView(quizId: 1)
     }
 }

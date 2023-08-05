@@ -20,10 +20,8 @@ struct ContentView: View {
             case .home:
                 HomeView()
                     .configureView()
-                    .environmentObject(homeNavigator)
             case .authentication:
                 OnboardingView()
-                    .environmentObject(authenticationNavigator)
             }
         }
         .fullScreenCover(
@@ -32,8 +30,6 @@ struct ContentView: View {
                     switch showQuizModel {
                     case .solve(let id):
                         SolveQuizIntroView(quizId: id)
-                            .environmentObject(mainNavigator)
-                            .environmentObject(solveQuizNavigator)
                     case let .result(id, solverId):
                         EmptyView()
                     }

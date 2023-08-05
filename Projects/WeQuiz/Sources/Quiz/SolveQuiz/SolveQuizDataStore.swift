@@ -14,9 +14,11 @@ final class SolveQuizDataStore: ObservableObject {
     @Published var solvedQuiz = SolveQuizModel.init()
     @Published var routeToResultView = false
     @Published var quizResult: QuizResultModel?
+    @Published var routeToNameInputView = false
 
-    public init() {
-        self.quiz = .init()
+    public init(_ quiz: SolveQuizModel) {
+        self.quiz = quiz
+        self.solvedQuiz = quiz
     }
     
     public func setQuiz(_ quizModel: SolveQuizModel) {
@@ -35,11 +37,12 @@ final class SolveQuizDataStore: ObservableObject {
         }
     }
     
-    public func goToPreviousQuestion() {
+    public func goToPreviousQuestion() -> Bool {
         if currentIndex > 0 {
             currentIndex -= 1
             unselectAnswer()
+            return true
         }
+        return false
     }
-
 }

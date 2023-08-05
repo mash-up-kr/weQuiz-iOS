@@ -81,7 +81,7 @@ public struct RankUserModel {
 
 // SolveQuizModel.swift 로 만들어져 있었지만, 파일명 충돌로 인해 임시로 현재 파일로 통합
 
-public struct SolveQuizModel {
+public struct SolveQuizModel: Equatable, Hashable {
     public var title: String
     public var questions: [SolveQuestionModel]
     
@@ -91,7 +91,7 @@ public struct SolveQuizModel {
     }
 }
 
-public struct SolveQuestionModel {
+public struct SolveQuestionModel: Equatable, Hashable {
     public var id: Int
     public var title: String
     public var answerCount: Int
@@ -107,7 +107,7 @@ public struct SolveQuestionModel {
     }
 }
 
-public struct SolveAnswerModel {
+public struct SolveAnswerModel: Equatable, Hashable {
     public var id: Int
     public var answer: String
     public var isSelected: Bool

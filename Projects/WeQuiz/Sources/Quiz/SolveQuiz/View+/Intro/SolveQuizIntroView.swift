@@ -47,7 +47,8 @@ public struct SolveQuizIntroView: View {
                         .init(
                             title: "시험 응시하기",
                             action: {
-                                solveQuizNavigator.path.append(.input(quizId))
+                                solveQuizNavigator.path.append(
+                                    .input(quizId, viewModel.makeQuizModel()))
                             }
                         )
                     ))
@@ -61,10 +62,10 @@ public struct SolveQuizIntroView: View {
             }
             .navigationDestination(for: SolveQuizScreen.self) { screen in
                 switch screen {
-                case .input(let id):
-                    SolveQuizUserNameInputView(quizId: id)
-                case .solve(let id):
-                    SolveQuizView(quizId: id).configureView()
+                case .input(let id, let model):
+                    SolveQuizUserNameInputView(quizId: id, solveQuizModel: model)
+                case .solve(let id, let model):
+                    SolveQuizView(quizId: id, .init(model)).configureView()
                 }
             }
         }

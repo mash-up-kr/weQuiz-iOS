@@ -26,8 +26,5 @@ public struct SolveQuizAnswerView: View {
             .frame(height: 58)
             .background($model.isSelected.wrappedValue ? Color.designSystem(.s1) : Color.designSystem(.g8))
             .cornerRadius(16)
-            .onTapGesture {
-                $model.isSelected.wrappedValue.toggle()
-            }
     }
 }
