@@ -98,7 +98,14 @@ public extension NetworkRequestable {
     }
     
     var headers: NetworkHeader? {
-        nil
+        if let token = AuthManager.shared.token {
+            return .init([
+                "Content-Type": "application/json",
+                "x-wequiz-token": token
+            ])
+        } else {
+            return nil
+        }
     }
     
     var encoding: NetworkParameterEncoding {

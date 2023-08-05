@@ -29,14 +29,6 @@ extension QuizAPI: NetworkRequestable {
         }
     }
     
-    public var headers: NetworkHeader? {
-        .init( [
-            "Content-Type": "application/json",
-            "x-wequiz-token": "AIE-54W-amwtn2V03BQXn5ibwu3my68KXVAL4b7wQMa7gIDLV_QGwcQji_5lQ30sV20L5igMhn4Daig6w4JhTPOF_rQ_c-CF5rojgpVw8EVKnNgJF2ePgAt4bRJ86Mvml51yWvWl2wcTX30StvIeSomDhlhUx2jcMw"
-        ]
-               )
-    }
-    
     public var method: NetworkMethod {
         switch self {
         case .makeQuiz(_):
