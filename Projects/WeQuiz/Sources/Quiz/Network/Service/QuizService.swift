@@ -23,6 +23,11 @@ public protocol QuizServiceLogic {
         _ requestable: NetworkRequestable)
         -> AnyPublisher<GetQuizResponseModel?, Error> where T : Decodable
     
+    // 문제 풀이
+    func getQuiz(
+        _ requestable: NetworkRequestable,
+        _ completion: @escaping (GetQuizResponseModel?) -> Void)
+    
     // 문제 풀이 결과
     func quizResult<T>(
         _ model: T.Type,
@@ -68,6 +73,17 @@ extension QuizService: QuizServiceLogic {
                 }
             }
         }.eraseToAnyPublisher()
+    }
+    
+    public func getQuiz(_ requestable: NetworkRequestable, _ completion: @escaping (GetQuizResponseModel?) -> Void) {
+        networking.request(BaseDataResponseModel<GetQuizResponseModel>.self, requestable, { result in
+            switch result {
+            case .success(let success):
+                completion(success)
+            case .failure:
+                completion(nil)
+            }
+        })
     }
     
     public func quizResult<T>(_ model: T.Type, _ requestable: NetworkRequestable) -> AnyPublisher<QuizResultResponseModel?, Error> where T : Decodable {

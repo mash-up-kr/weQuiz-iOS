@@ -11,13 +11,26 @@ import SwiftUI
 import DesignSystemKit
 
 public struct SolveQuizUserNameInputView: View {
+    @EnvironmentObject var solveQuizNavigator: SolveQuizNavigator
     @State private var userNameInput: String = ""
     @State private var isUserNameValid: Bool = false
+
+    private let quizId: Int
     
-    public init() { }
+    init(quizId: Int) {
+        self.quizId = quizId
+    }
     
     public var body: some View {
         VStack {
+            WQTopBar(style: .navigation(
+                .init(
+                    title: "",
+                    action: {
+                        solveQuizNavigator.back()
+                    }
+                )
+            ))
             VStack(spacing: .zero) {
                 title()
                 Spacer()
@@ -32,12 +45,13 @@ public struct SolveQuizUserNameInputView: View {
                     .init(
                         title: "완료",
                         action: {
-                            print("완료 버튼 눌림")
+                            solveQuizNavigator.path.append(.solve(quizId))
                         }
                     )
                 ))
             }
         }
+        .navigationBarBackButtonHidden()
     }
     
     private func title() -> some View {
@@ -84,11 +98,5 @@ public struct SolveQuizUserNameInputView: View {
             .onTapGesture {
                 print("툴팁 터치")
             }
-    }
-}
-
-struct SolveQuizUserNameInputView_Previews: PreviewProvider {
-    static var previews: some View {
-        SolveQuizUserNameInputView()
     }
 }

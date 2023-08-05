@@ -16,6 +16,8 @@ enum SolveQuiz {
         
         struct Response {
             let quiz: GetQuizResponseModel
+            
+            static let `default`: Response = .init(quiz: .default)
         }
         
         struct ViewModel {

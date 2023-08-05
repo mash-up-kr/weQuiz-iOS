@@ -15,12 +15,14 @@ protocol QuizResultDisplayLogic {
 }
 
 public struct QuizResultView: View {
+    @EnvironmentObject var mainNavigator: MainNavigator
     var interactor: QuizResultBusinessLogic?
     
     @ObservedObject var model = QuizResultDataStore()
 
     @Binding var isPresented: Bool
     @State private var isSharePresented = false
+    @State private var activityItem: [Any] = []
     
     public init(isPresented: Binding<Bool>, quizId: Int,_ quizResult: QuizResultModel) {
         self._isPresented = isPresented
@@ -29,7 +31,7 @@ public struct QuizResultView: View {
     }
     
     public var body: some View {
-        ZStack {
+        ZStack(alignment: .topTrailing) {
             ScrollView(.vertical) {
                 VStack {
                     VStack(alignment: .center, spacing: 20) {
@@ -71,15 +73,15 @@ public struct QuizResultView: View {
                             isPresented = false
                         },
                         rightAction: {
-                            isSharePresented = true
+                            guard let quizId = model.quizId else { return }
+                            resultLink(id: quizId)
                         }
                     )))
                     .background(
                         // TODO: - url 문제 id로 수정
                         ActivityView(
                             isPresented: $isSharePresented,
-                            activityItems: ["찐친고사 결과를 확인해보세요!",
-                                            URL(string: "https://youtu.be/jOTfBlKSQYY")!]
+                            activityItems: activityItem
                         )
                     )
                 }
@@ -93,13 +95,14 @@ public struct QuizResultView: View {
         }
     }
 }
+
 extension QuizResultView: QuizResultDisplayLogic {
     func displayRanking(viewModel: QuizResult.LoadRanking.ViewModel) {
         self.model.result?.ranking = viewModel.rank
     }
 }
-extension QuizResultView {
 
+extension QuizResultView {
     private func socreView(_ score: Int) -> some View {
         HStack(alignment: .center, spacing: 6) {
             // TODO: - size 68로 수정
@@ -159,11 +162,18 @@ extension QuizResultView {
                 .frame(width: 24, height: 24)
                 .padding(.trailing, 20)
                 .onTapGesture {
-                    // TODO: - 홈으로 돌아가기
-                    print("홈으로 돌아가기")
+                    mainNavigator.showQuiz = false
                 }
         }
         .frame(height: 56)
         .background(Color.designSystem(.g9))
+    }
+    
+    private func resultLink(id: Int) {
+        DynamicLinks.makeDynamicLink(type: .result(id: id)) {
+            guard let url = $0 else { return }
+            activityItem = [url]
+            isSharePresented = true
+        }
     }
 }

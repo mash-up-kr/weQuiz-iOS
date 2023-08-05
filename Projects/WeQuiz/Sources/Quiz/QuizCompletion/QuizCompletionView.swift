@@ -11,10 +11,11 @@ import SwiftUI
 import DesignSystemKit
 
 public struct QuizCompletionView: View {
-    
     @State var isSharePresented = false
-    private var quizId: Int
+    @State var activityItems: [Any] = []
+
     private var navigator: HomeNavigator
+    private var quizId: Int    
     
     public init(quizId: Int, navigator: HomeNavigator) {
         self.quizId = quizId
@@ -34,15 +35,15 @@ public struct QuizCompletionView: View {
                   style: .single(
                       .init(title: "친구들에게 시험지 공유하기",
                           action: {
-                              self.isSharePresented = true
+                              quizLink(id: quizId)
                           }))
                 )
                 .frame(height: 52)
                 .background(
                     ActivityView(
                         isPresented: $isSharePresented,
-                        activityItems: ["친구가 만든 찐친고사에 도전해보세요!", URL(string: "https://www.youtube.com/")!])
-                    // TODO: - url 문제 id로 수정
+                        activityItems: activityItems
+                    )
                 )
             }
             
@@ -64,6 +65,14 @@ public struct QuizCompletionView: View {
             Color.designSystem(.g9)
         )
         .navigationBarHidden(true)
+    }
+    
+    private func quizLink(id: Int) {
+        DynamicLinks.makeDynamicLink(type: .solve(id: id)) {
+            guard let url = $0 else { return }
+            activityItems = [url]
+            isSharePresented = true
+        }
     }
 }
 

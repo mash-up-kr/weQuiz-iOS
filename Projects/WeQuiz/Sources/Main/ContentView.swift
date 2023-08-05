@@ -9,19 +9,36 @@
 import SwiftUI
 
 struct ContentView: View {
-    private let authenticationNavigator: AuthenticationNavigator = .shared
-    private let homeNavigator: HomeNavigator = .shared
+    @EnvironmentObject var mainNavigator: MainNavigator
+    @EnvironmentObject var authenticationNavigator: AuthenticationNavigator
+    @EnvironmentObject var homeNavigator: HomeNavigator
+    @EnvironmentObject var solveQuizNavigator: SolveQuizNavigator
+    
     var body: some View {
         Group {
-            if let token = AuthManager.shared.token {
+            switch mainNavigator.root {
+            case .home:
                 HomeView()
+                    .configureView()
                     .environmentObject(homeNavigator)
-            } else {
+            case .authentication:
                 OnboardingView()
                     .environmentObject(authenticationNavigator)
             }
-            
         }
+        .fullScreenCover(
+            isPresented: $mainNavigator.showQuiz) {
+                if let showQuizModel = mainNavigator.showQuizModel {
+                    switch showQuizModel {
+                    case .solve(let id):
+                        SolveQuizIntroView(quizId: id)
+                            .environmentObject(mainNavigator)
+                            .environmentObject(solveQuizNavigator)
+                    case let .result(id, solverId):
+                        EmptyView()
+                    }
+                }
+            }
     }
 }
 

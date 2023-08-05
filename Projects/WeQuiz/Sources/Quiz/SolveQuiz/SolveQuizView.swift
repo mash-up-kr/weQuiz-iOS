@@ -105,7 +105,7 @@ public struct SolveQuizView: View {
                 QuizResultView(isPresented: $viewModel.routeToResultView, quizId: quizId, quizResult).configureView()
             }
         }
-
+        .navigationBarBackButtonHidden()
     }
 
     private func onNextQuestion() {
