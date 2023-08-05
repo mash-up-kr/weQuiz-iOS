@@ -16,9 +16,11 @@ public struct SolveQuizUserNameInputView: View {
     @State private var isUserNameValid: Bool = false
 
     private let quizId: Int
+    private let solveQuizModel: SolveQuizModel
     
-    init(quizId: Int) {
+    init(quizId: Int, solveQuizModel: SolveQuizModel) {
         self.quizId = quizId
+        self.solveQuizModel = solveQuizModel
     }
     
     public var body: some View {
@@ -44,8 +46,11 @@ public struct SolveQuizUserNameInputView: View {
                 WQButton(style: .single(
                     .init(
                         title: "완료",
+                        isEnable: $isUserNameValid,
                         action: {
-                            solveQuizNavigator.path.append(.solve(quizId))
+                            solveQuizNavigator.path.append(
+                                .solve(quizId, solveQuizModel)
+                            )
                         }
                     )
                 ))
@@ -58,7 +63,7 @@ public struct SolveQuizUserNameInputView: View {
         HStack {
             Text("친구가 알 수 있게\n본인의 이름을 적어주세요")
                 .font(.pretendard(.bold, size: ._24))
-                .foregroundColor(.gray)
+                .foregroundColor(.white)
             Spacer()
         }
         .padding(.top, 76)
@@ -81,7 +86,7 @@ public struct SolveQuizUserNameInputView: View {
                     placeholder: "이름 입력",
                     limit: 8,
                     condition: { input in
-                        input < 8
+                        input <= 8
                     })
             ))
         }

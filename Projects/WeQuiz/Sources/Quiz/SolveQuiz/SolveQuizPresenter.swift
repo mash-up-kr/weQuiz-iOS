@@ -9,7 +9,6 @@
 import Foundation
 
 protocol SolveQuizPresentationLogic {
-    func present(response: SolveQuiz.LoadSolveQuiz.Response)
     func presentQuizResult(response: SolveQuiz.LoadQuizResult.Response)
 }
 
@@ -18,43 +17,30 @@ final class SolveQuizPresenter {
 }
 
 extension SolveQuizPresenter: SolveQuizPresentationLogic {
-    func present(response: SolveQuiz.LoadSolveQuiz.Response) {
-        view?.displayQuiz(viewModel: .init(quiz: makeViewModel(response)))
-    }
-    
     func presentQuizResult(response: SolveQuiz.LoadQuizResult.Response) {
-        let viewModel = QuizResultModel(myScore: response.result.totalScore, myNickname: response.result.quizResolver.name, friendNickname: response.result.quizCreator.name,
-                                        resultImage: setResultImage(response.result.totalScore),
-                                        scoreDescription: setScoreDescription(response.result.totalScore))
+        let viewModel = QuizResultModel(
+            myScore: response.result.totalScore,
+            myNickname: response.result.quizResolver.name,
+            friendNickname: response.result.quizCreator.name,
+            resultImage: setResultImage(response.result.totalScore),
+            scoreDescription: setScoreDescription(response.result.totalScore)
+        )
         
         view?.displayQuizResult(viewModel: .init(result: viewModel))
-    }
-    
-    private func makeViewModel(_ response: SolveQuiz.LoadSolveQuiz.Response) -> SolveQuizModel{
-        var viewModel = SolveQuizModel.init()
-        viewModel.title = response.quiz.title
-        for question in response.quiz.questions {
-            var questionModel = SolveQuestionModel(id: question.id, title: question.title, answerCount: question.answerCounts, score: question.score, answers: [])
-            for answer in question.options {
-                questionModel.answers.append(.init(id: answer.id, answer: answer.content, isCorrect: answer.isCorrect))
-            }
-            viewModel.questions.append(questionModel)
-        }
-        return viewModel
     }
     
     private func setResultImage(_ score: Int) -> String {
         switch score {
         case 90...100:
-            return "quizResult_1"
+            return WeQuizAsset.Assets.quizResult05.name
         case 70..<90:
-            return "quizResult_2"
+            return WeQuizAsset.Assets.quizResult04.name
         case 50..<70:
-            return "quizResult_3"
+            return WeQuizAsset.Assets.quizResult03.name
         case 30..<50:
-            return "quizResult_4"
+            return WeQuizAsset.Assets.quizResult02.name
         default:
-            return "quizResult_5"
+            return WeQuizAsset.Assets.quizResult01.name
         }
     }
     

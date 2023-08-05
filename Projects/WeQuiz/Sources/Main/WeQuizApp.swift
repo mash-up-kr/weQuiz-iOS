@@ -89,7 +89,7 @@ struct WeQuizApp: App {
                 .environmentObject(solveQuizNavigator)
                 .onOpenURL { url in
                     if let destination = DynamicLinks.id(from: url) {
-                        solveQuizNavigator.path = []
+                        solveQuizNavigator.popToroot()
                         switch destination {
                         case .solve(let id):
                             mainNavigator.showSolveQuiz(id)

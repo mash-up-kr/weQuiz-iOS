@@ -9,8 +9,8 @@
 import Foundation
 
 public enum SolveQuizScreen: Hashable {
-    case input(Int)
-    case solve(Int)
+    case input(Int, SolveQuizModel)
+    case solve(Int, SolveQuizModel)
 }
 
 public final class SolveQuizNavigator: ObservableObject {
@@ -22,5 +22,9 @@ public final class SolveQuizNavigator: ObservableObject {
     
     public func back() {
         path = path.dropLast()
+    }
+    
+    func popToroot() {
+        path = []
     }
 }

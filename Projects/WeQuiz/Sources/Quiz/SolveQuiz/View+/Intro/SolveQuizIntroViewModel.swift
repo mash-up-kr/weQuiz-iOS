@@ -20,4 +20,24 @@ final class SolveQuizIntroViewModel: ObservableObject {
             self?.quizModel = SolveQuiz.LoadSolveQuiz.Response(quiz: model)
         }
     }
+    
+    func makeQuizModel() -> SolveQuizModel {
+        SolveQuizModel(
+            title: quizModel.quiz.title,
+            questions: quizModel.quiz.questions.map { question in
+                SolveQuestionModel(
+                    id: question.id,
+                    title: question.title,
+                    answerCount: question.answerCounts,
+                    score: question.score,
+                    answers: question.options.map { option in
+                        SolveAnswerModel.init(
+                            id: option.id,
+                            answer: option.content,
+                            isCorrect: option.isCorrect
+                        )
+                    })
+            }
+        )
+    }
 }
