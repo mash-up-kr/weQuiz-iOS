@@ -36,7 +36,7 @@ public struct SolveQuizIntroView: View {
                         quizNumber()
                         Spacer()
                             .frame(height: 32)
-                        title("출제자")
+                        title()
                         Spacer()
                             .frame(height: 32)
                         thumbnail()
@@ -88,13 +88,13 @@ public struct SolveQuizIntroView: View {
         .padding(.top, 46)
     }
     
-    private func title(_ examiner: String) -> some View {
+    private func title() -> some View {
         VStack(spacing: 10) {
             Text(viewModel.quizModel.quiz.title)
                 .font(.pretendard(.medium, size: ._20))
                 .foregroundColor(.designSystem(.g4))
             VStack(spacing: .zero) {
-                Text(examiner)
+                Text(viewModel.quizModel.quiz.creator.name)
                     .font(.pretendard(.bold, size: ._34))
                     .foregroundColor(.designSystem(.g1))
                 Text("영역")

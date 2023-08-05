@@ -19,18 +19,28 @@ public struct MakeQuizResponseModel: Decodable {
 public struct GetQuizResponseModel: Codable {
     public let id: Int
     public let title: String
+    public let creator: QuizCreator
     public let questions: [QuiestionModel]
     
     public static let `default`: GetQuizResponseModel = .init(
         id: .zero,
-        title: "-",
+        title: "나를 맞춰봐!",
+        creator: .default,
         questions: []
     )
     
-    public init(id: Int, title: String, questions: [QuiestionModel]) {
+    public init(id: Int, title: String, creator: QuizCreator, questions: [QuiestionModel]) {
         self.id = id
         self.title = title
         self.questions = questions
+        self.creator = creator
+    }
+    
+    public struct QuizCreator: Codable {
+        public let id: Int
+        public let name: String
+        
+        public static let `default`: QuizCreator = .init(id: .zero, name: "매쉬업귀염둥이")
     }
     
     public struct QuiestionModel: Codable {
