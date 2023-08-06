@@ -11,6 +11,7 @@ import SwiftUI
 public struct WQTopBar: View {
     public enum Style {
         case title(TitleNavigationModel)
+        case logo(LogoNavigationModel)
         case navigation(TitleNavigationModel)
         case navigationSearchBar(SearchBarNavigationModel)
         case navigationWithButtons(ButtonNavigationModel)
@@ -26,6 +27,14 @@ public struct WQTopBar: View {
             ) {
                 self.title = title
                 self.action = action
+            }
+        }
+        
+        public struct LogoNavigationModel {
+            let iconImage: Image
+            
+            public init(iconImage: Image) {
+                self.iconImage = iconImage
             }
         }
         
@@ -108,6 +117,8 @@ public struct WQTopBar: View {
         switch style {
         case .title(let model):
             title(model)
+        case .logo(let model):
+            logo(model)
         case .navigation(let model):
             navigation(model)
         case .navigationSearchBar(let model):
@@ -129,7 +140,24 @@ public struct WQTopBar: View {
             .padding(
                 EdgeInsets(
                     top: 15,
-                    leading: 12,
+                    leading: 20,
+                    bottom: 15,
+                    trailing: 0
+                )
+            )
+        }
+    }
+    
+    private func logo(_ model: Style.LogoNavigationModel) -> some View {
+        ZStack {
+            HStack(spacing: .zero) {
+                model.iconImage
+                Spacer()
+            }
+            .padding(
+                EdgeInsets(
+                    top: 15,
+                    leading: 20,
                     bottom: 15,
                     trailing: 0
                 )
@@ -187,6 +215,7 @@ public struct WQTopBar: View {
                         }
                     }
                 }
+                .padding(.trailing, 20)
             }
             .padding(
                 EdgeInsets(
@@ -251,6 +280,7 @@ public struct WQTopBar: View {
                         }
                         .foregroundColor(.designSystem(.g2))
                     }
+                    .padding(.trailing, 20)
                 }
             }
             .padding(

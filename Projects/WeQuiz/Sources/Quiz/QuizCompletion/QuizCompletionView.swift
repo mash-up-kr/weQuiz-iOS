@@ -47,10 +47,8 @@ public struct QuizCompletionView: View {
                 )
             }
             
-            VStack {
-                Image("img_success")
-                    .resizable()
-                    .aspectRatio(1.0, contentMode: .fit)
+            VStack(spacing: 16) {
+                WeQuizAsset.Assets.quizMakeSuccess.swiftUIImage
                 
                 Text("WeQuiz\n시험지를 완성했어요!")
                     .multilineTextAlignment(.center)

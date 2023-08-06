@@ -92,8 +92,7 @@ public struct HomeView: View {
 
 extension HomeView {
     private var topBarView: some View {
-        WQTopBar(style: .title(.init(title: "LOGO")))
-            .padding(.leading, 8)
+        WQTopBar(style: .logo(.init(iconImage: WeQuizAsset.Assets.homeLogo.swiftUIImage)))
     }
     
     private var profileView: some View {

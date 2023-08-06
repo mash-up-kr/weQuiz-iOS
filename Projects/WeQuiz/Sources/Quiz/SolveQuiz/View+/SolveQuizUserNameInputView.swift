@@ -15,7 +15,7 @@ public struct SolveQuizUserNameInputView: View {
     @State private var userNameInput: String = ""
     @State private var isUserNameValid: Bool = false
     @State private var userIdentifyFailToastModel: WQToast.Model?
-
+    
     private let quizId: Int
     private let solveQuizModel: SolveQuizModel
     private let quizService: QuizService = .init(Networking())
@@ -44,7 +44,6 @@ public struct SolveQuizUserNameInputView: View {
             }
             .padding(.horizontal, 20)
             VStack(spacing: 16) {
-                tooltip()
                 WQButton(style: .single(
                     .init(
                         title: "완료",
@@ -102,19 +101,6 @@ public struct SolveQuizUserNameInputView: View {
                     })
             ))
         }
-    }
-    
-    private func tooltip() -> some View {
-        Text("1분만에 가입해서 친구한테 문제내기 🗯️️")
-            .font(.pretendard(.bold, size: ._16))
-            .foregroundColor(.designSystem(.g3))
-            .padding(.horizontal, 21)
-            .padding(.vertical, 7)
-            .background(Color.designSystem(.g8))
-            .cornerRadius(19)
-            .onTapGesture {
-                print("툴팁 터치")
-            }
     }
 }
 
