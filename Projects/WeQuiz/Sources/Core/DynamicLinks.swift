@@ -24,11 +24,12 @@ enum DynamicLinks {
             }
         }
         
-        var metaTagtitle: String {
-            switch self {
-            case .solve: return "친구가 만든 찐친고사에 도전해보세요!"
-            case .result: return "찐친고사 결과를 확인해보세요!"
-            }
+        var metaTagTitle: String {
+            "진정한 친구들만 통과할 수 있는 찐친고사"
+        }
+        
+        var metaTagDescription: String {
+            "너 나 알아? WeQuiz 우정테스트"
         }
     }
     
@@ -58,7 +59,8 @@ enum DynamicLinks {
         builder?.androidParameters = DynamicLinkAndroidParameters(packageName: "team.ommaya.wequiz.android")
         
         builder?.socialMetaTagParameters = DynamicLinkSocialMetaTagParameters()
-        builder?.socialMetaTagParameters?.title = type.metaTagtitle
+        builder?.socialMetaTagParameters?.title = type.metaTagTitle
+        builder?.socialMetaTagParameters?.descriptionText = type.metaTagDescription
         
         builder?.shorten(completion: { url, options, error in
             if let error = error  {
