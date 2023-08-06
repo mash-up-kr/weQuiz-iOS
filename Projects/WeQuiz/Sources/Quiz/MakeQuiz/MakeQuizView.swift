@@ -13,7 +13,7 @@ public struct MakeQuizView: View {
     var interactor: MakeQuizBusinessLogic?
     
     
-    @State var isNetworking: Bool = false
+    @State var isPresentProgressView: Bool = false
     @ObservedObject var viewModel = MakeQuizDataStore()
     
     public init(navigator: HomeNavigator) {
@@ -72,7 +72,7 @@ public struct MakeQuizView: View {
                     style: .single(
                         .init(title: "시험지 완성하기",
                               action: {
-                                  isNetworking = true
+                                  isPresentProgressView = true
                                   interactor?.requestMakeQuiz(request: .init(quiz: viewModel.quiz))
                               }))
                 )
@@ -100,10 +100,7 @@ public struct MakeQuizView: View {
         .background(
             Color.designSystem(.g9)
         )
-        .overlay(
-            ProgressView()
-                .hidden(!isNetworking)
-        )
+        .progressView(isPresented: $isPresentProgressView)
     }
     
     private func titleTextField() -> some View {
@@ -156,7 +153,7 @@ public struct MakeQuizView: View {
 extension MakeQuizView: MakeQuizDisplayLogic {
     func displayCompletionView(viewModel: MakeQuiz.RequestMakeQuiz.ViewModel) {
         navigator.path.append(.quizCompletion(quizId: viewModel.quizId))
-        isNetworking = false
+        isPresentProgressView = false
     }
 }
 
