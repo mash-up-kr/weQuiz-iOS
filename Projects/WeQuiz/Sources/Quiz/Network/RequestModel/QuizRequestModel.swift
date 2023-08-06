@@ -67,3 +67,7 @@ public struct GetQuizRankRequestModel: Codable {
         self.quizAnswerCursorId = quizAnswerCursorId
     }
 }
+
+public struct TemporaryTokenRequestModel: Encodable {
+    public let nickname: String
+}

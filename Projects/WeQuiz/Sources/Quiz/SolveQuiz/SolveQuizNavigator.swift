@@ -10,7 +10,12 @@ import Foundation
 
 public enum SolveQuizScreen: Hashable {
     case input(Int, SolveQuizModel)
-    case solve(Int, SolveQuizModel)
+    case solve(Int, SolveQuizModel, SolveQuizUser)
+}
+
+public enum SolveQuizUser: Hashable {
+    case user
+    case nonUser(String)
 }
 
 public final class SolveQuizNavigator: ObservableObject {

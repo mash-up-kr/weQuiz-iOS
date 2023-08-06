@@ -36,7 +36,7 @@ public struct SolveQuizIntroView: View {
                         quizNumber()
                         Spacer()
                             .frame(height: 32)
-                        title("출제자")
+                        title()
                         Spacer()
                             .frame(height: 32)
                         thumbnail()
@@ -62,10 +62,10 @@ public struct SolveQuizIntroView: View {
             }
             .navigationDestination(for: SolveQuizScreen.self) { screen in
                 switch screen {
-                case .input(let id, let model):
+                case let .input(id, model):
                     SolveQuizUserNameInputView(quizId: id, solveQuizModel: model)
-                case .solve(let id, let model):
-                    SolveQuizView(quizId: id, .init(model)).configureView()
+                case let .solve(id, model, solver):
+                    SolveQuizView(quizId: id, .init(model), solver: solver).configureView()
                 }
             }
         }
@@ -88,13 +88,13 @@ public struct SolveQuizIntroView: View {
         .padding(.top, 46)
     }
     
-    private func title(_ examiner: String) -> some View {
+    private func title() -> some View {
         VStack(spacing: 10) {
             Text(viewModel.quizModel.quiz.title)
                 .font(.pretendard(.medium, size: ._20))
                 .foregroundColor(.designSystem(.g4))
             VStack(spacing: .zero) {
-                Text(examiner)
+                Text(viewModel.quizModel.quiz.creator.name)
                     .font(.pretendard(.bold, size: ._34))
                     .foregroundColor(.designSystem(.g1))
                 Text("영역")

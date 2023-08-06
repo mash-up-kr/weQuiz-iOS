@@ -11,6 +11,7 @@ import Foundation
 
 protocol SolveQuizBusinessLogic {
     func requestQuizResult(request: SolveQuiz.LoadQuizResult.Request)
+    func requestQuizResultForAnonymous(request: SolveQuiz.LoadQuizResult.Request, temporaryToken: String)
 }
 
 final class SolveQuizInteractor: SolveQuizBusinessLogic {
@@ -24,7 +25,10 @@ final class SolveQuizInteractor: SolveQuizBusinessLogic {
     }
     
     func requestQuizResult(request: SolveQuiz.LoadQuizResult.Request) {
-        self.service.quizResult(BaseDataResponseModel<QuizResultResponseModel>.self, QuizAPI.quizResult(request.quizId, makeRequestModel(request.quiz)))
+        self.service.quizResult(
+            BaseDataResponseModel<QuizResultResponseModel>.self,
+            QuizAPI.quizResult(request.quizId, makeRequestModel(request.quiz))
+        )
             .sink(receiveCompletion: { com in
                 //TODO: - Error 처리
             }, receiveValue: { value in
@@ -32,6 +36,20 @@ final class SolveQuizInteractor: SolveQuizBusinessLogic {
                 self.presenter?.presentQuizResult(response: .init(result: value))
             })
             .store(in: &cancellables)
+    }
+    
+    func requestQuizResultForAnonymous(request: SolveQuiz.LoadQuizResult.Request, temporaryToken: String) {
+        self.service.quizResult(
+            BaseDataResponseModel<QuizResultResponseModel>.self,
+            QuizAPI.quizResultForAnonymous(request.quizId, makeRequestModel(request.quiz), temporaryToken)
+        )
+        .sink(receiveCompletion: { com in
+            //TODO: - Error 처리
+        }, receiveValue: { value in
+            guard let value else { return }
+            self.presenter?.presentQuizResult(response: .init(result: value))
+        })
+        .store(in: &cancellables)
     }
 }
 
