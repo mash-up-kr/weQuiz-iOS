@@ -18,7 +18,7 @@ public struct MakeQuizModel {
     }
 }
 
-public struct MakeQuestionModel: Identifiable {
+public struct MakeQuestionModel: Identifiable, Equatable {
     public var id: UUID = UUID()
     public var title: String
     public var answers: [MakeAnswerModel]
@@ -30,9 +30,19 @@ public struct MakeQuestionModel: Identifiable {
         self.answers = [MakeAnswerModel(answer: "", isCorrect: false),
                         MakeAnswerModel(answer: "", isCorrect: false)]
     }
+    
+    public func checkQuestionFilled() -> Bool {
+        let answerCount = answers.filter({ $0.isCorrect == true })
+        let answerIsEmpty = answers.filter({ $0.answer.isEmpty == true })
+        
+        if title.isEmpty == true || answerCount.count == 0 || answerIsEmpty.count > 0 {
+            return false
+        }
+        return true
+    }
 }
 
-public struct MakeAnswerModel {
+public struct MakeAnswerModel: Equatable {
     public var answer: String
     public var isCorrect: Bool
     
