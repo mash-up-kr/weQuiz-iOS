@@ -95,8 +95,9 @@ public struct SolveQuizView: View {
                         .frame(maxWidth: .infinity, alignment: .trailing)
                         .frame(height: 24)
 
-                    ForEach($viewModel.solvedQuiz.questions[viewModel.currentIndex].answers, id: \.id) { answer in
-                        SolveQuizAnswerView(answer)
+                    ForEach($viewModel.solvedQuiz.questions[viewModel.currentIndex].answers.indices, id: \.self) { answerIndex in
+                        let answer = $viewModel.solvedQuiz.questions[viewModel.currentIndex].answers[answerIndex]
+                        SolveQuizAnswerView(answer, answerIndex)
                             .onTapGesture {
                                 answer.isSelected.wrappedValue.toggle()
                             }
@@ -144,7 +145,7 @@ public struct SolveQuizView: View {
     }
 
     private func onNextQuestion() {
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
             if viewModel.currentIndex + 1 < viewModel.solvedQuiz.questions.count {
                 viewModel.currentIndex += 1
                 selectedCount = 0
