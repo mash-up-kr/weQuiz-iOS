@@ -24,6 +24,7 @@ public struct MakeQuizView: View {
     @State private var removeItemPopupPresented = false
     @State private var removedIndex: (popupPresented: Bool, index: UUID?) = (false, nil)
     @State private var removeSuccessToastModal: WQToast.Model?
+    @State private var isQuizEnabled: Bool = false
     
     
     public var body: some View {
@@ -53,12 +54,17 @@ public struct MakeQuizView: View {
                             }, onExpand: { index in
                                 viewModel.toggleExpand(index)
                                 proxy.scrollTo(item.id, anchor: .center)
+                            }, isChanged: {
+                                checkViewModel()
                             })
                             .padding(.bottom, 12)
                             .id(item.id)
+                            
                         }
-                        .onMove(perform: moveListItem)
-                        
+                        .onChange(of: viewModel.quiz.title) { _ in
+                            checkViewModel()
+                        }
+                                  
                         addAnswerView()
                             .padding(.horizontal, 20)
                         
@@ -71,6 +77,7 @@ public struct MakeQuizView: View {
                 WQButton(
                     style: .single(
                         .init(title: "시험지 완성하기",
+                              isEnable: $isQuizEnabled,
                               action: {
                                   isPresentProgressView = true
                                   interactor?.requestMakeQuiz(request: .init(quiz: viewModel.quiz))
@@ -148,6 +155,15 @@ public struct MakeQuizView: View {
         viewModel.quiz.questions.removeAll { $0.id == self.removedIndex.index }
         removedIndex = (false, nil)
         removeSuccessToastModal = .init(status: .success, text: "문제를 삭제했어요")
+        checkViewModel()
+    }
+                                  
+    private func checkViewModel() {
+        if viewModel.isQuizFilled() == true {
+            isQuizEnabled = true
+        } else {
+            isQuizEnabled = false
+        }
     }
 }
 extension MakeQuizView: MakeQuizDisplayLogic {
