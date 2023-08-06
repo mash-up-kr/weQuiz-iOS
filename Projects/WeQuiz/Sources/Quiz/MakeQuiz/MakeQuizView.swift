@@ -12,6 +12,8 @@ public struct MakeQuizView: View {
     private let navigator: HomeNavigator
     var interactor: MakeQuizBusinessLogic?
     
+    
+    @State var isNetworking: Bool = false
     @ObservedObject var viewModel = MakeQuizDataStore()
     
     public init(navigator: HomeNavigator) {
@@ -70,6 +72,7 @@ public struct MakeQuizView: View {
                     style: .single(
                         .init(title: "시험지 완성하기",
                               action: {
+                                  isNetworking = true
                                   interactor?.requestMakeQuiz(request: .init(quiz: viewModel.quiz))
                               }))
                 )
@@ -96,6 +99,10 @@ public struct MakeQuizView: View {
         .toast(model: $removeSuccessToastModal)
         .background(
             Color.designSystem(.g9)
+        )
+        .overlay(
+            ProgressView()
+                .hidden(!isNetworking)
         )
     }
     
@@ -149,6 +156,7 @@ public struct MakeQuizView: View {
 extension MakeQuizView: MakeQuizDisplayLogic {
     func displayCompletionView(viewModel: MakeQuiz.RequestMakeQuiz.ViewModel) {
         navigator.path.append(.quizCompletion(quizId: viewModel.quizId))
+        isNetworking = false
     }
 }
 
