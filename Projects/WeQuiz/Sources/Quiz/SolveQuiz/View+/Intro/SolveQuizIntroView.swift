@@ -91,6 +91,7 @@ public struct SolveQuizIntroView: View {
     private func title() -> some View {
         VStack(spacing: 10) {
             Text(viewModel.quizModel.quiz.title)
+                .multilineTextAlignment(.center)
                 .font(.pretendard(.medium, size: ._20))
                 .foregroundColor(.designSystem(.g4))
             VStack(spacing: .zero) {
