@@ -31,6 +31,12 @@ enum DynamicLinks {
         var metaTagDescription: String {
             "너 나 알아? WeQuiz 우정테스트"
         }
+        
+        var metaTagImageURL: URL? {
+            URL(string:"""
+                https://firebasestorage.googleapis.com/v0/b/wequiz-3910f.appspot.com/o/metaTagImage.png?alt=media&token=22389993-44e2-4ffa-adce-0a8f369d0173
+                """)
+        }
     }
     
     /// DynamicLink의 앱 화면 진입  Path
@@ -61,6 +67,7 @@ enum DynamicLinks {
         builder?.socialMetaTagParameters = DynamicLinkSocialMetaTagParameters()
         builder?.socialMetaTagParameters?.title = type.metaTagTitle
         builder?.socialMetaTagParameters?.descriptionText = type.metaTagDescription
+        builder?.socialMetaTagParameters?.imageURL = type.metaTagImageURL
         
         builder?.shorten(completion: { url, options, error in
             if let error = error  {
