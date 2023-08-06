@@ -54,19 +54,19 @@ public struct SolveQuizAnswerView: View {
         self.currentAnswerIndex = currentAnswerIndex
     }
     
-    public var body: some View {
-        Text(model.answer)
-            .font(.pretendard(.bold, size: ._18))
-            .foregroundColor(model.isSelected ? Color.designSystem(.g9) : .designSystem(.g2))
-            .frame(maxWidth: .infinity, alignment: .center)
-            .frame(height: 58)
-            .background(
-                backgroundColor()
-            )
-            .cornerRadius(16)
-            .onTapGesture {
-                model.isSelected.toggle()
-            }
+    public var body: some View {    
+        ZStack {
+            Text(model.answer)
+                .lineLimit(2)
+                .font(.pretendard(.bold, size: ._18))
+                .foregroundColor(model.isSelected ? Color.designSystem(.g9) : .designSystem(.g2))
+                .padding(.all, 16)
+        }
+        .frame(maxWidth: .infinity, alignment: .center)
+        .background(
+            backgroundColor()
+        )
+        .cornerRadius(16)
     }
 }
 
