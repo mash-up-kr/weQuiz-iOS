@@ -39,10 +39,10 @@ public struct SolveQuizIntroView: View {
                         title()
                         Spacer()
                             .frame(height: 32)
-                        thumbnail()
-                        Spacer()
                     }
                     .padding(.horizontal, 20)
+                    thumbnail()
+                    Spacer()
                     WQButton(style: .single(
                         .init(
                             title: "시험 응시하기",
@@ -106,5 +106,6 @@ public struct SolveQuizIntroView: View {
     
     private func thumbnail() -> some View {
         Image("quiz_solve_thumbnail")
+            .fixedSize()
     }
 }
