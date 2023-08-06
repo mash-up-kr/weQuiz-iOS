@@ -16,7 +16,6 @@ protocol SolveQuizDisplayLogic {
 public struct SolveQuizView: View {
     @EnvironmentObject var solveQuizNavigator: SolveQuizNavigator
     @ObservedObject var viewModel: SolveQuizDataStore
-    @State private var selectedCount: Int = 0
     @State private var _showReportModal: Bool = false
     @State private var _reportedToastModel: WQToast.Model?
     
@@ -50,7 +49,7 @@ public struct SolveQuizView: View {
                                 )
                             ],
                             action: {
-                                self.selectedCount = 0
+                                viewModel.selectedCount = 0
                                 
                                 if viewModel.goToPreviousQuestion() == false {
                                     solveQuizNavigator.back()
@@ -99,12 +98,15 @@ public struct SolveQuizView: View {
                     ForEach($viewModel.solvedQuiz.questions[viewModel.currentIndex].answers.indices, id: \.self) { answerIndex in
                         let answer = $viewModel.solvedQuiz.questions[viewModel.currentIndex].answers[answerIndex]
                         SolveQuizAnswerView(answer, answerIndex)
-                            .onTapGesture {
-                                answer.isSelected.wrappedValue.toggle()
-                            }
                             .onChange(of: answer.isSelected.wrappedValue, perform: { isSelected in
-                                selectedCount = (isSelected == true) ? selectedCount + 1 : selectedCount - 1
-                                if selectedCount == viewModel.solvedQuiz.questions[viewModel.currentIndex].answerCount {
+                                if isSelected {
+                                    viewModel.selectedCount += 1
+                                } else if viewModel.selectedCount - 1 >= 0 {
+                                    viewModel.selectedCount -= 1
+                                } else {
+                                    return
+                                }
+                                if viewModel.selectedCount == viewModel.solvedQuiz.questions[viewModel.currentIndex].answerCount {
                                     onNextQuestion()
                                 }
                             })
@@ -118,7 +120,7 @@ public struct SolveQuizView: View {
             isPresented: $viewModel.routeToResultView,
             onDismiss: {
                 viewModel.resetQuiz()
-                self.selectedCount = 0
+                viewModel.selectedCount = 0
             }
         ) {
             if let quizResult = viewModel.quizResult {
@@ -149,7 +151,7 @@ public struct SolveQuizView: View {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
             if viewModel.currentIndex + 1 < viewModel.solvedQuiz.questions.count {
                 viewModel.currentIndex += 1
-                selectedCount = 0
+                viewModel.selectedCount = 0
             } else {
                 switch solver {
                 case .user:

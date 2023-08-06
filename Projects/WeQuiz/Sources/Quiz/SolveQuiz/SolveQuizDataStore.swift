@@ -15,6 +15,8 @@ final class SolveQuizDataStore: ObservableObject {
     @Published var routeToResultView = false
     @Published var quizResult: QuizResultModel?
     @Published var routeToNameInputView = false
+    
+    var selectedCount: Int = .zero
 
     public init(_ quiz: SolveQuizModel) {
         self.quiz = quiz
