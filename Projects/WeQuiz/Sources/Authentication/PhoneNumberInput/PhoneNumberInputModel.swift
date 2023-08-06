@@ -42,6 +42,10 @@ public enum PhoneNumberInputModel {
             }
             public let type: `Type`
         }
+        
+        public struct Progress{
+            public let show: Bool
+        }
     }
 }
 

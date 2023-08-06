@@ -49,6 +49,10 @@ extension VerificationCodeInputPresenter: VerificationCodeInputPresentingLogic {
         viewModel.modalModel.isPresented = true
         viewModel.modalModel.type = response.type
     }
+    
+    public func present(_ response: VerificationCodeInputModel.Response.Progress) {
+        viewModel.progress = response.show
+    }
 }
 
 // MARK: - Private
@@ -74,4 +78,5 @@ public protocol VerificationCodeInputPresentingLogic {
     func present(_ response: VerificationCodeInputModel.Response.ResetTimer)
     func present(_ response: VerificationCodeInputModel.Response.Toast)
     func present(_ response: VerificationCodeInputModel.Response.Modal)
+    func present(_ response: VerificationCodeInputModel.Response.Progress)
 }

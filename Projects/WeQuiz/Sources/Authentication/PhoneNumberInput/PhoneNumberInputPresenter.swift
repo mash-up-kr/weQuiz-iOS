@@ -33,9 +33,14 @@ extension PhoneNumberInputPresenter: PhoneNumberInputPresentingLogic {
     public func present(_ response: PhoneNumberInputModel.Response.Toast) {
         viewModel.toastModel = response.type
     }
+    
+    public func present(_ response: PhoneNumberInputModel.Response.Progress) {
+        viewModel.progress = response.show
+    }
 }
 
 public protocol PhoneNumberInputPresentingLogic {
     func present(_ response: PhoneNumberInputModel.Response.Naivgate)
     func present(_ response: PhoneNumberInputModel.Response.Toast)
+    func present(_ response: PhoneNumberInputModel.Response.Progress)
 }

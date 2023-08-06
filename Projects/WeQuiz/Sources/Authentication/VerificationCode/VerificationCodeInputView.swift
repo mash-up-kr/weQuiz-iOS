@@ -79,6 +79,7 @@ public struct VerificationCodeInputView: View {
             )
             Spacer()
         }
+        .progressView(isPresented: .constant(presenter.viewModel.progress))
         .onChange(of: isValid) { isValid in
             Task {
                 await interactor?.reqeust(VerificationCodeInputModel.Request.OnRequestVerifyCode(
@@ -88,6 +89,8 @@ public struct VerificationCodeInputView: View {
                     isValid: isValid,
                     code: input
                 ))
+                input = ""
+                self.isValid = false
             }
         }
         .onChange(of: presenter.viewModel.toastModel, perform: { model in

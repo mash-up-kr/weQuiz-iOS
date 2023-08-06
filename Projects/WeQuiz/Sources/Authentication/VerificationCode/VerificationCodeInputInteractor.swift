@@ -36,19 +36,25 @@ extension VerificationCodeInputInteractor: VerificationCodeInputRequestingLogic 
     
     
     public func reqeust(_ request: VerificationCodeInputModel.Request.OnTouchReSend) {
+        presenter?.present(VerificationCodeInputModel.Response.Progress(show: true))
         presenter?.present(VerificationCodeInputModel.Response.Toast(type: .resendCode))
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             self?.authManager.verifyPhoneNumber(
                 request.phoneNumber
             ) { [weak self] isSucceed in
-                guard isSucceed else { return }
+                guard isSucceed else {
+                    self?.presenter?.present(VerificationCodeInputModel.Response.Progress(show: false))
+                    return
+                }
                 self?.presenter?.present(VerificationCodeInputModel.Response.ResetTimer())
+                self?.presenter?.present(VerificationCodeInputModel.Response.Progress(show: false))
             }
         }
     }
     
     public func reqeust(_ request: VerificationCodeInputModel.Request.OnRequestVerifyCode) {
+        presenter?.present(VerificationCodeInputModel.Response.Progress(show: true))
         guard request.remainTime > 0 else {
             presenter?.present(VerificationCodeInputModel.Response.Toast(type: .timeout))
             return
@@ -80,6 +86,7 @@ extension VerificationCodeInputInteractor: VerificationCodeInputRequestingLogic 
                 case .unknown:
                     self?.presenter?.present(VerificationCodeInputModel.Response.Toast(type: .unknown))
                 }
+                self?.presenter?.present(VerificationCodeInputModel.Response.Progress(show: false))
             }
         }
     }
@@ -100,6 +107,7 @@ extension VerificationCodeInputInteractor {
         if let userInfromation = await authenticationService.user(userId) {
             // 회원정보가 있다면 토큰 저장하고 홈으로
             authManager.storeToken { [weak self] in
+                self?.presenter?.present(VerificationCodeInputModel.Response.Progress(show: false))
                 self?.presenter?.present(
                     VerificationCodeInputModel.Response.Naivgate(
                         destination: .home(userInfromation.nickname)
@@ -107,6 +115,7 @@ extension VerificationCodeInputInteractor {
                 )
             }
         } else {
+            presenter?.present(VerificationCodeInputModel.Response.Progress(show: false))
             // 회원정보가 없으면 회원가입 모달 노출
             presenter?.present(VerificationCodeInputModel.Response.Modal(type: .notSignedUpUser))
         }
