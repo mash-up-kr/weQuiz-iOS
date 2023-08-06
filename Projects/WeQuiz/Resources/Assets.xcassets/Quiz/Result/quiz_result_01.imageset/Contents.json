@@ -1,8 +1,19 @@
 {
   "images" : [
     {
-      "filename" : "quiz_result_01.svg",
-      "idiom" : "universal"
+      "filename" : "quiz_result_01.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "quiz_result_01@2x.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "quiz_result_01@3x.png",
+      "idiom" : "universal",
+      "scale" : "3x"
     }
   ],
   "info" : {

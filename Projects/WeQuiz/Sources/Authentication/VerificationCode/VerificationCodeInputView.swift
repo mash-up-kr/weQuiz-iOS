@@ -16,6 +16,7 @@ public struct VerificationCodeInputView: View {
     @State private var input: String = ""
     @State private var isValid: Bool = false
     @State private var verificationCodeToastModel: WQToast.Model?
+    @FocusState private var isVerificationCodeInputFocused: Bool
     
     private var interactor: VerificationCodeInputRequestingLogic?
     private let phoneNumber: String
@@ -67,6 +68,7 @@ public struct VerificationCodeInputView: View {
                             }
                         )
                     ))
+                    .focused($isVerificationCodeInputFocused)
                 }
             }
             .padding(
@@ -80,6 +82,9 @@ public struct VerificationCodeInputView: View {
             Spacer()
         }
         .progressView(isPresented: .constant(presenter.viewModel.progress))
+        .onAppear {
+            isVerificationCodeInputFocused = true
+        }
         .onChange(of: isValid) { isValid in
             Task {
                 await interactor?.reqeust(VerificationCodeInputModel.Request.OnRequestVerifyCode(

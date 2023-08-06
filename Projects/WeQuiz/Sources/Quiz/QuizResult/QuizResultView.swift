@@ -31,7 +31,7 @@ public struct QuizResultView: View {
     
     public var body: some View {
         ZStack(alignment: .topTrailing) {
-            ScrollView(.vertical) {
+            ScrollView(.vertical, showsIndicators: false) {
                 VStack {
                     VStack(alignment: .center, spacing: 20) {
                         if let result = model.result {
@@ -40,27 +40,42 @@ public struct QuizResultView: View {
                         }
                     }
 
-                    Image(model.result?.resultImage ?? "quizResult_5")
-                        .resizable()
-                        .aspectRatio(1.0, contentMode: .fit)
+                    HStack {
+                        Spacer()
+                        if let ranking = model.result?.ranking, ranking.count >= 3 {
+                            Image(model.result?.resultImage ?? "quizResult_5")
+                        } else {
+                            Image(model.result?.resultImage ?? "quizResult_5")
+                                .resizable()
+                                .aspectRatio(1.0, contentMode: .fit)
+                        }
+                        Spacer()
+                    }
 
                     rankingView()
                         .hidden(model.result?.ranking == nil)
+                    Spacer()
+                        .frame(height: 72)
                 }
             }
-            .padding(.top, 58)
-            .padding(.bottom, 128)
+            .padding(.top, 56)
+            .padding(.bottom, 72)
             .disabled(model.result?.ranking == nil)
 
-            VStack {
+            VStack(spacing: .zero) {
                 topBar()
 
                 Spacer()
 
-                VStack(spacing: 22) {
-
+                VStack(spacing: .zero) {
+                    LinearGradient(
+                        colors: [.clear, .designSystem(.g9)],
+                        startPoint: .init(x: 0.5, y: 0),
+                        endPoint: .init(x: 0.5, y: 1)
+                    )
+                    .frame(height: 72)
                     WQButton(style: .double(WQButton.Style.DobuleButtonStyleModel(
-                        titles: (leftTitle: "다시 풀기", rightTitle: "결과 공유하기"),
+                        titles: (leftTitle: "다시 풀기", rightTitle: "문제 공유하기"),
                         leftAction: {
                             solveQuizNavigator.popToroot()
                         },
@@ -69,6 +84,7 @@ public struct QuizResultView: View {
                             resultLink(id: quizId)
                         }
                     )))
+                    .background(Color.black)
                     .background(
                         ActivityView(
                             isPresented: $isSharePresented,
@@ -78,7 +94,7 @@ public struct QuizResultView: View {
                 }
             }
         }
-        .background(Color.designSystem(.g9))
+        .edgesIgnoringSafeArea(.bottom)
         .task {
             if let quizId = model.quizId {
                 interactor?.requestRanking(request: .init(quizId: quizId))
@@ -123,13 +139,13 @@ extension QuizResultView {
     }
 
     private func rankingView() -> some View {
-        VStack {
-            Rectangle()
-                .fill(Color.designSystem(.g7))
-                .frame(height: 8)
-
-            if let ranking = model.result?.ranking {
-                ForEach(ranking, id: \.rank) { user in
+        VStack(spacing: .zero) {
+            if let ranking = model.result?.ranking, ranking.count >= 3 {
+                Rectangle()
+                    .fill(Color.designSystem(.g9))
+                    .frame(height: 8)
+                
+                ForEach(.constant(ranking), id: \.rank) { user in
                     QuizResultRankView(user)
                 }
                 .padding(.horizontal, 20)
@@ -151,11 +167,11 @@ extension QuizResultView {
                 }
         }
         .frame(height: 56)
-        .background(Color.designSystem(.g9))
+        .background(Color.clear)
     }
     
     private func resultLink(id: Int) {
-        DynamicLinks.makeDynamicLink(type: .result(id: id)) {
+        DynamicLinks.makeDynamicLink(type: .solve(id: id)) {
             guard let url = $0 else { return }
             activityItem = [url]
             isSharePresented = true

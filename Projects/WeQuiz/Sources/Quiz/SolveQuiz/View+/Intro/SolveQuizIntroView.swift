@@ -39,10 +39,10 @@ public struct SolveQuizIntroView: View {
                         title()
                         Spacer()
                             .frame(height: 32)
-                        thumbnail()
-                        Spacer()
                     }
                     .padding(.horizontal, 20)
+                    thumbnail()
+                    Spacer()
                     WQButton(style: .single(
                         .init(
                             title: "시험 응시하기",
@@ -91,6 +91,7 @@ public struct SolveQuizIntroView: View {
     private func title() -> some View {
         VStack(spacing: 10) {
             Text(viewModel.quizModel.quiz.title)
+                .multilineTextAlignment(.center)
                 .font(.pretendard(.medium, size: ._20))
                 .foregroundColor(.designSystem(.g4))
             VStack(spacing: .zero) {
@@ -106,5 +107,6 @@ public struct SolveQuizIntroView: View {
     
     private func thumbnail() -> some View {
         Image("quiz_solve_thumbnail")
+            .fixedSize()
     }
 }

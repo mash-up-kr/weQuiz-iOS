@@ -11,11 +11,10 @@ import SwiftUI
 import DesignSystemKit
 
 struct QuizResultRankView: View {
+    @Binding private var model: RankUserModel
     
-    private let model: RankUserModel
-    
-    public init(_ model: RankUserModel) {
-        self.model = model
+    public init(_ model: Binding<RankUserModel>) {
+        self._model = model
     }
     
     var body: some View {
@@ -60,11 +59,5 @@ struct QuizResultRankView: View {
         default:
             return Image(Icon.Medal.bronze)
         }
-    }
-}
-
-struct QuizResultRankCell_Previews: PreviewProvider {
-    static var previews: some View {
-        QuizResultRankView(.init(id: 1234, name: "감자", rank: 1, score: 100))
     }
 }

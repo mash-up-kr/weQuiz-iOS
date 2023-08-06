@@ -17,11 +17,13 @@ public struct QuestionView: View {
     
     private var onRemove: ((UUID) -> ())?
     private var onExpand: ((UUID) -> ())?
+    private var isChanged: (() -> ())?
     
-    public init(model: Binding<MakeQuestionModel>, onRemove: ((UUID) -> ())?, onExpand: ((UUID) -> ())?) {
+    public init(model: Binding<MakeQuestionModel>, onRemove: ((UUID) -> ())?, onExpand: ((UUID) -> ())?, isChanged: (() -> ())?) {
         self._model = model
         self.onRemove = onRemove
         self.onExpand = onExpand
+        self.isChanged = isChanged
     }
     
     public var body: some View {
@@ -54,6 +56,9 @@ public struct QuestionView: View {
                 
                 Spacer()
                 
+            }
+            .onChange(of: model) { _ in
+                isChanged?()
             }
             .frame(height: model.isExpand ? expandedHeight : 66)
             .background(

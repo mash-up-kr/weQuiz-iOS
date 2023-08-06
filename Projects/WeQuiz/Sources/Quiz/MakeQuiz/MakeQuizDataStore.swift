@@ -30,4 +30,22 @@ final class MakeQuizDataStore: ObservableObject {
             quiz.title = String(quiz.title.prefix(quizNameLimit))
         }
     }
+    
+    public func isQuizFilled() -> Bool {
+        if quiz.title.isEmpty == true || quiz.questions.count < 2 {
+            return false
+        }
+        
+        for question in quiz.questions {
+            if question.title.isEmpty == true {
+                return false
+            }
+            let answerCount = question.answers.filter({ $0.isCorrect == true })
+            let answerIsEmpty = question.answers.filter({ $0.answer.isEmpty == true })
+            if answerCount.count == 0 || answerIsEmpty.count > 0 {
+                return false
+            }
+        }
+        return true
+    }
 }
