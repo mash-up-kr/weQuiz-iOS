@@ -199,7 +199,7 @@ extension HomeView {
                     }
                     .padding(.bottom, 12)
                 
-                ForEach($viewModel.quizs.prefix(4)) { quiz in
+                ForEach($viewModel.quizs.prefix(3)) { quiz in
                     ZStack {
                         QuizGroupRow(quiz: quiz)
                     }
