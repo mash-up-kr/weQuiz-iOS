@@ -17,6 +17,7 @@ public struct PhoneNumberInputView: View {
     @State private var isPhoneNumberValid: Bool = false
     @FocusState private var isPhoneNumberInputFocused: Bool
     @State private var phoneNumberInvalidToastModel: WQToast.Model?
+    @State private var isPresentProgressView: Bool = false
     
     private var interactor: PhoneNumberInputRequestingLogic?
     private let signType: AuthenticationScreen.SignType
@@ -75,6 +76,7 @@ public struct PhoneNumberInputView: View {
                 )
             }
         }
+        .progressView(isPresented: .constant(presenter.viewModel.progress))
         .onAppear {
             isPhoneNumberInputFocused = true
         }

@@ -80,6 +80,7 @@ public struct UserInformationInputView: View {
                 )
             )
         }
+        .progressView(isPresented: .constant(presenter.viewModel.progress))
         .onChange(of: presenter.viewModel.toastModel) { model in
             switch model {
             case .none: break

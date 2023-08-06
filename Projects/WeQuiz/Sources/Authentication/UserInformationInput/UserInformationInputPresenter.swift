@@ -33,9 +33,14 @@ extension UserInformationInputPresenter: UserInformationInputPresentingLogic {
     public func present(_ response: UserInformationInputModel.Response.Toast) {
         viewModel.toastModel = response.type
     }
+    
+    public func present(_ response: UserInformationInputModel.Response.Progress) {
+        viewModel.progress = response.show
+    }
 }
 
 public protocol UserInformationInputPresentingLogic {
     func present(_ response: UserInformationInputModel.Response.Navigate)
     func present(_ response: UserInformationInputModel.Response.Toast)
+    func present(_ response: UserInformationInputModel.Response.Progress)
 }

@@ -44,5 +44,9 @@ public enum UserInformationInputModel {
             }
             public let type: `Type`
         }
+        
+        public struct Progress {
+            public let show: Bool
+        }
     }
 }

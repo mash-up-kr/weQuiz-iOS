@@ -10,6 +10,7 @@ import Foundation
 
 public struct PhoneNumberInputViewModel {
     public var toastModel: PhoneNumberInputModel.Response.Toast.`Type` = .unknown
+    public var progress: Bool = false
     
     public static let `default`: PhoneNumberInputViewModel = .init()
 }

@@ -31,8 +31,10 @@ extension UserInformationInputInteractor: UserInformationInputRequestingLogic {
     }
     
     public func request(_ request: UserInformationInputModel.Request.OnRequestSignUp) {
+        presenter.present(UserInformationInputModel.Response.Progress(show: true))
         guard let token = authManager.userId else {
             presenter.present(UserInformationInputModel.Response.Toast(type: .signUpFailed(reason: "유효하지 않은 휴대폰 인증정보입니다")))
+            presenter.present(UserInformationInputModel.Response.Progress(show: false))
             return
         }
         
@@ -44,6 +46,7 @@ extension UserInformationInputInteractor: UserInformationInputRequestingLogic {
         )
         
         authenticationService?.join(model) { [weak self] result in
+            self?.presenter.present(UserInformationInputModel.Response.Progress(show: false))
             switch result {
             case .success:
                 AuthManager.shared.storeToken {

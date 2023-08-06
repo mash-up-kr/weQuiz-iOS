@@ -10,6 +10,7 @@ import Foundation
 
 public struct UserInformationInputViewModel {
     public var toastModel: UserInformationInputModel.Response.Toast.`Type` = .none
+    public var progress: Bool = false
     
     public static let `default`: UserInformationInputViewModel = .init()
 }
