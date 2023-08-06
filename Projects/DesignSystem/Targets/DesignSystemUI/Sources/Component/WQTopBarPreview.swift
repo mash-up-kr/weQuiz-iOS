@@ -19,6 +19,7 @@ struct WQTopBarPreview: View {
                 .font(.title)
             VStack {
                 WQTopBar(style: .title(.init(title: "타이틀만")))
+                WQTopBar(style: .logo(.init(iconImage: DesignSystemKitAsset.checkmarkFalseFill24.swiftUIImage)))
                 WQTopBar(style: .navigation(.init(title: "네비게이션이랑 타이틀")))
                 WQTopBar(style: .navigationWithButtons(
                     .init(

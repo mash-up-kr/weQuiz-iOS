@@ -29,6 +29,7 @@ public enum WeQuizAsset {
     public static let goldGrade = WeQuizImages(name: "GoldGrade")
     public static let noRank = WeQuizImages(name: "NoRank")
     public static let silverGrade = WeQuizImages(name: "SilverGrade")
+    public static let homeLogo = WeQuizImages(name: "home_logo")
     public static let profileImage = WeQuizImages(name: "profileImage")
     public static let quizResult01 = WeQuizImages(name: "quiz_result_01")
     public static let quizResult02 = WeQuizImages(name: "quiz_result_02")
