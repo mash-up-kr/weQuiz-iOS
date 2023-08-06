@@ -98,6 +98,9 @@ public struct SolveQuizView: View {
                     ForEach($viewModel.solvedQuiz.questions[viewModel.currentIndex].answers.indices, id: \.self) { answerIndex in
                         let answer = $viewModel.solvedQuiz.questions[viewModel.currentIndex].answers[answerIndex]
                         SolveQuizAnswerView(answer, answerIndex)
+                            .onTapGesture {
+                                answer.isSelected.wrappedValue.toggle()
+                            }
                             .onChange(of: answer.isSelected.wrappedValue, perform: { isSelected in
                                 if isSelected {
                                     viewModel.selectedCount += 1
