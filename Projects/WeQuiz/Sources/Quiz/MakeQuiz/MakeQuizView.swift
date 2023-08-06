@@ -20,7 +20,6 @@ public struct MakeQuizView: View {
         self.navigator = navigator
     }
     
-    @Environment(\.editMode) private var editMode
     @State private var removeItemPopupPresented = false
     @State private var removedIndex: (popupPresented: Bool, index: UUID?) = (false, nil)
     @State private var removeSuccessToastModal: WQToast.Model?
@@ -29,16 +28,11 @@ public struct MakeQuizView: View {
     
     public var body: some View {
         VStack {
-            WQTopBar(style: .navigationWithListEdit(
-                .init(
-                    title: "문제 만들기",
-                    editAction: {
-                        self.editMode?.wrappedValue == .active ?
-                        (self.editMode?.wrappedValue = .inactive) : (self.editMode?.wrappedValue = .active)
-                    }, action: {
-                        navigator.back()
-                    })
-            ))
+            WQTopBar(style: .navigation(
+                .init(title: "문제 만들기",
+                     action: {
+                         navigator.back()
+                     })))
             .background(
                 Color.designSystem(.g9)
             )
