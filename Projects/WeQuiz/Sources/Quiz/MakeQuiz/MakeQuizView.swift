@@ -159,11 +159,7 @@ public struct MakeQuizView: View {
     }
                                   
     private func checkViewModel() {
-        if viewModel.isQuizFilled() == true {
-            isQuizEnabled = true
-        } else {
-            isQuizEnabled = false
-        }
+        isQuizEnabled = viewModel.isQuizFilled()
     }
 }
 extension MakeQuizView: MakeQuizDisplayLogic {

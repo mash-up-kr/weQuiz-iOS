@@ -32,27 +32,17 @@ final class MakeQuizDataStore: ObservableObject {
     }
     
     public func isQuizFilled() -> Bool {
-        if quiz.title.isEmpty == true {
+        if quiz.title.isEmpty == true || quiz.questions.count < 2 {
             return false
         }
-        if quiz.questions.count < 2 {
-            return false
-        }
+        
         for question in quiz.questions {
             if question.title.isEmpty == true {
                 return false
             }
-            var answerCount = 0
-            for answer in question.answers {
-                if answer.answer.isEmpty == true {
-                    return false
-                }
-                
-                if answer.isCorrect == true {
-                    answerCount += 1
-                }
-            }
-            if answerCount == 0 {
+            let answerCount = question.answers.filter({ $0.isCorrect == true })
+            let answerIsEmpty = question.answers.filter({ $0.answer.isEmpty == true })
+            if answerCount.count == 0 || answerIsEmpty.count > 0 {
                 return false
             }
         }

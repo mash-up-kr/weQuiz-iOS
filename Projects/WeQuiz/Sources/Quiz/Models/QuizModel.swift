@@ -32,19 +32,10 @@ public struct MakeQuestionModel: Identifiable, Equatable {
     }
     
     public func checkQuestionFilled() -> Bool {
-        if title.isEmpty == true {
-            return false
-        }
-        var answerCount = 0
-        for answer in answers {
-            if answer.answer.isEmpty == true {
-                return false
-            }
-            if answer.isCorrect == true {
-                answerCount += 1
-            }
-        }
-        if answerCount == 0 {
+        let answerCount = answers.filter({ $0.isCorrect == true })
+        let answerIsEmpty = answers.filter({ $0.answer.isEmpty == true })
+        
+        if title.isEmpty == true || answerCount.count == 0 || answerIsEmpty.count > 0 {
             return false
         }
         return true
