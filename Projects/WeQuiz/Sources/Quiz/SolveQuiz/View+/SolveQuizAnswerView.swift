@@ -64,6 +64,9 @@ public struct SolveQuizAnswerView: View {
                 backgroundColor()
             )
             .cornerRadius(16)
+            .onTapGesture {
+                model.isSelected.toggle()
+            }
     }
 }
 
