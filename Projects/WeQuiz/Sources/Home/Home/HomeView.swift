@@ -18,7 +18,7 @@ public struct HomeView: View {
     
     public var body: some View {
         NavigationStack(path: $navigator.path,  root: {
-            VStack {
+            VStack(spacing: .zero) {
                 self.topBarView
                 ScrollView(.vertical, showsIndicators: false) {
                     VStack(spacing: 0) {
@@ -47,6 +47,7 @@ public struct HomeView: View {
                     }
                 }
             }
+            .navigationBarBackButtonHidden()
             .background(
                 Color.designSystem(.g9)
             )

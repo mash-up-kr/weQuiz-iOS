@@ -25,7 +25,7 @@ public struct QuizCompletionView: View {
     public var body: some View {
         ZStack {
             VStack {
-                WQTopBar(style: .navigationWithButtons(.init(title: "문제 만들기", bttons: [], action: {
+                WQTopBar(style: .navigation(.init(title: "", action: {
                     navigator.path = []
                 })))
                 
