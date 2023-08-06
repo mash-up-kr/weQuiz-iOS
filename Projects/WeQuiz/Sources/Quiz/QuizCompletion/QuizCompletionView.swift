@@ -25,7 +25,7 @@ public struct QuizCompletionView: View {
     public var body: some View {
         ZStack {
             VStack {
-                WQTopBar(style: .navigationWithButtons(.init(title: "문제 만들기", bttons: [], action: {
+                WQTopBar(style: .navigation(.init(title: "", action: {
                     navigator.path = []
                 })))
                 
@@ -68,7 +68,7 @@ public struct QuizCompletionView: View {
     private func quizLink(id: Int) {
         DynamicLinks.makeDynamicLink(type: .solve(id: id)) {
             guard let url = $0 else { return }
-            activityItems = [url]
+            activityItems = ["친구가 만든 찐친고사에 도전해보세요!\n\n\(url)"]
             isSharePresented = true
         }
     }

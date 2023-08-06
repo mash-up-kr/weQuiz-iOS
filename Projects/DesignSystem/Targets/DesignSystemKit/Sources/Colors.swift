@@ -43,6 +43,7 @@ public extension DesignSystemKit {
         // MARK: - Opacity
         
         case dimed
+        case black
 
         public var name: String {
             self.rawValue

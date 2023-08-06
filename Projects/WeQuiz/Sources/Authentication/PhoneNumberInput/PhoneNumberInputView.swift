@@ -75,6 +75,9 @@ public struct PhoneNumberInputView: View {
                 )
             }
         }
+        .onAppear {
+            isPhoneNumberInputFocused = true
+        }
         .onChange(of: phoneNumberInput) { input in
             // ClearButton 터치 시 isVaild 변경되지 않아 임시 처리
             if input.isEmpty {

@@ -51,8 +51,10 @@ extension FriendRankRow {
                 .font(.pretendard(.regular, size: ._10))
                 .foregroundColor(.designSystem(.g1))
         }
-        .background(.black)
-        .cornerRadius(4)
+        .background(
+            RoundedRectangle(cornerRadius: 4)
+                .foregroundColor(.designSystem(.black))
+        )
     }
     
     private var scoreView: some View {
@@ -60,39 +62,6 @@ extension FriendRankRow {
             .padding(.horizontal, 16)
             .font(.pretendard(.medium, size: ._18))
             .foregroundColor(.designSystem(.g1))
-    }
-    
-    
-    private var friendInfoDescription: some View {
-        HStack {
-            image
-                .padding(.vertical, 16)
-                .padding(.leading, 16)
-            
-            Text(self.friend.name)
-                .padding(.horizontal, 8)
-                .font(.pretendard(.regular, size: ._16))
-                .foregroundColor(.designSystem(.g1))
-            
-            ZStack {
-                Text("#" + "\(self.friend.id)")
-                    .padding(.all, 4)
-                    .font(.pretendard(.regular, size: ._10))
-                    .foregroundColor(.designSystem(.g1))
-            }
-            .background(.black)
-            .cornerRadius(4)
-            
-            Spacer()
-            
-            Text("\(self.friend.score)점")
-                .padding(.horizontal, 16)
-                .font(.pretendard(.medium, size: ._18))
-                .foregroundColor(.designSystem(.g1))
-        }
-        .frame(height: 58)
-        .background(Color.designSystem(.g8))
-        .cornerRadius(16)
     }
     
     private var image: some View {
