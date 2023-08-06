@@ -60,6 +60,7 @@ public struct WQModal: View {
                 .onTapGesture {
                     isPresented = false
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
     }
     
@@ -88,8 +89,8 @@ public struct WQModal: View {
                         RoundedRectangle(cornerRadius: 16)
                             .foregroundColor(.designSystem(.g7))
                     }
+                    .padding(.horizontal, 20)
                 }
-                .padding(.horizontal, 20)
                 .position(x: proxy.size.width / 2.0, y: proxy.size.height / 2.0)
             }
         }
@@ -120,8 +121,8 @@ public struct WQModal: View {
                         RoundedRectangle(cornerRadius: 16)
                             .foregroundColor(.designSystem(.g7))
                     }
+                    .padding(.horizontal, 20)
                 }
-                .padding(.horizontal, 20)
                 .position(x: proxy.size.width / 2.0, y: proxy.size.height / 2.0)
             }
         }
