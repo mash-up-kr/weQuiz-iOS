@@ -37,7 +37,7 @@ public struct SolveQuizView: View {
     public var body: some View {
         ZStack {
             if viewModel.solvedQuiz.questions.count > 0 {
-                VStack {
+                VStack(spacing: .zero) {
                     WQTopBar(
                         style: .navigationWithButtons(.init(
                             title: "",
@@ -65,6 +65,7 @@ public struct SolveQuizView: View {
                     )
 
                     tooltip()
+                        .padding(.top, 28)
 
                     Spacer()
                 }
@@ -182,7 +183,10 @@ public struct SolveQuizView: View {
             .foregroundColor(.designSystem(.g4))
             .padding(.vertical, 4)
             .padding(.horizontal, 8)
-            .background(Color.designSystem(.g8))
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .foregroundColor(Color.designSystem(.g8))
+            )
     }
 }
 

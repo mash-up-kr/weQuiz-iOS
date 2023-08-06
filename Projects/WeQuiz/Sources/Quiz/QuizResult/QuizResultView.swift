@@ -58,12 +58,6 @@ public struct QuizResultView: View {
                 Spacer()
 
                 VStack(spacing: 22) {
-                    tooltip()
-                        .padding(.vertical, 7)
-                        .padding(.horizontal, 21)
-                        .frame(height: 38)
-                        .background(Color.designSystem(.g8))
-                        .cornerRadius(19)
 
                     WQButton(style: .double(WQButton.Style.DobuleButtonStyleModel(
                         titles: (leftTitle: "다시 풀기", rightTitle: "결과 공유하기"),
@@ -126,13 +120,6 @@ extension QuizResultView {
                 .font(.pretendard(.bold, size: ._28))
                 .frame(height: 38)
         }
-    }
-
-    private func tooltip() -> some View {
-        Text("1분만에 가입해서 친구한테 문제내기 🗯️")
-            .foregroundColor(Color.designSystem(.g3))
-            .font(.pretendard(.bold, size: ._16))
-            .frame(height: 24)
     }
 
     private func rankingView() -> some View {
