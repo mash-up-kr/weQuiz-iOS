@@ -215,6 +215,7 @@ public struct WQTopBar: View {
                         }
                     }
                 }
+                .padding(.trailing, 20)
             }
             .padding(
                 EdgeInsets(
@@ -279,6 +280,7 @@ public struct WQTopBar: View {
                         }
                         .foregroundColor(.designSystem(.g2))
                     }
+                    .padding(.trailing, 20)
                 }
             }
             .padding(
