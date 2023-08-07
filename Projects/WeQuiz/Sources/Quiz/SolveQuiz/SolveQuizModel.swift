@@ -33,10 +33,18 @@ enum SolveQuiz {
         
         struct Response {
             let result: QuizResultResponseModel
+            
+            struct ErrorMessage {
+                let message: String
+            }
         }
         
         struct ViewModel {
             let result: QuizResultModel
+            
+            struct ErrorMessage {
+                let message: String
+            }
         }
     }
 }

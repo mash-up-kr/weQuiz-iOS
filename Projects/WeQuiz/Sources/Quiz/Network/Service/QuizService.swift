@@ -18,21 +18,15 @@ public protocol QuizServiceLogic {
         -> AnyPublisher<MakeQuizResponseModel?, QuizAPIError> where T : Decodable
     
     // 문제 풀이
-    func getQuiz<T>(
-        _ model: T.Type,
-        _ requestable: NetworkRequestable)
-        -> AnyPublisher<GetQuizResponseModel?, Error> where T : Decodable
-    
-    // 문제 풀이
     func getQuiz(
         _ requestable: NetworkRequestable,
-        _ completion: @escaping (GetQuizResponseModel?) -> Void)
+        _ completion: @escaping (Result<GetQuizResponseModel, QuizAPIError>) -> Void)
     
     // 문제 풀이 결과
     func quizResult<T>(
         _ model: T.Type,
         _ requestable: NetworkRequestable)
-        -> AnyPublisher<QuizResultResponseModel?, Error> where T : Decodable
+        -> AnyPublisher<QuizResultResponseModel?, QuizAPIError> where T : Decodable
     
     // 퀴즈 단건의 랭킹
     func getQuizRank<T>(
@@ -69,39 +63,39 @@ extension QuizService: QuizServiceLogic {
             }
         }.eraseToAnyPublisher()
     }
-    
-    public func getQuiz<T>(_ model: T.Type, _ requestable: NetworkRequestable) -> AnyPublisher<GetQuizResponseModel?, Error> where T : Decodable {
-        return Future { [weak self] promise in
-            self?.networking.request(BaseDataResponseModel<GetQuizResponseModel>.self, requestable) { result in
-                switch result {
-                case .success(let success):
-                    promise(.success(success))
-                case .failure(let error):
-                    promise(.failure(error))
-                }
-            }
-        }.eraseToAnyPublisher()
-    }
-    
-    public func getQuiz(_ requestable: NetworkRequestable, _ completion: @escaping (GetQuizResponseModel?) -> Void) {
+
+    public func getQuiz(
+        _ requestable: NetworkRequestable,
+        _ completion: @escaping (Result<GetQuizResponseModel, QuizAPIError>) -> Void) {
         networking.request(BaseDataResponseModel<GetQuizResponseModel>.self, requestable, { result in
             switch result {
             case .success(let success):
-                completion(success)
-            case .failure:
-                completion(nil)
+                guard let model = success else {
+                    completion(.failure(.failure))
+                    return
+                }
+                completion(.success(model))
+            case .failure(let error):
+                guard case .errorMessage(let message) = error else {
+                    completion(.failure(.failure))
+                    return
+                }
+                completion(.failure(.failureWithMessage(message)))
             }
         })
     }
     
-    public func quizResult<T>(_ model: T.Type, _ requestable: NetworkRequestable) -> AnyPublisher<QuizResultResponseModel?, Error> where T : Decodable {
+    public func quizResult<T>(
+        _ model: T.Type,
+        _ requestable: NetworkRequestable
+    ) -> AnyPublisher<QuizResultResponseModel?, QuizAPIError> where T : Decodable {
         return Future { [weak self] promise in
             self?.networking.request(BaseDataResponseModel<QuizResultResponseModel>.self, requestable) { result in
                 switch result {
                 case .success(let success):
                     promise(.success(success))
                 case .failure(let error):
-                    promise(.failure(error))
+                    promise(.failure(.failureWithMessage(error.message)))
                 }
             }
         }.eraseToAnyPublisher()

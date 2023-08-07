@@ -29,8 +29,14 @@ final class SolveQuizInteractor: SolveQuizBusinessLogic {
             BaseDataResponseModel<QuizResultResponseModel>.self,
             QuizAPI.quizResult(request.quizId, makeRequestModel(request.quiz))
         )
-            .sink(receiveCompletion: { com in
-                //TODO: - Error 처리
+            .sink(receiveCompletion: { result in
+                guard
+                    case .failure(let error) = result,
+                    case .failureWithMessage(let message) = error
+                else {
+                    return
+                }
+                self.presenter?.presentErrorMessage(response: SolveQuiz.LoadQuizResult.Response.ErrorMessage(message: message))
             }, receiveValue: { value in
                 guard let value else { return }
                 self.presenter?.presentQuizResult(response: .init(result: value))
@@ -43,8 +49,14 @@ final class SolveQuizInteractor: SolveQuizBusinessLogic {
             BaseDataResponseModel<QuizResultResponseModel>.self,
             QuizAPI.quizResultForAnonymous(request.quizId, makeRequestModel(request.quiz), temporaryToken)
         )
-        .sink(receiveCompletion: { com in
-            //TODO: - Error 처리
+        .sink(receiveCompletion: { result in
+            guard
+                case .failure(let error) = result,
+                case .failureWithMessage(let message) = error
+            else {
+                return
+            }
+            self.presenter?.presentErrorMessage(response: SolveQuiz.LoadQuizResult.Response.ErrorMessage(message: message))
         }, receiveValue: { value in
             guard let value else { return }
             self.presenter?.presentQuizResult(response: .init(result: value))
