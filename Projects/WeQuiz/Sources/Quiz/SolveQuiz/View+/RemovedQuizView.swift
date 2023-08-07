@@ -15,22 +15,37 @@ struct RemovedQuizView: View {
     
     var body: some View {
         ZStack(alignment: .topTrailing) {
-            Image(Icon.Home.fillGray)
-                .tint(.white)
-                .padding(.top, 16)
-                .padding(.trailing, 20)
-                .onTapGesture {
-                    mainNavigator.dismissQuiz()
+            HStack {
+                Spacer()
+                Image(Icon.Home.fillGray)
+                    .tint(.white)
+                    .padding(.top, 16)
+                    .padding(.trailing, 20)
+                    .onTapGesture {
+                        mainNavigator.dismissQuiz()
+                    }
+            }
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    VStack(spacing: 30) {
+                        Text("문제 불러오기 실패")
+                            .font(.pretendard(.regular, size: ._20))
+                            .foregroundColor(.designSystem(.g4))
+                        Text("삭제된 문제에요 🥶")
+                            .font(.pretendard(.medium, size: ._32))
+                            .foregroundColor(.designSystem(.g1))
+                        
+                    }
+                    Spacer()
                 }
-            VStack(spacing: 30) {
-                Text("문제 불러오기 실패")
-                    .font(.pretendard(.regular, size: ._20))
-                    .foregroundColor(.designSystem(.g4))
-                Text("삭제된 문제에요 🥶")
-                    .font(.pretendard(.medium, size: ._32))
-                    .foregroundColor(.designSystem(.g1))
+                Spacer()
             }
         }
+        .background(
+            WeQuizAsset.Assets.quizSolveBackground.swiftUIImage
+        )
     }
 }
 
