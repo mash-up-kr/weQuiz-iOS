@@ -73,14 +73,13 @@ extension VerificationCodeInputInteractor: VerificationCodeInputRequestingLogic 
         authManager.registerPhoneNumber(with: request.code) { [weak self] result in
             switch result {
             case let .success(response):
-                guard response.0, let userId = response.1 else { return }
-                switch request.type {
-                case .signIn:
-                    Task {
-                        await self?.signIn(userId)
-                    }
-                case .signUp:
-                    self?.signUp(request.phoneNumber)
+                guard response.0, let userId = response.1 else {
+                    self?.presenter?.present(VerificationCodeInputModel.Response.Toast(type: .unknown))
+                    return
+                }
+                
+                Task {
+                    await self?.signIn(request, userId)
                 }
             case .failure(let reason):
                 switch reason {
@@ -109,7 +108,10 @@ extension VerificationCodeInputInteractor: VerificationCodeInputRequestingLogic 
 }
 
 extension VerificationCodeInputInteractor {
-    private func signIn(_ userId: String) async {
+    private func signIn(
+        _ request: VerificationCodeInputModel.Request.OnRequestVerifyCode,
+        _ userId: String
+    ) async {
         if let userInfromation = await authenticationService.user(userId) {
             // 회원정보가 있다면 토큰 저장하고 홈으로
             authManager.storeToken { [weak self] in
@@ -121,10 +123,15 @@ extension VerificationCodeInputInteractor {
                 )
             }
         } else {
-            presenter?.present(VerificationCodeInputModel.Response.Progress(show: false))
-            presenter?.present(VerificationCodeInputModel.Response.InputReset(needRest: true))
-            // 회원정보가 없으면 회원가입 모달 노출
-            presenter?.present(VerificationCodeInputModel.Response.Modal(type: .notSignedUpUser))
+            switch request.type {
+            case .signIn:
+                presenter?.present(VerificationCodeInputModel.Response.Progress(show: false))
+                presenter?.present(VerificationCodeInputModel.Response.InputReset(needRest: true))
+                // 회원정보가 없으면 회원가입 모달 노출
+                presenter?.present(VerificationCodeInputModel.Response.Modal(type: .notSignedUpUser))
+            case .signUp:
+                signUp(request.phoneNumber)
+            }
         }
     }
     
