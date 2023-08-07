@@ -25,8 +25,17 @@ final class MakeQuizInteractor: MakeQuizBusinessLogic {
     
     func requestMakeQuiz(request: MakeQuiz.RequestMakeQuiz.Request) {
         self.service.makeQuiz(BaseDataResponseModel<MakeQuizResponseModel>.self, QuizAPI.makeQuiz(makeRequestModel(request)))
-            .sink(receiveCompletion: { _ in
-                // TODO: Error 처리
+            .sink(receiveCompletion: { completion in
+                guard case .failure(let error) = completion else {
+                    self.presenter?.presentMakeQuiz(response: MakeQuiz.RequestMakeQuiz.Response.Toast(isWarning: true, message: "일시적 오류입니다.\n잠시 후 다시 시도해주세요"))
+                    return
+                }
+                switch error {
+                case .failureWithMessage(let message):
+                    self.presenter?.presentMakeQuiz(response: MakeQuiz.RequestMakeQuiz.Response.Toast(isWarning: true, message: message))
+                case .failure:
+                    self.presenter?.presentMakeQuiz(response: MakeQuiz.RequestMakeQuiz.Response.Toast(isWarning: true, message: "일시적 오류입니다.\n잠시 후 다시 시도해주세요"))
+                }
             }, receiveValue: { value in
                 guard let value else { return }
                 let response = MakeQuiz.RequestMakeQuiz.Response(quizId: value.quizId)

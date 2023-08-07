@@ -8,6 +8,11 @@
 
 import Foundation
 
+public enum QuizAPIError: Error {
+    case failureWithMessage(String)
+    case failure
+}
+
 public enum QuizAPI {
     case makeQuiz(MakeQuizRequestModel)
     case getQuiz(Int)

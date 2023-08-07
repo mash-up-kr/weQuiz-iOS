@@ -15,7 +15,7 @@ public protocol QuizServiceLogic {
     func makeQuiz<T>(
         _ model: T.Type,
         _ requestable: NetworkRequestable)
-        -> AnyPublisher<MakeQuizResponseModel?, Error> where T : Decodable
+        -> AnyPublisher<MakeQuizResponseModel?, QuizAPIError> where T : Decodable
     
     // 문제 풀이
     func getQuiz<T>(
@@ -39,8 +39,8 @@ public protocol QuizServiceLogic {
         _ model: T.Type,
         _ requestable: NetworkRequestable)
         -> AnyPublisher<GetQuizRankResponseModel?, Error> where T : Decodable
-
 }
+
 public final class QuizService {
     private let networking: NetworkingProtocol
     
@@ -49,14 +49,22 @@ public final class QuizService {
     }
 }
 extension QuizService: QuizServiceLogic {
-    public func makeQuiz<T>(_ model: T.Type, _ requestable: NetworkRequestable) -> AnyPublisher<MakeQuizResponseModel?, Error> where T : Decodable {
+    public func makeQuiz<T>(
+        _ model: T.Type,
+        _ requestable: NetworkRequestable
+    ) -> AnyPublisher<MakeQuizResponseModel?, QuizAPIError> where T : Decodable {
         return Future { [weak self] promise in
             self?.networking.request(BaseDataResponseModel<MakeQuizResponseModel>.self, requestable) { result in
                 switch result {
                 case .success(let success):
                     promise(.success(success))
                 case .failure(let error):
-                    promise(.failure(error))
+                    guard case let .errorMessage(message) = error else {
+                        debugPrint(error)
+                        promise(.failure(.failure))
+                        return
+                    }
+                    promise(.failure(.failureWithMessage(message)))
                 }
             }
         }.eraseToAnyPublisher()

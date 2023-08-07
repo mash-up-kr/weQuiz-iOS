@@ -5,6 +5,7 @@ import DesignSystemKit
 
 protocol MakeQuizDisplayLogic {
     func displayCompletionView(viewModel: MakeQuiz.RequestMakeQuiz.ViewModel)
+    func displayToast(viewModel: MakeQuiz.RequestMakeQuiz.ViewModel.Toast)
 }
 
 public struct MakeQuizView: View {
@@ -24,6 +25,7 @@ public struct MakeQuizView: View {
     @State private var removedIndex: (popupPresented: Bool, index: UUID?) = (false, nil)
     @State private var removeSuccessToastModal: WQToast.Model?
     @State private var isQuizEnabled: Bool = false
+    @State private var networkErrorToastModel: WQToast.Model?
     
     
     public var body: some View {
@@ -98,6 +100,7 @@ public struct MakeQuizView: View {
                isPresented: $removedIndex.popupPresented
         )
         .toast(model: $removeSuccessToastModal)
+        .toast(model: $networkErrorToastModel)
         .background(
             Color.designSystem(.g9)
         )
@@ -160,6 +163,10 @@ extension MakeQuizView: MakeQuizDisplayLogic {
     func displayCompletionView(viewModel: MakeQuiz.RequestMakeQuiz.ViewModel) {
         navigator.path.append(.quizCompletion(quizId: viewModel.quizId))
         isPresentProgressView = false
+    }
+    
+    func displayToast(viewModel: MakeQuiz.RequestMakeQuiz.ViewModel.Toast) {
+        networkErrorToastModel = .init(status: viewModel.isWarning ? .warning : .success, text: viewModel.message)
     }
 }
 

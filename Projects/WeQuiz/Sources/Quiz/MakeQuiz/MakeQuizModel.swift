@@ -16,10 +16,24 @@ enum MakeQuiz {
         
         struct Response {
             let quizId: Int
+            
+            struct Toast {
+                let isWarning: Bool
+                let message: String
+                
+                static let `default`: Toast = .init(isWarning: false, message: "")
+            }
         }
         
         struct ViewModel {
             let quizId: Int
+            
+            struct Toast {
+                let isWarning: Bool
+                let message: String
+                
+                static let `default`: Toast = .init(isWarning: false, message: "")
+            }
         }
     }
 }
