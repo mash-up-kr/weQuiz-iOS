@@ -14,9 +14,6 @@ struct WeQuizApp: App {
             didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil
         ) -> Bool {
             FirebaseApp.configure()
-            #if DEBUG
-            Auth.auth().settings?.isAppVerificationDisabledForTesting = true
-            #endif
             return true
         }
         
