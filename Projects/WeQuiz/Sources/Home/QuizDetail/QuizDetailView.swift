@@ -22,8 +22,11 @@ struct QuizDetailView: View {
     
     @State private var isPresentRemoveModal: Bool = false
     @State private var removeSuccessToastModal: WQToast.Model?
-    
+    @State var isSharePresented = false
+    @State private var activityItems: [Any] = []
+
     private let navigator: HomeNavigator
+    
     
     public init(viewModel: QuizDetailDataStore, navigator: HomeNavigator) {
         self.viewModel = viewModel
@@ -58,6 +61,12 @@ struct QuizDetailView: View {
         )
         .toast(model: $removeSuccessToastModal)
         .progressView(isPresented: $viewModel.isPresentProgressView)
+        .background(
+            ActivityView(
+                isPresented: $isSharePresented,
+                activityItems: activityItems
+            )
+        )
     }
 }
 
@@ -69,7 +78,7 @@ extension QuizDetailView {
                 title: "",
                 bttons: [
                     .init(icon: Icon.Share.fillGray, action: {
-                        actionSheet()
+                        quizLink(id: viewModel.quizInfo.id)
                     })
                     ,
                     .init(icon: Icon.TrashCan.fillGray, action: {
@@ -82,10 +91,12 @@ extension QuizDetailView {
         ))
     }
     
-    private func actionSheet() {
-        guard let data = URL(string: "https://www.youtube.com/") else { return }
-        let activityView = UIActivityViewController(activityItems: [data], applicationActivities: nil)
-        UIApplication.shared.windows.first?.rootViewController?.present(activityView, animated: true, completion: nil)
+    private func quizLink(id: Int) {
+        DynamicLinks.makeDynamicLink(type: .solve(id: id)) {
+            guard let url = $0 else { return }
+            activityItems = ["친구가 만든 찐친고사에 도전해보세요!\n\n\(url)"]
+            isSharePresented = true
+        }
     }
     
     private var questionList: some View {
