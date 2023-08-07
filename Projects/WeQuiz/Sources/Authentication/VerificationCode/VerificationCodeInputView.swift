@@ -86,6 +86,7 @@ public struct VerificationCodeInputView: View {
             isVerificationCodeInputFocused = true
         }
         .onChange(of: isValid) { isValid in
+            guard isValid else { return }
             Task {
                 await interactor?.reqeust(VerificationCodeInputModel.Request.OnRequestVerifyCode(
                     type: signType,
@@ -94,12 +95,10 @@ public struct VerificationCodeInputView: View {
                     isValid: isValid,
                     code: input
                 ))
-                input = ""
-                self.isValid = false
             }
         }
         .onChange(of: presenter.viewModel.toastModel, perform: { model in
-            switch model {
+            switch model.type {
             case .invalidCode:
                 verificationCodeToastModel = .init(status: .warning, text: "인증번호가 올바르지 않아요")
             case .expiredCode:
@@ -108,9 +107,16 @@ public struct VerificationCodeInputView: View {
                 verificationCodeToastModel = .init(status: .warning, text: "인증번호 시간이 만료됐어요\n재전송을 눌러 다시 시도해 주세요")
             case .resendCode:
                 verificationCodeToastModel = .init(status: .success, text: "인증번호를 재전송했어요")
+            case .errorMessage(let message):
+                verificationCodeToastModel = .init(status: .warning, text: "\(message)")
             case .unknown:
                 verificationCodeToastModel = .init(status: .warning, text: "잠시 후 다시 시도해 주세요")
             }
+        })
+        .onChange(of: presenter.viewModel.resetInput, perform: { model in
+            guard model.needRest else { return }
+            input = ""
+            isValid = false
         })
         .toast(model: $verificationCodeToastModel)
         .modal(

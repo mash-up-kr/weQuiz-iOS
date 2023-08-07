@@ -36,8 +36,9 @@ public enum PhoneNumberInputModel {
         }
         
         public struct Toast {
-            public enum `Type` {
+            public enum `Type`: Equatable {
                 case exceededLimit
+                case errorMessage(String)
                 case unknown
             }
             public let type: `Type`

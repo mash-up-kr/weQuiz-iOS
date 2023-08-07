@@ -42,7 +42,7 @@ extension VerificationCodeInputPresenter: VerificationCodeInputPresentingLogic {
     }
 
     public func present(_ response: VerificationCodeInputModel.Response.Toast) {
-        viewModel.toastModel = response.type
+        viewModel.toastModel = response
     }
     
     public func present(_ response: VerificationCodeInputModel.Response.Modal) {
@@ -52,6 +52,10 @@ extension VerificationCodeInputPresenter: VerificationCodeInputPresentingLogic {
     
     public func present(_ response: VerificationCodeInputModel.Response.Progress) {
         viewModel.progress = response.show
+    }
+    
+    public func present(_ response: VerificationCodeInputModel.Response.InputReset) {
+        viewModel.resetInput = response
     }
 }
 
@@ -79,4 +83,5 @@ public protocol VerificationCodeInputPresentingLogic {
     func present(_ response: VerificationCodeInputModel.Response.Toast)
     func present(_ response: VerificationCodeInputModel.Response.Modal)
     func present(_ response: VerificationCodeInputModel.Response.Progress)
+    func present(_ response: VerificationCodeInputModel.Response.InputReset)
 }
