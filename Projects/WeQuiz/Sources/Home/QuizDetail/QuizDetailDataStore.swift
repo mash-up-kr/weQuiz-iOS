@@ -10,8 +10,10 @@ import Foundation
 
 final class QuizDetailDataStore: ObservableObject {
     @Published var quizInfo: QuizDetailViewModel
+    @Published var isPresentProgressView: Bool
     
-    public init(quizInfo: QuizDetailViewModel) {
+    public init(quizInfo: QuizDetailViewModel, isPresentProgressView: Bool) {
         self.quizInfo = quizInfo
+        self.isPresentProgressView = isPresentProgressView
     }
 }

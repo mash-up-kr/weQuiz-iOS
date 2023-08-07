@@ -12,10 +12,12 @@ final class HomeDataStore: ObservableObject {
     @Published var myInfo: MyInfoResponseModel
     @Published var quizs: [QuizSummaryModel]
     @Published var friendsRank: [RankModel]
+    @Published var isPresentProgressView: Bool
     
-    public init(myInfo: MyInfoResponseModel, quizs: [QuizSummaryModel], friendsRank: [RankModel]) {
+    public init(myInfo: MyInfoResponseModel, quizs: [QuizSummaryModel], friendsRank: [RankModel], isPresentProgressView: Bool) {
         self.myInfo = myInfo
         self.quizs = quizs
         self.friendsRank = friendsRank
+        self.isPresentProgressView = isPresentProgressView
     }
 }

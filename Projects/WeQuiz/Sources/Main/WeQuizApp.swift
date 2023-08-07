@@ -7,6 +7,7 @@ import FirebaseCore
 
 @main
 struct WeQuizApp: App {
+    
     class AppDelegate: NSObject, UIApplicationDelegate {
         func application(
             _ application: UIApplication,
@@ -78,6 +79,7 @@ struct WeQuizApp: App {
     
     init() {
         DesignSystemKit.registerFont()
+        UITableView.appearance().backgroundColor = UIColor(Color.designSystem(.g9))
     }
     
     var body: some Scene {

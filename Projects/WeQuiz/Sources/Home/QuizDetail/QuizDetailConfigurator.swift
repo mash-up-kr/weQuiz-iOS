@@ -17,6 +17,7 @@ extension QuizDetailView {
         interactor.presenter = presenter
         presenter.view = view
         
+        
         interactor.getQuizDetail(request: QuizDetailResult.LoadQuizDetail.Request(quizDetailRequest: QuizDetailRequestModel(quizId: quizId)))
         return view
     }

@@ -13,7 +13,7 @@ public struct HomeView: View {
     
     var interactor: HomeBusinessLogic?
     
-    @ObservedObject var viewModel: HomeDataStore = HomeDataStore(myInfo: MyInfoResponseModel(id: 0, image: "", nickname: "", contents: ""), quizs: [], friendsRank: [])
+    @ObservedObject var viewModel: HomeDataStore = HomeDataStore(myInfo: MyInfoResponseModel(id: 0, image: "", nickname: "", contents: ""), quizs: [], friendsRank: [], isPresentProgressView: false)
     @EnvironmentObject var navigator: HomeNavigator
     
     public var body: some View {
@@ -30,6 +30,7 @@ public struct HomeView: View {
                     
                 }
                 .task {
+                    viewModel.isPresentProgressView = true
                     interactor?.getQuizGroup(request: HomeResult.LoadQuizGroup.Request(quizGroupRequest: QuizGroupRequestModel(size: 15, cursor: nil)))
                 }
                 .navigationDestination(for: Screen.self) { type in
@@ -57,6 +58,7 @@ public struct HomeView: View {
                     .padding(.top, 26)
                 , alignment: .center
             )
+            .progressView(isPresented: $viewModel.isPresentProgressView)
         })
     }
     
@@ -74,7 +76,7 @@ public struct HomeView: View {
     }
     
     private func questionDetailBuilder(quizId: Int) -> some View {
-        QuizDetailView(viewModel: QuizDetailDataStore(quizInfo: QuizDetailViewModel(quizId: 0, quizTitle: "", questions: [])), navigator: navigator)
+        QuizDetailView(viewModel: QuizDetailDataStore(quizInfo: QuizDetailViewModel(quizId: 0, quizTitle: "", questions: []), isPresentProgressView: true), navigator: navigator)
             .configureView(quizId: quizId)
             .navigationBarBackButtonHidden()
     }
@@ -261,6 +263,7 @@ extension HomeView: HomeDisplayLogic {
     
     func displayQuizGroup(viewModel: HomeResult.LoadQuizGroup.ViewModel) {
         self.viewModel.quizs = viewModel.quizs
+        self.viewModel.isPresentProgressView = false
     }
 }
 
