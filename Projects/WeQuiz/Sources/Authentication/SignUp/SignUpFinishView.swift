@@ -24,7 +24,7 @@ struct SignUpFinishView: View {
 
     var body: some View {
         VStack(alignment: .center, spacing: 24) {
-            Image("authentication_finish")
+            WeQuizAsset.Assets.authenticationFinish.swiftUIImage
             Text("반가워요\n\(nickname)")
                 .multilineTextAlignment(.center)
                 .font(.pretendard(.bold, size: ._34))

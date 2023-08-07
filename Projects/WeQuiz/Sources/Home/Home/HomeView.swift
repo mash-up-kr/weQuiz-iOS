@@ -55,12 +55,6 @@ public struct HomeView: View {
             .background(
                 Color.designSystem(.g9)
             )
-            .overlay(
-                myQuestionBlankView
-                    .padding([.leading, .trailing], 20)
-                    .padding(.top, 26)
-                , alignment: .center
-            )
             .progressView(isPresented: $viewModel.isPresentProgressView)
             .modal(
                 .init(
@@ -118,7 +112,7 @@ extension HomeView {
         let contents = viewModel.myInfo.description
         
         return HStack {
-            if let image = image {
+            if let image = image, image.isEmpty == false {
                 Image(image)
                     .resizable()
                     .scaledToFill()
@@ -188,12 +182,11 @@ extension HomeView {
     
     @ViewBuilder
     private var myQuestionBlankView: some View {
-        let image = "doc.plaintext"
         let contents = "아직 생성된 문제가 없어요"
         
         if viewModel.friendsRank.isEmpty && viewModel.quizs.isEmpty {
             VStack {
-                Image(systemName: image)
+                WeQuizAsset.Assets.homeEmptyQuestion.swiftUIImage
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 40, height: 40)
@@ -246,7 +239,9 @@ extension HomeView {
                 .padding([.leading, .trailing], 20)
                 .padding(.top, 26)
         } else {
-            EmptyView()
+            myQuestionBlankView
+                .padding([.leading, .trailing], 20)
+                .padding(.top, 26)
         }
     }
     

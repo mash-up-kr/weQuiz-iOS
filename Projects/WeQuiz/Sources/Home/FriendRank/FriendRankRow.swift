@@ -66,9 +66,9 @@ extension FriendRankRow {
     
     private var image: some View {
         switch friend.rank {
-        case 1: return Image("GoldGrade")
-        case 2: return Image("SilverGrade")
-        case 3: return Image("BronzeGrade")
+        case 1: return WeQuizAsset.Assets.goldGrade.swiftUIImage
+        case 2: return WeQuizAsset.Assets.silverGrade.swiftUIImage
+        case 3: return WeQuizAsset.Assets.bronzeGrade.swiftUIImage
         default: return Image("NoRank")
         }
     }
