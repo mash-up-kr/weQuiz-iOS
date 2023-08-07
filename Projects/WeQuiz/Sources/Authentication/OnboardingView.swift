@@ -4,6 +4,7 @@ import DesignSystemKit
 
 public struct OnboardingView: View {
     @EnvironmentObject var navigator: AuthenticationNavigator
+    @State private var signedOutToastModel: WQToast.Model?
     
     private let authManager: AuthManager = .shared
 
@@ -55,6 +56,14 @@ public struct OnboardingView: View {
                         .navigationBarBackButtonHidden()
                 }
             }
+            .onAppear {
+                guard authManager.signedOut else { return }
+                authManager.signedOut = false
+                DispatchQueue.main.async {
+                    signedOutToastModel = .init(status: .success, text: "로그아웃 되었습니다.")
+                }
+            }
+            .toast(model: $signedOutToastModel)
         }
     }
     

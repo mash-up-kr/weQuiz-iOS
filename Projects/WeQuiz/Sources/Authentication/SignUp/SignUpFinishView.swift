@@ -34,6 +34,7 @@ struct SignUpFinishView: View {
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                 mainNavigator.root = .home
+                navigator.path = []
             }
         }
     }
