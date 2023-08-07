@@ -64,7 +64,7 @@ public struct QuizCompletionView: View {
         )
         .navigationBarHidden(true)
     }
-    
+
     private func quizLink(id: Int) {
         DynamicLinks.makeDynamicLink(type: .solve(id: id)) {
             guard let url = $0 else { return }
