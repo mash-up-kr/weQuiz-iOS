@@ -42,8 +42,12 @@ extension PhoneNumberInputInteractor: PhoneNumberInputRequestingLogic {
                         destination: .verificationCodeInput(request.input, request.signType)
                     )
                 )
-            case .failure(let message) :
-                self.presenter.present(PhoneNumberInputModel.Response.Toast(type: .errorMessage(message.localizedDescription)))
+            case .failure(let error):
+                guard case .fail(let message) = error else {
+                    self.presenter.present(PhoneNumberInputModel.Response.Toast(type: .unknown))
+                    return
+                }
+                self.presenter.present(PhoneNumberInputModel.Response.Toast(type: .errorMessage(message)))
             }
         })
     }

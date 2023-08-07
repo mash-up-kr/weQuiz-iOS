@@ -87,7 +87,7 @@ public struct PhoneNumberInputView: View {
             }
         }
         .onChange(of: presenter.viewModel.toastModel) { model in
-            switch model {
+            switch model.type {
             case .exceededLimit:
                 phoneNumberInvalidToastModel = .init(status: .warning, text: "인증한도를 초과했습니다. 개발자에게 문의해주세요")
             case .errorMessage(let message):

@@ -115,7 +115,7 @@ public struct SolveQuizIntroView: View {
     }
     
     private func thumbnail() -> some View {
-        Image("quiz_solve_thumbnail")
+        WeQuizAsset.Assets.quizSolveThumbnail.swiftUIImage
             .fixedSize()
     }
 }
