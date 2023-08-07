@@ -35,13 +35,16 @@ public enum PhoneNumberInputModel {
             public let destination: Destination
         }
         
-        public struct Toast {
+        public struct Toast: Identifiable, Equatable {
             public enum `Type`: Equatable {
                 case exceededLimit
                 case errorMessage(String)
                 case unknown
             }
+            public let id = UUID()
             public let type: `Type`
+            
+            static let `default`: Toast = .init(type: .unknown)
         }
         
         public struct Progress{

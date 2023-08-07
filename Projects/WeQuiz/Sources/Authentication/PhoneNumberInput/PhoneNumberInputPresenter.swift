@@ -31,7 +31,7 @@ extension PhoneNumberInputPresenter: PhoneNumberInputPresentingLogic {
     }
     
     public func present(_ response: PhoneNumberInputModel.Response.Toast) {
-        viewModel.toastModel = response.type
+        viewModel.toastModel = .init(type: response.type)
     }
     
     public func present(_ response: PhoneNumberInputModel.Response.Progress) {
