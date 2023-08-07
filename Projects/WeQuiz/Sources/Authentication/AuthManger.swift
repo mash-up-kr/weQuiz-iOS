@@ -23,6 +23,7 @@ public class AuthManager: ObservableObject {
     
     private(set) var userId: String?
     private var verificationID: String?
+    var signedOut: Bool = false
 }
 
 public extension AuthManager {
@@ -88,6 +89,11 @@ public extension AuthManager {
         UserDefaults.standard.set(userId, forKey: "token")
         verificationID = nil
         userId = nil
+        completion()
+    }
+    
+    func signOut(_ completion: () -> Void) {
+        UserDefaults.standard.removeObject(forKey: "token")
         completion()
     }
 }
