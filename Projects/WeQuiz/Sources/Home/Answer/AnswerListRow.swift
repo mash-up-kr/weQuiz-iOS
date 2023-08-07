@@ -39,7 +39,7 @@ struct AnswerListRow: View {
                 
                 HStack {
                     Text(model.content)
-                        .font(.pretendard(.medium, size: ._16))
+                        .font(.pretendard(.medium, size: ._14))
                         .foregroundColor(contentTextColor)
                         .background(
                             GeometryReader { proxy in

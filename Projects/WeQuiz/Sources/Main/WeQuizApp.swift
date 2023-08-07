@@ -7,6 +7,7 @@ import FirebaseCore
 
 @main
 struct WeQuizApp: App {
+    
     class AppDelegate: NSObject, UIApplicationDelegate {
         func application(
             _ application: UIApplication,

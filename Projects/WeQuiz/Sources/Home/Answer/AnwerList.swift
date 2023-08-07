@@ -19,7 +19,7 @@ struct AnswerList: View {
             LazyVStack(alignment: .leading, spacing: 12) {
                 HStack {
                     Text("\(question.rank). \(question.questionTitle)")
-                        .font(.pretendard(.medium, size: ._18))
+                        .font(.pretendard(.medium, size: ._16))
                         .foregroundColor(.designSystem(.g2))
                 }
                 .padding(.vertical, 24)

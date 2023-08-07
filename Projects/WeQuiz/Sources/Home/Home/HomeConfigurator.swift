@@ -18,8 +18,8 @@ extension HomeView {
         presenter.view = view
         
         interactor.getMyInfo()
-        interactor.getFriendRank(request: HomeResult.LoadRanking.Request(request: FriendRankRequestModel(size: 15, cursorScore: nil, cursorUserId: nil)))
-        interactor.getQuizGroup(request: HomeResult.LoadQuizGroup.Request(quizGroupRequest: QuizGroupRequestModel(size: 15, cursor: nil)))
+        interactor.getFriendRank(request: HomeResult.LoadRanking.Request(request: FriendRankRequestModel(size: 100, cursorScore: nil, cursorUserId: nil)))
+        interactor.getQuizGroup(request: HomeResult.LoadQuizGroup.Request(quizGroupRequest: QuizGroupRequestModel(size: 100, cursor: nil)))
         
         return view
     }

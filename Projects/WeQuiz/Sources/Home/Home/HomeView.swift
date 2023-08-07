@@ -13,7 +13,7 @@ public struct HomeView: View {
     
     var interactor: HomeBusinessLogic?
     
-    @ObservedObject var viewModel: HomeDataStore = HomeDataStore(myInfo: MyInfoResponseModel(id: 0, image: "", nickname: "", contents: ""), quizs: [], friendsRank: [])
+    @ObservedObject var viewModel: HomeDataStore = HomeDataStore(myInfo: MyInfoResponseModel(id: 0, image: "", nickname: "", contents: ""), quizs: [], friendsRank: [], isPresentProgressView: false)
     @EnvironmentObject var navigator: HomeNavigator
     @EnvironmentObject var mainNavigator: MainNavigator
     @State private var showSignOutModal: Bool = false
@@ -31,22 +31,23 @@ public struct HomeView: View {
                     }
                     logOutView
                 }
-            }
-            .task {
-                interactor?.getQuizGroup(request: HomeResult.LoadQuizGroup.Request(quizGroupRequest: QuizGroupRequestModel(size: 15, cursor: nil)))
-            }
-            .navigationDestination(for: Screen.self) { type in
-                switch type {
-                case .friendRankView:
-                    friendRankBuilder()
-                case .quizDetail(let quizId):
-                    questionDetailBuilder(quizId: quizId)
-                case .quizGroupView:
-                    questionGroupBuilder()
-                case .makeQuiz:
-                    makeQuizBuilder()
-                case .quizCompletion(let quizId):
-                    quizCompletionBuilder(quizId: quizId)
+                .task {
+                    viewModel.isPresentProgressView = true
+                    interactor?.getQuizGroup(request: HomeResult.LoadQuizGroup.Request(quizGroupRequest: QuizGroupRequestModel(size: 15, cursor: nil)))
+                }
+                .navigationDestination(for: Screen.self) { type in
+                    switch type {
+                    case .friendRankView:
+                        friendRankBuilder()
+                    case .quizDetail(let quizId):
+                        questionDetailBuilder(quizId: quizId)
+                    case .quizGroupView:
+                        questionGroupBuilder()
+                    case .makeQuiz:
+                        makeQuizBuilder()
+                    case .quizCompletion(let quizId):
+                        quizCompletionBuilder(quizId: quizId)
+                    }
                 }
             }
             .navigationBarBackButtonHidden()
@@ -59,6 +60,7 @@ public struct HomeView: View {
                     .padding(.top, 26)
                 , alignment: .center
             )
+            .progressView(isPresented: $viewModel.isPresentProgressView)
             .modal(
                 .init(
                     message: "로그아웃 하시겠습니까?",
@@ -87,7 +89,7 @@ public struct HomeView: View {
     }
     
     private func questionDetailBuilder(quizId: Int) -> some View {
-        QuizDetailView(viewModel: QuizDetailDataStore(quizInfo: QuizDetailViewModel(quizId: 0, quizTitle: "", questions: [])), navigator: navigator)
+        QuizDetailView(viewModel: QuizDetailDataStore(quizInfo: QuizDetailViewModel(quizId: 0, quizTitle: "", questions: []), isPresentProgressView: true), navigator: navigator)
             .configureView(quizId: quizId)
             .navigationBarBackButtonHidden()
     }
@@ -292,6 +294,7 @@ extension HomeView: HomeDisplayLogic {
     
     func displayQuizGroup(viewModel: HomeResult.LoadQuizGroup.ViewModel) {
         self.viewModel.quizs = viewModel.quizs
+        self.viewModel.isPresentProgressView = false
     }
 }
 

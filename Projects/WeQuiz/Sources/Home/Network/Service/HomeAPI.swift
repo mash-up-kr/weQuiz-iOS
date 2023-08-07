@@ -31,7 +31,7 @@ extension HomeAPI: NetworkRequestable {
             return "/api/v1/quiz/\(model.quizId)"
         }
     }
-
+    
     public var method: NetworkMethod {
         switch self {
         case .getMyInfo:

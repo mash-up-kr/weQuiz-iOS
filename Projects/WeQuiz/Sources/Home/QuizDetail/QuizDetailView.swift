@@ -16,7 +16,7 @@ protocol QuizDetailDisplayLogic {
 }
 
 struct QuizDetailView: View {
-    
+        
     var interactor: QuizDetailBusinessLogic?
     @ObservedObject var viewModel: QuizDetailDataStore
     
@@ -32,8 +32,8 @@ struct QuizDetailView: View {
     
     var body: some View {
         VStack {
-            self.topBarView
-            self.questionList
+            topBarView
+            questionList
         }
         .background(Color.designSystem(.g9))
         .modal(
@@ -57,6 +57,7 @@ struct QuizDetailView: View {
             isPresented: $isPresentRemoveModal
         )
         .toast(model: $removeSuccessToastModal)
+        .progressView(isPresented: $viewModel.isPresentProgressView)
     }
 }
 
@@ -88,21 +89,23 @@ extension QuizDetailView {
     }
     
     private var questionList: some View {
-        List {
-            ForEach(viewModel.quizInfo.questions) { question in
-                AnswerListContainer(question: question, questionsCount: viewModel.quizInfo.questions.count, questionId: question.id)
+        ScrollView {
+            LazyVStack(spacing: 36) {
+                ForEach(viewModel.quizInfo.questions) { question in
+                    AnswerListContainer(question: question, questionsCount: viewModel.quizInfo.questions.count, questionId: question.id)
+                }
+                .background(Color.designSystem(.g9))
             }
-            .listRowSeparator(.hidden)
-            .listRowBackground(Color.designSystem(.g9))
+            .padding(.horizontal, 20)
+            .background(Color.designSystem(.g9))
         }
-        .background(Color.designSystem(.g9))
-        .listStyle(.plain)
     }
 }
 
 extension QuizDetailView: QuizDetailDisplayLogic {
     func displayQuizDetail(viewModel: QuizDetailResult.LoadQuizDetail.ViewModel) {
         self.viewModel.quizInfo = viewModel.quizDetail
+        self.viewModel.isPresentProgressView = false
     }
     
     func deleteQuiz(viewModel: QuizDetailResult.DeleteQuiz.ViewModel) {
