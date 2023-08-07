@@ -27,8 +27,10 @@ final class HomeInteractor: HomeBusinessLogic {
     }
     
     func getMyInfo() {
+        presenter?.present(response: HomeResult.Indicator.Response(needShow: true))
         self.service.getMyInfo(BaseDataResponseModel<MyInfoResponseModel>.self, HomeAPI.getMyInfo)
             .sink(receiveCompletion: { completion in
+                self.presenter?.present(response: HomeResult.Indicator.Response(needShow: false))
                 switch completion {
                 case .failure(let error):
                     print("Error: \(error)")
@@ -36,6 +38,7 @@ final class HomeInteractor: HomeBusinessLogic {
                     break
                 }
             }, receiveValue: { [weak self] value in
+                self?.presenter?.present(response: HomeResult.Indicator.Response(needShow: false))
                 guard let value = value else { return }
                 self?.presenter?.present(response: .init(result: value))
             })
@@ -43,8 +46,10 @@ final class HomeInteractor: HomeBusinessLogic {
     }
     
     func getFriendRank(request: HomeResult.LoadRanking.Request) {
+        presenter?.present(response: HomeResult.Indicator.Response(needShow: true))
         self.service.getFriendRank(BaseDataResponseModel<FriendRankResponseModel>.self, HomeAPI.getFriendRank(request.request))
             .sink(receiveCompletion: { completion in
+                self.presenter?.present(response: HomeResult.Indicator.Response(needShow: false))
                 switch completion {
                 case .failure(let error):
                     print("Error: \(error)")
@@ -52,6 +57,7 @@ final class HomeInteractor: HomeBusinessLogic {
                     break
                 }
             }, receiveValue: { [weak self] value in
+                self?.presenter?.present(response: HomeResult.Indicator.Response(needShow: false))
                 guard let value = value else { return }
                 self?.presenter?.present(response: .init(result: value))
             })
@@ -59,6 +65,7 @@ final class HomeInteractor: HomeBusinessLogic {
     }
     
     func getQuizGroup(request: HomeResult.LoadQuizGroup.Request) {
+        presenter?.present(response: HomeResult.Indicator.Response(needShow: true))
         self.service.getQuizGroup(BaseDataResponseModel<QuizGroupResponseModel>.self, HomeAPI.getQuizGroup(request.quizGroupRequest))
             .sink(receiveCompletion: { completion in
                 switch completion {
@@ -68,6 +75,7 @@ final class HomeInteractor: HomeBusinessLogic {
                     break
                 }
             }, receiveValue: { [weak self] value in
+                self?.presenter?.present(response: HomeResult.Indicator.Response(needShow: false))
                 guard let value = value else { return }
                 self?.presenter?.present(response: .init(result: value))
             })

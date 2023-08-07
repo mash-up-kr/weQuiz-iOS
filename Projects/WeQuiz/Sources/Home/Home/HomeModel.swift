@@ -46,4 +46,14 @@ public enum HomeResult {
             let quizs: [QuizSummaryModel]
         }
     }
+    
+    enum Indicator {
+        struct Response {
+            let needShow: Bool
+        }
+        
+        struct ViewModel {
+            let needShow: Bool
+        }
+    }
 }

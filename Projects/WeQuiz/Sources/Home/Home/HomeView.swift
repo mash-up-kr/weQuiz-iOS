@@ -6,6 +6,7 @@ protocol HomeDisplayLogic {
     func displayMyInfo(viewModel: HomeResult.LoadMyInfo.ViewModel)
     func displayFriendRank(viewModel: HomeResult.LoadRanking.ViewModel)
     func displayQuizGroup(viewModel: HomeResult.LoadQuizGroup.ViewModel)
+    func displayIndicator(viewModel: HomeResult.Indicator.ViewModel)
 }
 
 public struct HomeView: View {
@@ -294,7 +295,10 @@ extension HomeView: HomeDisplayLogic {
     
     func displayQuizGroup(viewModel: HomeResult.LoadQuizGroup.ViewModel) {
         self.viewModel.quizs = viewModel.quizs
-        self.viewModel.isPresentProgressView = false
+    }
+    
+    func displayIndicator(viewModel: HomeResult.Indicator.ViewModel) {
+        self.viewModel.isPresentProgressView = viewModel.needShow
     }
 }
 

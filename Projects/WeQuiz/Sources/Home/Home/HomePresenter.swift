@@ -12,6 +12,7 @@ protocol HomePresentingLogic {
     func present(response: HomeResult.LoadMyInfo.Response)
     func present(response: HomeResult.LoadRanking.Response)
     func present(response: HomeResult.LoadQuizGroup.Response)
+    func present(response: HomeResult.Indicator.Response)
 }
 
 final class HomePresenter {
@@ -33,7 +34,11 @@ extension HomePresenter: HomePresentingLogic {
     }
     
     func present(response: HomeResult.LoadQuizGroup.Response) {
-        var viewModel: [QuizSummaryModel] = response.result.quiz
+        let viewModel: [QuizSummaryModel] = response.result.quiz
         view?.displayQuizGroup(viewModel: .init(quizs: viewModel))
+    }
+    
+    func present(response: HomeResult.Indicator.Response) {
+        view?.displayIndicator(viewModel: .init(needShow: response.needShow))
     }
 }

@@ -10,7 +10,7 @@ import Foundation
 
 public struct QuizGroupResponseModel {
     public var quiz: [QuizSummaryModel]
-    public var nextCursor: Int
+    public var nextCursor: Int?
     
     public init(quiz: [QuizSummaryModel], nextCursor: Int) {
         self.quiz = quiz
