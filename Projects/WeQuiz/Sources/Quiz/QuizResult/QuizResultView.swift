@@ -84,7 +84,7 @@ public struct QuizResultView: View {
                             resultLink(id: quizId)
                         }
                     )))
-                    .background(Color.black)
+                    .background(Color.designSystem(.g9))
                     .background(
                         ActivityView(
                             isPresented: $isSharePresented,
