@@ -15,6 +15,8 @@ public struct HomeView: View {
     
     @ObservedObject var viewModel: HomeDataStore = HomeDataStore(myInfo: MyInfoResponseModel(id: 0, image: "", nickname: "", contents: ""), quizs: [], friendsRank: [], isPresentProgressView: false)
     @EnvironmentObject var navigator: HomeNavigator
+    @EnvironmentObject var mainNavigator: MainNavigator
+    @State private var showSignOutModal: Bool = false
     
     public var body: some View {
         NavigationStack(path: $navigator.path,  root: {
@@ -27,7 +29,7 @@ public struct HomeView: View {
                         self.friendRankView
                         self.myQuestionView
                     }
-                    
+                    logOutView
                 }
                 .task {
                     viewModel.isPresentProgressView = true
@@ -59,10 +61,21 @@ public struct HomeView: View {
                 , alignment: .center
             )
             .progressView(isPresented: $viewModel.isPresentProgressView)
+            .modal(
+                .init(
+                    message: "로그아웃 하시겠습니까?",
+                    doubleButtonStyleModel:
+                            .init(titles: ("아니오", "예"),
+                                  leftAction: {
+                                      showSignOutModal = false
+                                  }, rightAction: {
+                                      signOut()
+                                  })
+                ), isPresented: $showSignOutModal
+            )
         })
     }
-    
-    
+
     private func friendRankBuilder() -> some View {
         FriendRankView(navigator: navigator, viewModel: FriendRankDataStore(result: viewModel.friendsRank))
             .configureView()
@@ -235,6 +248,24 @@ extension HomeView {
             EmptyView()
         }
     }
+    
+    private var logOutView: some View {
+        ZStack {
+            HStack {
+                Spacer()
+                Text("로그아웃")
+                    .font(.pretendard(.regular, size: ._16))
+                    .foregroundColor(.designSystem(.g4))
+                Spacer()
+            }
+            .padding(.top, 20)
+            .padding(.bottom, 20)
+            .onTapGesture {
+                showSignOutModal = true
+            }
+        }
+        .contentShape(Rectangle())
+    }
 }
 
 struct CustomHeader: View {
@@ -264,6 +295,18 @@ extension HomeView: HomeDisplayLogic {
     func displayQuizGroup(viewModel: HomeResult.LoadQuizGroup.ViewModel) {
         self.viewModel.quizs = viewModel.quizs
         self.viewModel.isPresentProgressView = false
+    }
+}
+
+extension HomeView {
+    private func signOut() {
+        AuthManager.shared.signOut {
+            showSignOutModal = false
+            DispatchQueue.main.async {
+                mainNavigator.root = .authentication
+                AuthManager.shared.signedOut = true
+            }
+        }
     }
 }
 
