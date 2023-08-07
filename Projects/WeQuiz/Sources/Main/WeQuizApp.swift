@@ -79,7 +79,6 @@ struct WeQuizApp: App {
     
     init() {
         DesignSystemKit.registerFont()
-        UITableView.appearance().backgroundColor = UIColor(Color.designSystem(.g9))
     }
     
     var body: some Scene {
