@@ -31,10 +31,19 @@ extension FriendRankRow {
     
     @ViewBuilder
     private var priorityImageView: some View {
-        image
-            .frame(width: 24, height: 24)
-            .padding(.vertical, 16)
-            .padding(.leading, 16)
+        if 1...3 ~= friend.rank {
+            image
+                .frame(width: 24, height: 24)
+                .padding(.vertical, 16)
+                .padding(.leading, 16)
+        } else {
+            Text("\(friend.rank)")
+                .foregroundColor(Color.designSystem(.g4))
+                .font(.pretendard(.bold, size: ._18))
+                .padding(.leading, 21)
+                .padding(.trailing, 9)
+                .padding(.vertical, 16)
+        }
     }
     
     private var descriptionView: some View {
