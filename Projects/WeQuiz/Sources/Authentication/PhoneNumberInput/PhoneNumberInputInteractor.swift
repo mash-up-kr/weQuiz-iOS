@@ -32,18 +32,19 @@ extension PhoneNumberInputInteractor: PhoneNumberInputRequestingLogic {
     
     public func request(_ request: PhoneNumberInputModel.Request.OnTouchGetVerificationCode) {
         presenter.present(PhoneNumberInputModel.Response.Progress(show: true))
-        authManager.verifyPhoneNumber(request.input, completion: { isSucceed in
+        authManager.verifyPhoneNumber(request.input, completion: { result in
             self.presenter.present(PhoneNumberInputModel.Response.Progress(show: false))
-            guard isSucceed else {
-                // TooManyRequest 처리 해야할듯
-                self.presenter.present(PhoneNumberInputModel.Response.Toast(type: .unknown))
-                return
-            }
-            self.presenter.present(
-                PhoneNumberInputModel.Response.Naivgate(
-                    destination: .verificationCodeInput(request.input, request.signType)
+            
+            switch result {
+            case .success:
+                self.presenter.present(
+                    PhoneNumberInputModel.Response.Naivgate(
+                        destination: .verificationCodeInput(request.input, request.signType)
+                    )
                 )
-            )
+            case .failure(let message) :
+                self.presenter.present(PhoneNumberInputModel.Response.Toast(type: .errorMessage(message.localizedDescription)))
+            }
         })
     }
 }

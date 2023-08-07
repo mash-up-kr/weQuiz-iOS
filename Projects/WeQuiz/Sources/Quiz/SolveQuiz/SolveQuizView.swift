@@ -11,6 +11,7 @@ import DesignSystemKit
 
 protocol SolveQuizDisplayLogic {
     func displayQuizResult(viewModel: SolveQuiz.LoadQuizResult.ViewModel)
+    func displayErrorMessage(viewModel: SolveQuiz.LoadQuizResult.ViewModel.ErrorMessage)
 }
 
 public struct SolveQuizView: View {
@@ -18,6 +19,7 @@ public struct SolveQuizView: View {
     @ObservedObject var viewModel: SolveQuizDataStore
     @State private var _showReportModal: Bool = false
     @State private var _reportedToastModel: WQToast.Model?
+    @State private var errorMessageToastModel: WQToast.Model?
     
     let quizId: Int
     var interactor: SolveQuizBusinessLogic?
@@ -130,7 +132,11 @@ public struct SolveQuizView: View {
                 QuizResultView(quizId: quizId, quizResult).configureView()
             }
         }
+        .onChange(of: viewModel.errorMessage, perform: { model in
+            errorMessageToastModel = .init(status: .warning, text: model.message)
+        })
         .toast(model: $_reportedToastModel)
+        .toast(model: $errorMessageToastModel)
         .modal(
             .init(
                 message: "문제를 신고할까요?",
@@ -199,5 +205,9 @@ extension SolveQuizView: SolveQuizDisplayLogic {
     func displayQuizResult(viewModel: SolveQuiz.LoadQuizResult.ViewModel) {
         self.viewModel.quizResult = viewModel.result
         self.viewModel.routeToResultView = true
+    }
+    
+    func displayErrorMessage(viewModel: SolveQuiz.LoadQuizResult.ViewModel.ErrorMessage) {
+        self.viewModel.errorMessage = .init(message: viewModel.message)
     }
 }

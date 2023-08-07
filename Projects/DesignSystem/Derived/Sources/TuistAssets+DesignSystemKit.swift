@@ -35,7 +35,7 @@ public enum DesignSystemKitAsset {
   public static let g7 = DesignSystemKitColors(name: "g7")
   public static let g8 = DesignSystemKitColors(name: "g8")
   public static let g9 = DesignSystemKitColors(name: "g9")
-  public static let black = DesignSystemKitColors(name: "Black")
+  public static let black = DesignSystemKitColors(name: "black")
   public static let dimed = DesignSystemKitColors(name: "dimed")
   public static let alert = DesignSystemKitColors(name: "alert")
   public static let disabled = DesignSystemKitColors(name: "disabled")

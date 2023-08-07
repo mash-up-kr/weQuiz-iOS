@@ -14,8 +14,10 @@ public struct SolveQuizIntroView: View {
     @EnvironmentObject var mainNavigator: MainNavigator
     @EnvironmentObject var solveQuizNavigator: SolveQuizNavigator
     
-    private let quizId: Int
     @ObservedObject var viewModel: SolveQuizIntroViewModel = .init()
+    @State private var networkErrorMessageToastModel: WQToast.Model?
+    
+    private let quizId: Int
     
     init(quizId: Int) {
         self.quizId = quizId
@@ -54,6 +56,13 @@ public struct SolveQuizIntroView: View {
                     ))
                 }
             }
+            .fullScreenCover(
+                isPresented: $viewModel.showErrorPage,
+                content: {
+                    RemovedQuizView()
+                }
+            )
+            .toast(model: $networkErrorMessageToastModel)
             .background(
                 WeQuizAsset.Assets.quizSolveBackground.swiftUIImage
             )

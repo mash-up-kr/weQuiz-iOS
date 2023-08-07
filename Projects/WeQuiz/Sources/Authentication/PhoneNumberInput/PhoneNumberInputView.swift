@@ -90,6 +90,8 @@ public struct PhoneNumberInputView: View {
             switch model {
             case .exceededLimit:
                 phoneNumberInvalidToastModel = .init(status: .warning, text: "인증한도를 초과했습니다. 개발자에게 문의해주세요")
+            case .errorMessage(let message):
+                phoneNumberInvalidToastModel = .init(status: .warning, text: "\(message)")
             case .unknown:
                 phoneNumberInvalidToastModel = .init(status: .warning, text: "잠시 후 다시 시도해 주세요")
             }

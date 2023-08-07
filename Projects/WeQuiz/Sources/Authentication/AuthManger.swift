@@ -17,6 +17,10 @@ public class AuthManager: ObservableObject {
         case unknown
     }
     
+    public enum PhoneNumberVerificationError: Error {
+        case fail(String)
+    }
+    
     public static let shared: AuthManager = .init()
     
     private init() {}
@@ -31,7 +35,10 @@ public extension AuthManager {
         UserDefaults.standard.string(forKey: "token")
     }
 
-    func verifyPhoneNumber(_ phoneNumber: String, completion: ((Bool) -> Void)? = nil) {
+    func verifyPhoneNumber(
+        _ phoneNumber: String,
+        completion: ((Result<Bool, PhoneNumberVerificationError>) -> Void)? = nil
+    ) {
         var convertedPhoneNumber = phoneNumber
         convertedPhoneNumber.removeFirst()
         
@@ -41,11 +48,10 @@ public extension AuthManager {
                 uiDelegate: nil
             ) { [weak self] verificationID, error in
                 if let error = error {
-                    debugPrint(error)
-                    completion?(false)
+                    completion?(.failure(.fail(error.localizedDescription)))
                 } else {
                     self?.verificationID = verificationID
-                    completion?(true)
+                    completion?(.success(true))
                 }
             }
     }

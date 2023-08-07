@@ -71,15 +71,19 @@ public enum VerificationCodeInputModel {
             public init() {}
         }
         
-        public struct Toast {
-            public enum `Type` {
+        public struct Toast: Identifiable, Equatable {
+            public enum `Type`: Equatable {
                 case invalidCode
                 case timeout
                 case expiredCode
                 case resendCode
+                case errorMessage(String)
                 case unknown
             }
+            public let id = UUID()
             public let type: `Type`
+            
+            static let `default`: Toast = .init(type: .unknown)
         }
         
         public struct Modal {
@@ -92,6 +96,13 @@ public enum VerificationCodeInputModel {
         
         public struct Progress {
             public let show: Bool
+        }
+        
+        public struct InputReset: Identifiable, Equatable {
+            public let id = UUID()
+            public let needRest: Bool
+            
+            static let `default`: InputReset = .init(needRest: false)
         }
     }
 }

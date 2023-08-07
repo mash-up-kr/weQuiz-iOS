@@ -9,6 +9,12 @@
 import Foundation
 
 final class SolveQuizDataStore: ObservableObject {
+    struct ErrorMessage: Identifiable, Equatable {
+        let id = UUID()
+        let message: String
+        
+        static let `default`: ErrorMessage = .init(message: "")
+    }
     @Published var currentIndex = 0
     @Published var quiz = SolveQuizModel.init()
     @Published var solvedQuiz = SolveQuizModel.init()
@@ -17,6 +23,7 @@ final class SolveQuizDataStore: ObservableObject {
     @Published var routeToNameInputView = false
     
     var selectedCount: Int = .zero
+    @Published var errorMessage: ErrorMessage = .default
 
     public init(_ quiz: SolveQuizModel) {
         self.quiz = quiz

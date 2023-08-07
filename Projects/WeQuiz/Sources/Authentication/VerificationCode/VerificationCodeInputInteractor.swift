@@ -42,13 +42,14 @@ extension VerificationCodeInputInteractor: VerificationCodeInputRequestingLogic 
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
             self?.authManager.verifyPhoneNumber(
                 request.phoneNumber
-            ) { [weak self] isSucceed in
-                guard isSucceed else {
-                    self?.presenter?.present(VerificationCodeInputModel.Response.Progress(show: false))
-                    return
-                }
-                self?.presenter?.present(VerificationCodeInputModel.Response.ResetTimer())
+            ) { [weak self] result in
                 self?.presenter?.present(VerificationCodeInputModel.Response.Progress(show: false))
+                switch result {
+                case .success:
+                    self?.presenter?.present(VerificationCodeInputModel.Response.ResetTimer())
+                case .failure(let message):
+                    self?.presenter?.present(VerificationCodeInputModel.Response.Toast(type: .errorMessage(message.localizedDescription)))
+                }
             }
         }
     }
@@ -56,11 +57,15 @@ extension VerificationCodeInputInteractor: VerificationCodeInputRequestingLogic 
     public func reqeust(_ request: VerificationCodeInputModel.Request.OnRequestVerifyCode) {
         presenter?.present(VerificationCodeInputModel.Response.Progress(show: true))
         guard request.remainTime > 0 else {
+            presenter?.present(VerificationCodeInputModel.Response.Progress(show: false))
+            presenter?.present(VerificationCodeInputModel.Response.InputReset(needRest: true))
             presenter?.present(VerificationCodeInputModel.Response.Toast(type: .timeout))
             return
         }
         
         guard request.isValid else {
+            presenter?.present(VerificationCodeInputModel.Response.Progress(show: false))
+            presenter?.present(VerificationCodeInputModel.Response.InputReset(needRest: true))
             presenter?.present(VerificationCodeInputModel.Response.Toast(type: .unknown))
             return
         }
@@ -68,14 +73,13 @@ extension VerificationCodeInputInteractor: VerificationCodeInputRequestingLogic 
         authManager.registerPhoneNumber(with: request.code) { [weak self] result in
             switch result {
             case let .success(response):
-                guard response.0, let userId = response.1 else { return }
-                switch request.type {
-                case .signIn:
-                    Task {
-                        await self?.signIn(userId)
-                    }
-                case .signUp:
-                    self?.signUp(request.phoneNumber)
+                guard response.0, let userId = response.1 else {
+                    self?.presenter?.present(VerificationCodeInputModel.Response.Toast(type: .unknown))
+                    return
+                }
+                
+                Task {
+                    await self?.signIn(request, userId)
                 }
             case .failure(let reason):
                 switch reason {
@@ -87,6 +91,7 @@ extension VerificationCodeInputInteractor: VerificationCodeInputRequestingLogic 
                     self?.presenter?.present(VerificationCodeInputModel.Response.Toast(type: .unknown))
                 }
                 self?.presenter?.present(VerificationCodeInputModel.Response.Progress(show: false))
+                self?.presenter?.present(VerificationCodeInputModel.Response.InputReset(needRest: true))
             }
         }
     }
@@ -103,7 +108,10 @@ extension VerificationCodeInputInteractor: VerificationCodeInputRequestingLogic 
 }
 
 extension VerificationCodeInputInteractor {
-    private func signIn(_ userId: String) async {
+    private func signIn(
+        _ request: VerificationCodeInputModel.Request.OnRequestVerifyCode,
+        _ userId: String
+    ) async {
         if let userInfromation = await authenticationService.user(userId) {
             // 회원정보가 있다면 토큰 저장하고 홈으로
             authManager.storeToken { [weak self] in
@@ -115,9 +123,15 @@ extension VerificationCodeInputInteractor {
                 )
             }
         } else {
-            presenter?.present(VerificationCodeInputModel.Response.Progress(show: false))
-            // 회원정보가 없으면 회원가입 모달 노출
-            presenter?.present(VerificationCodeInputModel.Response.Modal(type: .notSignedUpUser))
+            switch request.type {
+            case .signIn:
+                presenter?.present(VerificationCodeInputModel.Response.Progress(show: false))
+                presenter?.present(VerificationCodeInputModel.Response.InputReset(needRest: true))
+                // 회원정보가 없으면 회원가입 모달 노출
+                presenter?.present(VerificationCodeInputModel.Response.Modal(type: .notSignedUpUser))
+            case .signUp:
+                signUp(request.phoneNumber)
+            }
         }
     }
     

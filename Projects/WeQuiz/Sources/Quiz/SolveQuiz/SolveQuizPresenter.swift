@@ -10,6 +10,7 @@ import Foundation
 
 protocol SolveQuizPresentationLogic {
     func presentQuizResult(response: SolveQuiz.LoadQuizResult.Response)
+    func presentErrorMessage(response: SolveQuiz.LoadQuizResult.Response.ErrorMessage)
 }
 
 final class SolveQuizPresenter {
@@ -57,5 +58,9 @@ extension SolveQuizPresenter: SolveQuizPresentationLogic {
         default:
             return "지금 싸우자는 거지?"
         }
+    }
+    
+    func presentErrorMessage(response: SolveQuiz.LoadQuizResult.Response.ErrorMessage) {
+        view?.displayErrorMessage(viewModel: SolveQuiz.LoadQuizResult.ViewModel.ErrorMessage(message: response.message))
     }
 }

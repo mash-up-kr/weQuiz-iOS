@@ -15,9 +15,10 @@ public struct VerificationCodeInputViewModel {
     }
     
     public var remainTime: Int = .zero
-    public var toastModel: VerificationCodeInputModel.Response.Toast.`Type` = .unknown
+    public var toastModel: VerificationCodeInputModel.Response.Toast = .default
     public var modalModel = ModalModel()
     public var progress: Bool = false
+    public var resetInput: VerificationCodeInputModel.Response.InputReset = .default
     
     public static let `default`: Self = .init()
 }

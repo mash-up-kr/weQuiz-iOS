@@ -11,13 +11,18 @@ import Foundation
 final class SolveQuizIntroViewModel: ObservableObject {
     @Published var quizModel: SolveQuiz.LoadSolveQuiz.Response = .default
     @Published var isRemovedQuiz: Bool = false
+    @Published var showErrorPage: Bool = false
+
     private let quizService: QuizService = QuizService(Networking())
 
     func loadQuiz(id: Int) {
-        quizService.getQuiz(QuizAPI.getQuiz(id)) { [weak self] model in
-            guard let model = model else { return }
-            
-            self?.quizModel = SolveQuiz.LoadSolveQuiz.Response(quiz: model)
+        quizService.getQuiz(QuizAPI.getQuiz(id)) { [weak self] result in
+            switch result {
+            case .success(let model):
+                self?.quizModel = SolveQuiz.LoadSolveQuiz.Response(quiz: model)
+            case .failure:
+                self?.showErrorPage = true
+            }
         }
     }
     
