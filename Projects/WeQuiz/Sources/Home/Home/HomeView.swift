@@ -18,6 +18,8 @@ public struct HomeView: View {
     @EnvironmentObject var navigator: HomeNavigator
     @EnvironmentObject var mainNavigator: MainNavigator
     @State private var showSignOutModal: Bool = false
+    @State private var showWithdrawalModal: Bool = false
+    @State private var showWithdrawalFailureToast: WQToast.Model?
     
     public var body: some View {
         NavigationStack(path: $navigator.path,  root: {
@@ -67,6 +69,18 @@ public struct HomeView: View {
                                       signOut()
                                   })
                 ), isPresented: $showSignOutModal
+            )
+            .modal(
+                .init(
+                    message: "회원탈퇴 하시겠습니까?",
+                    doubleButtonStyleModel:
+                            .init(titles: ("아니오", "예"),
+                                  leftAction: {
+                                      showWithdrawalModal = false
+                                  }, rightAction: {
+                                      withdrawal()
+                                  })
+                ), isPresented: $showWithdrawalModal
             )
         })
     }
@@ -249,18 +263,30 @@ extension HomeView {
         ZStack {
             HStack {
                 Spacer()
-                Text("로그아웃")
-                    .font(.pretendard(.regular, size: ._16))
-                    .foregroundColor(.designSystem(.g4))
+                VStack(spacing: .zero) {
+                    Text("로그아웃")
+                        .font(.pretendard(.regular, size: ._16))
+                        .foregroundColor(.designSystem(.g4))
+                        .frame(height: 36)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            showSignOutModal = true
+                        }
+                    Text("회원탈퇴")
+                        .font(.pretendard(.regular, size: ._12))
+                        .foregroundColor(.designSystem(.g5))
+                        .frame(height: 36)
+                        .contentShape(Rectangle())
+                        .onTapGesture {
+                            showWithdrawalModal = true
+                        }
+                }
                 Spacer()
             }
             .padding(.top, 20)
             .padding(.bottom, 20)
-            .onTapGesture {
-                showSignOutModal = true
-            }
+            
         }
-        .contentShape(Rectangle())
     }
 }
 
@@ -304,6 +330,21 @@ extension HomeView {
             DispatchQueue.main.async {
                 mainNavigator.root = .authentication
                 AuthManager.shared.signedOut = true
+            }
+        }
+    }
+    
+    private func withdrawal() {
+        AuthManager.shared.withdrawal { isSucceeded in
+            showWithdrawalModal = false
+            guard isSucceeded else {
+                showWithdrawalFailureToast = .init(status: .warning, text: "회원탈퇴에 실패했습니다.\n잠시 후 다시 시도해주세요")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                mainNavigator.root = .authentication
+                AuthManager.shared.withdrawal = true
             }
         }
     }

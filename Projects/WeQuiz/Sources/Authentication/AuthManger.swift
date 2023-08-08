@@ -28,6 +28,7 @@ public class AuthManager: ObservableObject {
     private(set) var userId: String?
     private var verificationID: String?
     var signedOut: Bool = false
+    var withdrawal: Bool = false
 }
 
 public extension AuthManager {
@@ -101,5 +102,17 @@ public extension AuthManager {
     func signOut(_ completion: () -> Void) {
         UserDefaults.standard.removeObject(forKey: "token")
         completion()
+    }
+    
+    func withdrawal(_ completion: @escaping (Bool) -> Void) {
+        UserDefaults.standard.removeObject(forKey: "token")
+        let user = Auth.auth().currentUser
+        user?.delete(completion: { error in
+            if let error = error  {
+                completion(false)
+            } else {
+                completion(true)
+            }
+        })
     }
 }
