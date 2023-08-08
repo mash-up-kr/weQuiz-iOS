@@ -57,10 +57,18 @@ public struct OnboardingView: View {
                 }
             }
             .onAppear {
-                guard authManager.signedOut else { return }
-                authManager.signedOut = false
-                DispatchQueue.main.async {
-                    signedOutToastModel = .init(status: .success, text: "로그아웃 되었습니다.")
+                if authManager.signedOut {
+                    authManager.signedOut = false
+                    DispatchQueue.main.async {
+                        signedOutToastModel = .init(status: .success, text: "로그아웃 되었습니다")
+                    }
+                }
+                
+                if authManager.withdrawal {
+                    authManager.withdrawal = false
+                    DispatchQueue.main.async {
+                        signedOutToastModel = .init(status: .success, text: "회원탈퇴 되었습니다")
+                    }
                 }
             }
             .toast(model: $signedOutToastModel)
