@@ -19,6 +19,15 @@ public struct ProgressModifier: ViewModifier {
                     ProgressView()
                 }
             })
+            .onAppear {
+                turnOffProgressView()
+            }
+    }
+    
+    private func turnOffProgressView() {
+        Timer.scheduledTimer(withTimeInterval: 10.0, repeats: false) { timer in
+            isPresented = false
+        }
     }
 }
 public extension View {
